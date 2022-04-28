@@ -1,64 +1,77 @@
 package com.example.ecomapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link LoginFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.ecomapplication.databinding.ActivityLoginBinding;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.concurrent.Executor;
+
 public class LoginFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public LoginFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LoginFragment.
-     */
+    ActivityLoginBinding loginBinding;
+    private FirebaseAuth auth;
+    private Button signInButton;
+    private TextView linkToSignUp;
+    private EditText emailSignIn,passwordSignIn;
     // TODO: Rename and change types and number of parameters
     public static LoginFragment newInstance(String param1, String param2) {
         LoginFragment fragment = new LoginFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        View root =  inflater.inflate(R.layout.fragment_login, container, false);
+        auth = FirebaseAuth.getInstance();
+        signInButton = root.findViewById(R.id.signInButton);
+        linkToSignUp = root.findViewById(R.id.linkToSignUp);
+        emailSignIn = root.findViewById(R.id.emailSignIn);
+        passwordSignIn = root.findViewById(R.id.passwordSignIn);
+
+        signInButton.setOnClickListener(view -> {
+
+
+            if (TextUtils.isEmpty(emailSignIn.getText())) {
+                Toast.makeText(getContext(), "Please enter your email!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (TextUtils.isEmpty(passwordSignIn.getText())) {
+                Toast.makeText(getContext(), "Please enter your password!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            auth.signInWithEmailAndPassword(emailSignIn.getText().toString(), passwordSignIn.getText().toString())
+                    .addOnCompleteListener(getActivity(), task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getContext(), "Sign In Successfully", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getContext(), MainActivity.class));
+                        } else {
+                            Toast.makeText(getContext(), "Email or Password Wrong " + task.getException() + task.getException(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        });
+        return root;
     }
 }

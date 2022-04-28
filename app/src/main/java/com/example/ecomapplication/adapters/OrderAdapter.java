@@ -50,8 +50,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         });
 
         holder.orderAddress.setText(list.get(position).getOrderAddress());
-        holder.orderDate.setText(list.get(position).getOrderDate());
-        holder.shippedDate.setText(list.get(position).getShippedDate());
+//        holder.orderDate.setText((CharSequence) list.get(position).getOrderDate());
+//        holder.shippedDate.setText((CharSequence) list.get(position).getShippedDate());
         holder.total.setText(String.valueOf(list.get(position).getTotal()));
     }
 

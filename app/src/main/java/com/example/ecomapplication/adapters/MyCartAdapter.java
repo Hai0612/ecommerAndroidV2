@@ -74,7 +74,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
                 if (cartModel.getQuantity() <= 1) {
                     return;
                 } else {
-                    firestore.collection("Cart").document("SXcZhdR7152RN49UawTz")
+                        firestore.collection("Cart").document("SXcZhdR7152RN49UawTz")
                             .collection("Products").document("mGlH67AJFsAGEbq9hqZJ")
                             .update("quantity", cartModel.getQuantity() - 1);
                     //reload??

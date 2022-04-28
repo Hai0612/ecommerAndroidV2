@@ -2,17 +2,18 @@ package com.example.ecomapplication.models;
 
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class OrderModel implements Serializable {
     String orderAddress;
-    String orderDate;
-    String shippedDate;
+    Date orderDate;
+    Date shippedDate;
     int total;
 
     public OrderModel() {
     }
 
-    public OrderModel(String orderAddress, String orderDate, String shippedDate, int total) {
+    public OrderModel(String orderAddress, Date orderDate, Date shippedDate, int total) {
         this.orderAddress = orderAddress;
         this.orderDate = orderDate;
         this.shippedDate = shippedDate;
@@ -27,19 +28,19 @@ public class OrderModel implements Serializable {
         this.orderAddress = orderAddress;
     }
 
-    public String getOrderDate() {
+    public Date getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(String orderDate) {
+    public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }
 
-    public String getShippedDate() {
+    public Date getShippedDate() {
         return shippedDate;
     }
 
-    public void setShippedDate(String shippedDate) {
+    public void setShippedDate(Date shippedDate) {
         this.shippedDate = shippedDate;
     }
 
