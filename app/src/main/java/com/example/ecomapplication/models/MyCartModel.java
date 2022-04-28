@@ -1,6 +1,7 @@
 package com.example.ecomapplication.models;
 
 public class MyCartModel {
+    private  String documentId;
     String img_url;
     String name;
     int price;
@@ -9,12 +10,22 @@ public class MyCartModel {
     public MyCartModel() {
     }
 
-    public MyCartModel(String img_url, String name, int price, int quantity) {
+    public MyCartModel(String img_url, String name, int price, int quantity,int id) {
         this.img_url = img_url;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
     }
+
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
+    }
+
 
     public String getImg_url() {
         return img_url;

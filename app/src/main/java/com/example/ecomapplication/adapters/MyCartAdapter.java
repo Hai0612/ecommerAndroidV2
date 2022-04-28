@@ -1,5 +1,6 @@
 package com.example.ecomapplication.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -61,12 +62,13 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         int ref = getItemViewType(position);
 //        getSnapshots().getSnapshot(position).getId();
         auth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
         MyCartModel cartModel = list.get(position);
+        String id_document = list.get(position).getDocumentId();
         holder.buttonMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,33 +77,54 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
                     return;
                 } else {
                         firestore.collection("Cart").document("SXcZhdR7152RN49UawTz")
-                            .collection("Products").document("mGlH67AJFsAGEbq9hqZJ")
+                            .collection("Products").document(id_document)
                             .update("quantity", cartModel.getQuantity() - 1);
+                        list.get(position).setQuantity(cartModel.getQuantity() - 1);
+                        holder.quantity.setText(String.valueOf(list.get(position).getQuantity()) );
+
                     //reload??
 //                    cartAdapter.notifyDataSetChanged();
 //                    listener.refreshActivity();
                 }
+                int totalCart = 0;
+                for(int i = 0 ; i< list.size() ; i++){
+                    totalCart = list.get(i).getPrice() * list.get(i).getQuantity();
+                }
+                int totalPrice = list.get(position).getPrice() * list.get(position).getQuantity();
+                holder.price.setText(String.valueOf(totalPrice));
+                Intent intent = new Intent("MyTotalAmount");
+                intent.putExtra("totalAmount", totalCart);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
             }
+
         });
         holder.buttonPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, cartModel.getQuantity() + "", Toast.LENGTH_SHORT).show();
                 firestore.collection("Cart").document("SXcZhdR7152RN49UawTz")
-                        .collection("Products").document("mGlH67AJFsAGEbq9hqZJ")
+                        .collection("Products").document(id_document)
                         .update("quantity", cartModel.getQuantity() + 1);
-//                reload??
+                list.get(position).setQuantity(cartModel.getQuantity() + 1);
+                holder.quantity.setText(String.valueOf(list.get(position).getQuantity()) );
+
+//                reload?
+                int totalCart = 0;
+                for(int i = 0 ; i< list.size() ; i++){
+                    totalCart = list.get(i).getPrice() * list.get(i).getQuantity();
+                }
+                int totalPrice = list.get(position).getPrice() * list.get(position).getQuantity();
+                holder.price.setText(String.valueOf(totalPrice));
+                Intent intent = new Intent("MyTotalAmount");
+                intent.putExtra("totalAmount", totalCart);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
             }
         });
 
         int totalPrice = list.get(position).getPrice() * list.get(position).getQuantity();
-
-//        Total amount
-//        totalAmount = totalAmount + list.get(position).getPrice();
         totalAmount = totalAmount + totalPrice;
         Intent intent = new Intent("MyTotalAmount");
         intent.putExtra("totalAmount", totalAmount);
-
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
         holder.name.setText(list.get(position).getName());

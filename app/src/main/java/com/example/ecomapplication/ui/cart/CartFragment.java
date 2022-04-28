@@ -96,6 +96,7 @@ public class CartFragment extends Fragment {
                     for (DocumentSnapshot doc :task.getResult().getDocuments()) {
 //                        Log.v("Test", auth.getCurrentUser().getUid());
                         MyCartModel myCartModel = doc.toObject(MyCartModel.class);
+                        myCartModel.setDocumentId(doc.getId());
                         cartModelList.add(myCartModel);
                         cartAdapter.notifyDataSetChanged();
                     }
@@ -105,7 +106,6 @@ public class CartFragment extends Fragment {
         return root;
     }
     public void getProductData(){
-
         final List<CartModel> productModelList = new ArrayList<>();
 //        db.collection("Cart").get()
 //                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
