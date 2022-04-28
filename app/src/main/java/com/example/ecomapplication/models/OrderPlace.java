@@ -31,21 +31,28 @@ import java.util.Map;
 public class OrderPlace extends Dialog implements
         android.view.View.OnClickListener {
 
-    public Activity c;
+    public Activity activity;
     public Dialog d;
     public Button yes, no;
     private TextView addressText;
     private TextView totalText;
     FirebaseFirestore db;
-
-    private String address;
+    private String orderAddress;
+    private  String id_user;
+    private Date orderDate;
+    private Date shippedDate;
+     private int number;
+     private String id;
     private int total;
-    public OrderPlace(Activity a , String address, int total) {
-        super(a);
-        // TODO Auto-generated constructor stub
-        this.c = a;
-        this.address = address;
+    public OrderPlace(Activity activity , String orderAddress, int total ,String id_user  , Date orderDate , Date shippedDate, int number) {
+        super(activity);
+        this.activity = activity;
+        this.orderAddress = orderAddress;
         this.total = total;
+        this.id_user = id_user;
+        this.orderDate = orderDate;
+        this.shippedDate = shippedDate;
+        this.number = number;
     }
 
     @Override
@@ -59,7 +66,7 @@ public class OrderPlace extends Dialog implements
         totalText = findViewById(R.id.total_order);
         addressText = findViewById(R.id.address_order);
         totalText.setText(String.valueOf(total));
-        addressText.setText(address);
+        addressText.setText(orderAddress);
 
         yes.setOnClickListener(this);
 
@@ -70,11 +77,12 @@ public class OrderPlace extends Dialog implements
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date d  = Calendar.getInstance().getTime();
         Map<String, Object> order = new HashMap<>();
-        order.put("id", "123");
-        order.put("id_user", "1");
-        order.put("orderAddress", address);
-        order.put("orderDate", d);
-        order.put("shippedDate", d);
+        id = getAlphaNumericString(5);
+        order.put("id", id);
+        order.put("id_user", id_user);
+        order.put("orderAddress", orderAddress);
+        order.put("orderDate", orderDate);
+        order.put("shippedDate", shippedDate);
         order.put("total", total);
 
 
@@ -97,7 +105,7 @@ public class OrderPlace extends Dialog implements
     }
     public void AddProductListToOrderDetail(){
         Map<String, Object> order = new HashMap<>();
-        order.put("id_order", 1);
+        order.put(id, 1);
         order.put("id_product", "2");
         order.put("product_quantity", 2);
 
@@ -131,5 +139,31 @@ public class OrderPlace extends Dialog implements
                 break;
         }
         dismiss();
+    }
+    public String getAlphaNumericString(int n)
+    {
+
+        // chose a Character random from this String
+        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                + "0123456789"
+                + "abcdefghijklmnopqrstuvxyz";
+
+        // create StringBuffer size of AlphaNumericString
+        StringBuilder sb = new StringBuilder(n);
+
+        for (int i = 0; i < n; i++) {
+
+            // generate a random number between
+            // 0 to AlphaNumericString variable length
+            int index
+                    = (int)(AlphaNumericString.length()
+                    * Math.random());
+
+            // add Character one by one in end of sb
+            sb.append(AlphaNumericString
+                    .charAt(index));
+        }
+
+        return sb.toString();
     }
 }

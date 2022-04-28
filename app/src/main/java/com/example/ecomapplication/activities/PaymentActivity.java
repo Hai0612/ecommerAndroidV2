@@ -49,9 +49,6 @@ public class PaymentActivity extends AppCompatActivity {
     PaymentAdapter paymentAdapter;
     FirebaseFirestore db;
 
-    Payment payment1 = new Payment("1","1252626260","Online", "1" ,"AGRIBANK",new Date());
-    Payment payment2 = new Payment("2","429428323","Online", "1" ,"BIDV", new Date());
-    Payment payment3 = new Payment("3","6345334543","Online", "1" ,"AGRIBANK", new Date());
     Button makePayment,cancelOrder, zaloPay, momo, cod;
     TextView newPaypalText, newGooglePay, newMasterCard ;
     @Override
@@ -93,7 +90,7 @@ public class PaymentActivity extends AppCompatActivity {
 //
 //                AlertDialog alert11 = builder1.create();
 //                alert11.show();
-                OrderPlace cdd=new OrderPlace(PaymentActivity.this, "120 Nguyeenx Tuan, Ha Noi", 123000);
+                OrderPlace cdd=new OrderPlace(PaymentActivity.this, "120 Nguyễn Tuan, Ha Noi", 123000, "1jk1kj31j2k",new Date() , new Date(), 3);
                 cdd.show();
             }
         });
