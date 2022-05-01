@@ -15,12 +15,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/category_title"
+            android:id="@+id/product_title"
             android:background="@color/purple_200"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/amethysta"
-            android:text="List Category"
+            android:text="List Products"
             android:textColor="@color/blue"
             android:textSize="24sp" />
 
@@ -28,10 +28,10 @@
     </RelativeLayout>
 
     <GridView
-        android:id="@+id/categoryList"
+        android:id="@+id/productList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:numColumns="4"
+        android:numColumns="2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout"

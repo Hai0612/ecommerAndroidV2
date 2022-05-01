@@ -82,9 +82,6 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
                         list.get(position).setQuantity(cartModel.getQuantity() - 1);
                         holder.quantity.setText(String.valueOf(list.get(position).getQuantity()) );
 
-                    //reload??
-//                    cartAdapter.notifyDataSetChanged();
-//                    listener.refreshActivity();
                 }
                 int totalCart = 0;
                 for(int i = 0 ; i< list.size() ; i++){

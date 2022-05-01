@@ -34,6 +34,8 @@
         <activity android:name=".activities.MomoActivity" />
         <activity android:name=".activities.CheckoutActitvity" />
         <activity android:name=".activities.PaymentActivity" />
+        <activity android:name=".activities.ShowAllProductsActivity" />
+        <activity android:name=".activities.ShowAllCategoryActivity" />
     </application>
 
 </manifest>

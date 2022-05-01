@@ -5,40 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/product_title"
-            android:background="@color/purple_200"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/amethysta"
-            android:text="OrderDetail"
-            android:textColor="@color/blue"
-            android:textSize="24sp" />
-
-
-    </RelativeLayout>
-
-    <GridView
-        android:id="@+id/productList"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/order_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:numColumns="1"
+        android:background="#8ff7fd"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
-        android:layout_marginTop="20dp"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="OrderDetail"/>
+
+    <GridView
+        android:id="@+id/list_order"
+        android:numColumns="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/order_toolbar" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:orientation="horizontal"
         android:background="@color/purple_200"
@@ -87,13 +76,12 @@
             android:layout_weight="1"
             android:id="@+id/button_feedback"
             android:layout_marginRight="10dp"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/blue"
             android:backgroundTint="@color/purple_700"
             android:drawableLeft="@drawable/ic_baseline_edit_24"
             android:drawableTint="@color/white"
-            android:padding="14dp"
             android:text="Đánh giá"
             android:textAllCaps="false"
             android:textStyle="bold"
@@ -105,13 +93,12 @@
             android:layout_weight="1"
             android:id="@+id/button_buy_again"
             android:layout_marginLeft="10dp"
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/blue"
             android:backgroundTint="@color/purple_700"
             android:drawableLeft="@drawable/ic_baseline_shopping_cart_24"
             android:drawableTint="@color/white"
-            android:padding="14dp"
             android:text="Mua lại"
             android:textAllCaps="false"
             android:textStyle="bold"
@@ -119,5 +106,4 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

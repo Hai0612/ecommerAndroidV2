@@ -2,17 +2,18 @@ package com.example.ecomapplication.activities;
 
 import static android.content.ContentValues.TAG;
 
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.GridView;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.ListAdapter;
 
 import com.example.ecomapplication.R;
+import com.example.ecomapplication.adapters.CategoryAdapter;
+import com.example.ecomapplication.adapters.NewProductAdapter;
+import com.example.ecomapplication.adapters.PopularProductAdapter;
 import com.example.ecomapplication.adapters.ProductAdapter;
-import com.example.ecomapplication.adapters.ProductOrderAdapter;
-import com.example.ecomapplication.models.OrderModel;
+import com.example.ecomapplication.models.Category;
 import com.example.ecomapplication.models.Product;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -21,50 +22,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class OrderDetailActivity extends AppCompatActivity {
+public class ShowAllProductsActivity extends AppCompatActivity {
     FirebaseFirestore firestore;
     GridView productView;
-    ProductOrderAdapter productAdapter;
-    TextView total;
+    ProductAdapter productAdapter;
 
     List<Product> productList;
-    String id;
-    int totalPr = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_orderdetail);
-
-        Bundle bundle = getIntent().getExtras();
-        if (bundle == null) {
-            return;
-        }
-        OrderModel orderModel = (OrderModel) bundle.get("object_order");
-        id = orderModel.getId();
+        setContentView(R.layout.activity_products);
 
         firestore = FirebaseFirestore.getInstance();
         productView = findViewById(R.id.productList);
-        total = findViewById(R.id.all_total_price_order);
 
+        getProductFromFireBase();
+        productAdapter = new ProductAdapter(this, productList);
+        productView.setAdapter(productAdapter);
+    }
+
+    private void getProductFromFireBase() {
         productList = new ArrayList<>();
-        firestore.collection("OrderDetail").document(id)
-                .collection("Products").get().addOnCompleteListener(task -> {
+
+        firestore.collection("Product").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Product product = document.toObject(Product.class);
                     productList.add(product);
                     productAdapter.notifyDataSetChanged();
-                    totalPr += product.getQuantity() * Integer.parseInt(product.getPrice());
-                    Log.v("Testtt", String.valueOf(totalPr));
-                    total.setText(totalPr + " VNĐ");
                 }
             } else {
                 Log.w(TAG, "Error getting documents.", task.getException());
             }
         });
-        Log.v("Testtt", String.valueOf(totalPr));
-        productAdapter = new ProductOrderAdapter(this, productList);
-        productView.setAdapter(productAdapter);
     }
 }

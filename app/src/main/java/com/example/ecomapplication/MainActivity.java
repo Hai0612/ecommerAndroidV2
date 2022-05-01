@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.Menu;
 
 import com.example.ecomapplication.activities.MerchantActivity;
+import com.example.ecomapplication.activities.ShowAllCategoryActivity;
+import com.example.ecomapplication.activities.ShowAllProductsActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -75,5 +77,15 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void showAllProduct(View view) {
+        Intent intent = new Intent(this, ShowAllProductsActivity.class);
+        startActivity(intent);
+    }
+
+    public void showAllCategory(View view) {
+        Intent intent = new Intent(this, ShowAllCategoryActivity.class);
+        startActivity(intent);
     }
 }

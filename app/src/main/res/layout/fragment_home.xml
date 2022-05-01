@@ -24,11 +24,10 @@
         </androidx.viewpager2.widget.ViewPager2>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="9dp"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -39,18 +38,29 @@
                 android:textSize="21sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/category_see_all"
+            <!--            <TextView-->
+            <!--                android:id="@+id/category_see_all"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginRight="8dp"-->
+            <!--                android:layout_weight="1"-->
+            <!--                android:fontFamily="@font/amethysta"-->
+            <!--                android:gravity="end"-->
+            <!--                android:text="See All"-->
+            <!--                android:textColor="@color/pink"-->
+            <!--                android:textSize="18sp"-->
+            <!--                android:textStyle="bold" />-->
+            <Button
+                android:id="@+id/button_see_all_category"
+                android:onClick="showAllCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1"
-                android:fontFamily="@font/amethysta"
-                android:gravity="end"
-                android:text="See All"
-                android:textColor="@color/pink"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="10dp"
+                android:background="?android:selectableItemBackground"
+                android:text="See all"
+                android:textAllCaps="false"
+                android:textColor="@color/purple_500" />
         </LinearLayout>
 
 
@@ -97,17 +107,29 @@
                         android:layout_marginLeft="9dp"
                         android:text="We provide best products." />
 
-                    <TextView
-                        android:id="@+id/newProducts_see_all"
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/newProducts_see_all"-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_alignParentEnd="true"-->
+                    <!--                        android:layout_marginRight="8dp"-->
+                    <!--                        android:fontFamily="@font/amethysta"-->
+                    <!--                        android:text="See All"-->
+                    <!--                        android:textColor="@color/pink"-->
+                    <!--                        android:textSize="18sp"-->
+                    <!--                        android:textStyle="bold" />-->
+                    <Button
+                        android:id="@+id/button_see_all_product"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginRight="8dp"
-                        android:fontFamily="@font/amethysta"
-                        android:text="See All"
-                        android:textColor="@color/pink"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="10dp"
+                        android:background="?android:selectableItemBackground"
+                        android:clickable="true"
+                        android:onClick="showAllProduct"
+                        android:text="See all"
+                        android:textAllCaps="false"
+                        android:textColor="@color/purple_500" />
                 </RelativeLayout>
 
                 <androidx.recyclerview.widget.RecyclerView

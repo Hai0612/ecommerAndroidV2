@@ -9,15 +9,17 @@ public class OrderModel implements Serializable {
     Date orderDate;
     Date shippedDate;
     int total;
+    String id;
 
     public OrderModel() {
     }
 
-    public OrderModel(String orderAddress, Date orderDate, Date shippedDate, int total) {
+    public OrderModel(String orderAddress, Date orderDate, Date shippedDate, int total, String id) {
         this.orderAddress = orderAddress;
         this.orderDate = orderDate;
         this.shippedDate = shippedDate;
         this.total = total;
+        this.id = id;
     }
 
     public String getOrderAddress() {
@@ -50,5 +52,13 @@ public class OrderModel implements Serializable {
 
     public void setTotal(int total) {
         this.total = total;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
