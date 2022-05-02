@@ -118,7 +118,6 @@ public class HomeFragment extends Fragment {
         slideItemHomes.add(new SlideItemHome(R.drawable.banner1));
         slideItemHomes.add(new SlideItemHome(R.drawable.banner2));
         slideItemHomes.add(new SlideItemHome(R.drawable.banner3))       ;
-
         viewPager2.setAdapter(new SliderAdapter(slideItemHomes,viewPager2));
 
         // progress dialog

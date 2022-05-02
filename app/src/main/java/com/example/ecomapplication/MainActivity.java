@@ -1,5 +1,7 @@
 package com.example.ecomapplication;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -7,9 +9,11 @@ import android.view.View;
 import android.view.Menu;
 
 import com.example.ecomapplication.activities.MerchantActivity;
+import com.example.ecomapplication.activities.SellerActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -63,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_merchant:
-                startActivity(new Intent(this, MerchantActivity.class));
+                startActivity(new Intent(this, SellerActivity.class));
                 return true;
 
             default:
