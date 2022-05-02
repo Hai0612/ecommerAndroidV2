@@ -3,6 +3,7 @@ package com.example.ecomapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,7 +23,9 @@ public class RegistrationFragment extends Fragment {
 
     private FirebaseAuth auth;
     private Button signUpButton;
-    private EditText nameSignUp,emailSignUp,passwordSignUp;
+    private EditText nameSignUp, emailSignUp, passwordSignUp;
+    private TextView linktoSignIn;
+
     // TODO: Rename and change types and number of parameters
     public static RegistrationFragment newInstance(String param1, String param2) {
         RegistrationFragment fragment = new RegistrationFragment();
@@ -32,7 +36,6 @@ public class RegistrationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -45,10 +48,9 @@ public class RegistrationFragment extends Fragment {
         nameSignUp = root.findViewById(R.id.nameSignUp);
         emailSignUp = root.findViewById(R.id.emailSignUp);
         passwordSignUp = root.findViewById(R.id.passwordSignUp);
+        linktoSignIn = root.findViewById(R.id.linkToSignIn);
 
         signUpButton.setOnClickListener(view -> {
-
-
             if (TextUtils.isEmpty(nameSignUp.getText())) {
                 Toast.makeText(getContext(), "Please enter your name!", Toast.LENGTH_SHORT).show();
                 return;
@@ -79,6 +81,12 @@ public class RegistrationFragment extends Fragment {
                         }
                     });
         });
+
+        linktoSignIn.setOnClickListener(view -> {
+            NavHostFragment.findNavController(RegistrationFragment.this)
+                    .navigate(R.id.action_nav_signup_to_nav_login);
+        });
+
         return root;
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -50,8 +51,6 @@ public class LoginFragment extends Fragment {
         passwordSignIn = root.findViewById(R.id.passwordSignIn);
 
         signInButton.setOnClickListener(view -> {
-
-
             if (TextUtils.isEmpty(emailSignIn.getText())) {
                 Toast.makeText(getContext(), "Please enter your email!", Toast.LENGTH_SHORT).show();
                 return;
@@ -72,6 +71,12 @@ public class LoginFragment extends Fragment {
                         }
                     });
         });
+
+        linkToSignUp.setOnClickListener(view -> {
+            NavHostFragment.findNavController(LoginFragment.this)
+                    .navigate(R.id.action_nav_login_to_nav_signup);
+        });
+
         return root;
     }
 }

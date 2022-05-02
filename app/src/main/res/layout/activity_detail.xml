@@ -16,7 +16,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:adjustViewBounds="true" />
+        android:adjustViewBounds="true"
+        android:contentDescription="Temporary Image" />
 
     <androidx.cardview.widget.CardView
         android:translationY="-50dp"
@@ -73,14 +74,13 @@
                     style="?android:attr/ratingBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginTop="15dp"
                     android:isIndicator="true"
                     android:numStars="5"
                     android:rating="4.3"
                     android:stepSize="0.1"
                     android:secondaryProgressTint="#00000000"/>
-/>
         </LinearLayout>
 
         <TextView
@@ -114,28 +114,34 @@
             android:gravity="center_horizontal"
             android:layout_margin="10dp">
 
-            <ImageView
+            <Button
+                android:id="@+id/remove_item"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginRight="7dp"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/plusicon"
-                android:id="@+id/add_item"/>
+
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/custom_btn_remove"
+                app:backgroundTint="@color/gray" />
 
             <TextView
                 android:layout_width="wrap_content"
+                android:minWidth="100dp"
                 android:layout_height="wrap_content"
+                android:textAlignment="center"
                 android:id="@+id/quantity"
                 android:text="1"
                 android:textSize="30sp"
                 android:textStyle="bold"/>
 
-            <ImageView
+            <Button
+                android:id="@+id/add_item"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginLeft="7dp"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/iconminus"
-                android:id="@+id/remove_item"/>
-
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/custom_add_button"
+                app:backgroundTint="@color/gray"/>
         </LinearLayout>
 
 

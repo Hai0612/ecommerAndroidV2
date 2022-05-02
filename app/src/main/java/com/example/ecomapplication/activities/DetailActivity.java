@@ -1,16 +1,21 @@
 package com.example.ecomapplication.activities;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
+import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.models.Product;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -18,21 +23,19 @@ import com.squareup.picasso.Picasso;
 import java.util.Objects;
 
 public class DetailActivity extends AppCompatActivity {
-    ImageView addItem, removeItem, detailedImg;
+    ImageView detailedImg;
     TextView detailedName, detailedDesc, detailedPrice, quantityOrder, ratingValue;
     RatingBar detailedRating;
-    Button buyNow, addToCart;
+    Button buyNow, addToCart, addItem, removeItem;
 
     Product product;
     FirebaseStorage storage;
+    FirebaseFirestore firestore;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    int quantity;
+    String productId;
 
-        Objects.requireNonNull(getSupportActionBar()).hide();
-
-        setContentView(R.layout.activity_detail);
+    private void binding() {
         detailedImg = findViewById(R.id.detailed_img);
         detailedName = findViewById(R.id.detailed_name);
         detailedRating = findViewById(R.id.my_rating);
@@ -45,11 +48,42 @@ public class DetailActivity extends AppCompatActivity {
         addItem = findViewById(R.id.add_item);
         removeItem = findViewById(R.id.remove_item);
         storage = FirebaseStorage.getInstance();
+        firestore = FirebaseFirestore.getInstance();
+    }
 
+    private void addProductToFirebaseCart(View view, Product newProduct) {
+        firestore.collection("Cart").document("SXcZhdR7152RN49UawTz")
+                .collection("Products")
+                .add(newProduct).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(
+                        view.getContext(),
+                        "Added product ID " + newProduct.getProductId()
+                                + " of " + newProduct.getQuantity() + " products to cart",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(
+                        view.getContext(),
+                        "Fail to add product to cart",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
-        final Object obj = getIntent().getSerializableExtra("detailed");
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Objects.requireNonNull(getSupportActionBar()).hide();
+
+        setContentView(R.layout.activity_detail);
+        binding();
+
+        final Object obj = getIntent().getSerializableExtra("productDetail");
         if (obj instanceof Product) {
             product = (Product) obj;
+            quantity = 1;
+            productId = product.getProductId();
         }
 
         if (product != null) {
@@ -69,5 +103,55 @@ public class DetailActivity extends AppCompatActivity {
                             .into(detailedImg))
                     .addOnFailureListener(e -> Log.v("Error", "Error when get the images: " + e));
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        addItem.setOnClickListener(view -> {
+            quantity = Integer.parseInt((String) quantityOrder.getText());
+            quantity = quantity + 1;
+            quantityOrder.setText(String.valueOf(quantity));
+        });
+
+        removeItem.setOnClickListener(view -> {
+            quantity = Integer.parseInt((String) quantityOrder.getText());
+            if (quantity > 1) {
+                quantity = quantity - 1;
+                quantityOrder.setText(String.valueOf(quantity));
+            }
+        });
+
+        addToCart.setOnClickListener(view -> {
+            Product productCart = new Product(
+                    product.getName(),
+                    product.getImg_url(),
+                    product.getId_category(),
+                    Integer.parseInt(product.getPrice()),
+                    product.getSize(),
+                    quantity,
+                    product.getDescription()
+            );
+
+            addProductToFirebaseCart(view, productCart);
+        });
+
+        buyNow.setOnClickListener(view -> {
+            Product productCart = new Product(
+                    product.getName(),
+                    product.getImg_url(),
+                    product.getId_category(),
+                    Integer.parseInt(product.getPrice()),
+                    product.getSize(),
+                    quantity,
+                    product.getDescription()
+            );
+
+            addProductToFirebaseCart(view, productCart);
+
+            Intent intent = new Intent(view.getContext(), CheckoutActitvity.class);
+            startActivity(intent);
+        });
     }
 }

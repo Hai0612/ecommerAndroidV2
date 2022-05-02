@@ -43,7 +43,7 @@ public class PopularProductAdapter extends RecyclerView.Adapter<PopularProductAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.productId = products.get(position).getId();
+        holder.productId = products.get(position).getProductId();
         holder.name.setText(products.get(position).getName());
         holder.price.setText(products.get(position).getPrice());
 
@@ -59,7 +59,7 @@ public class PopularProductAdapter extends RecyclerView.Adapter<PopularProductAd
                 Toast.makeText(context, "Long click on product ID: " + holder.productId, Toast.LENGTH_SHORT).show();
             } else {
                 Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra("detailed", products.get(position));
+                intent.putExtra("productDetail", products.get(position));
 
                 context.startActivity(intent);
             }
