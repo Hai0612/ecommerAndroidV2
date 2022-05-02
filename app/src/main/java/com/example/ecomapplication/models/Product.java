@@ -4,7 +4,7 @@ package com.example.ecomapplication.models;
 import java.io.Serializable;
 
 public class Product implements Serializable {
-    private String productId;
+    private String id;
     private String name ;
     private String img_url;
     private String id_category;
@@ -15,6 +15,18 @@ public class Product implements Serializable {
     private String rating;
 
     public Product() {}
+
+    public Product(String id, String name, String img_url, String id_category, int price, String size, int quantity, String description, String rating) {
+        this.id = id;
+        this.name = name;
+        this.img_url = img_url;
+        this.id_category = id_category;
+        this.price = price;
+        this.size = size;
+        this.quantity = quantity;
+        this.description = description;
+        this.rating = rating;
+    }
 
     public Product(String name, String img_url, String id_category, int price,
                    String size, int quantity, String description, String rating) {
@@ -40,11 +52,11 @@ public class Product implements Serializable {
     }
 
     public String getProductId() {
-        return productId;
+        return id;
     }
 
     public void setProductId(String productId) {
-        this.productId = productId;
+        this.id = productId;
     }
 
     public String getName() {

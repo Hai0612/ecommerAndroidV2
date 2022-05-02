@@ -84,6 +84,7 @@ public class DetailActivity extends AppCompatActivity {
             product = (Product) obj;
             quantity = 1;
             productId = product.getProductId();
+            Log.v("Result", "Get product ID: " + productId);
         }
 
         if (product != null) {
@@ -134,6 +135,8 @@ public class DetailActivity extends AppCompatActivity {
                     product.getDescription()
             );
 
+            productCart.setProductId(productId);
+
             addProductToFirebaseCart(view, productCart);
         });
 
@@ -147,6 +150,8 @@ public class DetailActivity extends AppCompatActivity {
                     quantity,
                     product.getDescription()
             );
+
+            productCart.setProductId(productId);
 
             addProductToFirebaseCart(view, productCart);
 
