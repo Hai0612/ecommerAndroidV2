@@ -16,9 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.activities.OrderDetailActivity;
 import com.example.ecomapplication.models.OrderModel;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
@@ -49,9 +50,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             }
         });
 
+        Date ordered = list.get(position).getOrderDate();
+        Date shipped = list.get(position).getShippedDate();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        String orderDate = dateFormat.format(ordered);
+        String shippedDate = dateFormat.format(shipped);
+
         holder.orderAddress.setText(list.get(position).getOrderAddress());
-//        holder.orderDate.setText((CharSequence) list.get(position).getOrderDate());
-//        holder.shippedDate.setText((CharSequence) list.get(position).getShippedDate());
+        holder.orderDate.setText(orderDate);
+        holder.shippedDate.setText(shippedDate);
         holder.total.setText(String.valueOf(list.get(position).getTotal()));
     }
 

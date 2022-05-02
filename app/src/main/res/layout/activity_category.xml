@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.CategoryActivity">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -17,33 +16,25 @@
 
         <TextView
             android:id="@+id/category_title"
-            android:layout_width="wrap_content"
+            android:background="@color/purple_200"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/amethysta"
-            android:text="Category"
+            android:text="List Category"
             android:textColor="@color/blue"
             android:textSize="24sp" />
 
-        <Button
-            android:id="@+id/button_see_all"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_alignParentRight="true"
-            android:background="?android:selectableItemBackground"
-            android:text="See all"
-            android:textAllCaps="false"
-            android:textColor="@color/purple_500" />
 
     </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="wrap_content"
+    <GridView
+        android:id="@+id/categoryList"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:numColumns="4"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
-        tools:ignore="MissingConstraints"
-        tools:listitem="@layout/category_list" />
+        android:layout_marginTop="20dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

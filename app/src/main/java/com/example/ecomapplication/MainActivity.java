@@ -7,7 +7,8 @@ import android.view.View;
 import android.view.Menu;
 
 import com.example.ecomapplication.activities.MerchantActivity;
-import com.example.ecomapplication.ui.cart.CartFragment;
+import com.example.ecomapplication.activities.ShowAllCategoryActivity;
+import com.example.ecomapplication.activities.ShowAllProductsActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -45,11 +46,9 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_login, R.id.nav_signup, R.id.nav_notification,
-                R.id.nav_myproducts, R.id.nav_order, R.id.nav_myorder)
+                R.id.nav_home, R.id.nav_login, R.id.nav_signup, R.id.nav_notification, R.id.nav_myproducts, R.id.nav_order, R.id.nav_myorder)
                 .setOpenableLayout(drawer)
                 .build();
-
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -78,5 +77,15 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void showAllProduct(View view) {
+        Intent intent = new Intent(this, ShowAllProductsActivity.class);
+        startActivity(intent);
+    }
+
+    public void showAllCategory(View view) {
+        Intent intent = new Intent(this, ShowAllCategoryActivity.class);
+        startActivity(intent);
     }
 }
