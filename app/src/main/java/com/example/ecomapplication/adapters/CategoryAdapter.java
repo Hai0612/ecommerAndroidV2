@@ -18,8 +18,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.ecomapplication.R;
+import com.example.ecomapplication.activities.ShowProductCategory;
 import com.example.ecomapplication.models.Category;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -49,6 +51,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
 
         ImageView imageView = view.findViewById(R.id.cate_img);
         TextView textView = view.findViewById(R.id.cate_name);
+        ConstraintLayout item = view.findViewById(R.id.item_btn);
 
         if (!category.getImg_url().equals("")) {
             StorageReference storageReference = storage.getReferenceFromUrl(category.getImg_url());
@@ -59,6 +62,19 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
                     .addOnFailureListener(e -> Log.v("Error", "Error when get the images: " + e));
         }
         textView.setText(category.getName());
+
+
+        item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(context, ShowProductCategory.class);
+                intent.putExtra("type", list.get(position).getId_category());
+                String a = category.getId_category();
+                Log.v("Hello Tuoi", a);
+                context.startActivity(intent);
+            }
+        });
         return view;
     }
 

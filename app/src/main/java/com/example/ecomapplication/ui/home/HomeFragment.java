@@ -4,21 +4,23 @@ package com.example.ecomapplication.ui.home;
 import static android.content.ContentValues.TAG;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.adapters.CategoryAdapter;
@@ -26,9 +28,34 @@ import com.example.ecomapplication.adapters.NewProductAdapter;
 import com.example.ecomapplication.adapters.PopularProductAdapter;
 import com.example.ecomapplication.adapters.SlideItemHome;
 import com.example.ecomapplication.adapters.SliderAdapter;
+import com.example.ecomapplication.databinding.FragmentHomeBinding;
 import com.example.ecomapplication.models.Category;
 import com.example.ecomapplication.models.Product;
-import com.example.ecomapplication.ui.cart.CartFragment;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+import static android.content.ContentValues.TAG;
+
+import android.app.ProgressDialog;
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.GridView;
+import android.widget.ListView;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -69,7 +96,6 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_home, container, false);
-
         firestore = FirebaseFirestore.getInstance();
 
         //        ImageSlider imageSlider = root.findViewById((R.id.image_slider));
@@ -92,7 +118,6 @@ public class HomeFragment extends Fragment {
         slideItemHomes.add(new SlideItemHome(R.drawable.banner1));
         slideItemHomes.add(new SlideItemHome(R.drawable.banner2));
         slideItemHomes.add(new SlideItemHome(R.drawable.banner3))       ;
-
         viewPager2.setAdapter(new SliderAdapter(slideItemHomes,viewPager2));
 
         // progress dialog
@@ -128,7 +153,6 @@ public class HomeFragment extends Fragment {
                 try {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Product product = document.toObject(Product.class);
-                        product.setProductId(document.getId());
                         popularProductsList.add(product);
                         popularProductAdapter.notifyDataSetChanged();
                     }
