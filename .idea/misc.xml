@@ -34,10 +34,12 @@
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/layout/my_order_item.xml" value="1.3026315789473684" />
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/menu/activity_main_drawer.xml" value="0.18541666666666667" />
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/menu/main.xml" value="0.3625" />
+        <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/drawable/edittext_button_style_rounded.xml" value="0.1" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/drawable/ic_baseline_edit_24.xml" value="0.1" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/drawable/shape_rect01.xml" value="0.1" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/drawable/shape_rect02.xml" value="0.1" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/activity_add_product.xml" value="0.22" />
+        <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/activity_detail.xml" value="0.21178637200736647" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/activity_login.xml" value="0.14130434782608695" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/activity_show_product_cate.xml" value="0.14130434782608695" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/activity_test_payment.xml" value="0.14130434782608695" />
@@ -51,8 +53,11 @@
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/fragment_new_product.xml" value="0.22" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/fragment_profile.xml" value="0.14130434782608695" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/fragment_seller_home.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/row_comment.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/row_product_seller.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/show_all_item.xml" value="0.14130434782608695" />
+        <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/test.xml" value="0.1" />
+        <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/toolbar.xml" value="0.16621376811594202" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/menu/activity_main_drawer.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/menu/main.xml" value="0.17552083333333332" />
       </map>

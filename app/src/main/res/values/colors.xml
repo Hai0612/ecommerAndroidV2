@@ -14,5 +14,7 @@
     <color name="red">#DC143C</color>
     <color name="gray">#BEBEBE</color>
     <color name="blur">#F5F5F5</color>
+    <color name="blue_gray">#7092BE</color>
+    <color name="turquoise">#99D9EA</color>
 
 </resources>
