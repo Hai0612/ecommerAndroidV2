@@ -88,9 +88,9 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
                 }
                 int totalCart = 0;
                 for(int i = 0 ; i< list.size() ; i++){
-                    totalCart = list.get(i).getPrice() * list.get(i).getQuantity();
+                    totalCart = Integer.parseInt(list.get(i).getPrice()) * list.get(i).getQuantity();
                 }
-                int totalPrice = list.get(position).getPrice() * list.get(position).getQuantity();
+                int totalPrice = Integer.parseInt(list.get(position).getPrice()) * list.get(position).getQuantity();
                 holder.price.setText(String.valueOf(totalPrice));
                 Intent intent = new Intent("MyTotalAmount");
                 intent.putExtra("totalAmount", totalCart);
@@ -111,9 +111,9 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
 //                reload?
                 int totalCart = 0;
                 for(int i = 0 ; i< list.size() ; i++){
-                    totalCart = list.get(i).getPrice() * list.get(i).getQuantity();
+                    totalCart = Integer.parseInt(list.get(i).getPrice()) * list.get(i).getQuantity();
                 }
-                int totalPrice = list.get(position).getPrice() * list.get(position).getQuantity();
+                int totalPrice = Integer.parseInt(list.get(position).getPrice()) * list.get(position).getQuantity();
                 holder.price.setText(String.valueOf(totalPrice));
                 Intent intent = new Intent("MyTotalAmount");
                 intent.putExtra("totalAmount", totalCart);
@@ -121,7 +121,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
             }
         });
 
-        int totalPrice = list.get(position).getPrice() * list.get(position).getQuantity();
+        int totalPrice = Integer.parseInt(list.get(position).getPrice()) * list.get(position).getQuantity();
         totalAmount = totalAmount + totalPrice;
         Intent intent = new Intent("MyTotalAmount");
         intent.putExtra("totalAmount", totalAmount);

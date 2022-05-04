@@ -2,37 +2,47 @@ package com.example.ecomapplication.models;
 
 public class MyCartModel {
     private  String documentId;
-    String img_url;
-    String name;
-    int price;
-    int quantity;
+    private String id;
+    private String name ;
+    private String img_url;
+    private String id_category;
+    private int price;
+    private String size;
+    private int quantity;
+    private String description;
+    private String rating;
 
-    public MyCartModel() {
-    }
+    public MyCartModel() {}
 
-    public MyCartModel(String img_url, String name, int price, int quantity,int id) {
-        this.img_url = img_url;
+    public MyCartModel(String id, String name, String img_url, String id_category, int price, String size, int quantity, String description, String rating) {
+        this.id = id;
         this.name = name;
-        this.price = price;
-        this.quantity = quantity;
-    }
-
-
-    public String getDocumentId() {
-        return documentId;
-    }
-
-    public void setDocumentId(String documentId) {
-        this.documentId = documentId;
-    }
-
-
-    public String getImg_url() {
-        return img_url;
-    }
-
-    public void setImg_url(String img_url) {
         this.img_url = img_url;
+        this.id_category = id_category;
+        this.price = price;
+        this.size = size;
+        this.quantity = quantity;
+        this.description = description;
+        this.rating = rating;
+    }
+
+    public MyCartModel(String name, String img_url, String id_category,
+                   int price, String size, int quantity, String description) {
+        this.name = name;
+        this.img_url = img_url;
+        this.id_category = id_category;
+        this.price = price;
+        this.size = size;
+        this.quantity = quantity;
+        this.description = description;
+    }
+
+    public String getProductId() {
+        return id;
+    }
+
+    public void setProductId(String productId) {
+        this.id = productId;
     }
 
     public String getName() {
@@ -43,12 +53,36 @@ public class MyCartModel {
         this.name = name;
     }
 
-    public int getPrice() {
-        return price;
+    public String getImg_url() {
+        return img_url;
+    }
+
+    public void setImg_url(String img_url) {
+        this.img_url = img_url;
+    }
+
+    public String getId_category() {
+        return id_category;
+    }
+
+    public void setId_category(String id_category) {
+        this.id_category = id_category;
+    }
+
+    public String getPrice() {
+        return String.valueOf(price);
     }
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 
     public int getQuantity() {
@@ -58,4 +92,31 @@ public class MyCartModel {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
+    }
+
+
+
 }
