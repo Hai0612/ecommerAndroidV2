@@ -35,10 +35,6 @@ public class ShowAllCategoryActivity extends AppCompatActivity {
         getCategoriesFromFireBase();
         categoryAdapter = new CategoryAdapter(this, categories);
         categoryView.setAdapter(categoryAdapter);
-
-        getCategoriesFromFireBase();
-        categoryAdapter = new CategoryAdapter(this, categories);
-        categoryView.setAdapter(categoryAdapter);
     }
 
     private void getCategoriesFromFireBase() {

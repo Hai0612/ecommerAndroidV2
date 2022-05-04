@@ -3,18 +3,13 @@ package com.example.ecomapplication.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,18 +58,13 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         }
         textView.setText(category.getName());
 
-
-        item.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(context, ShowProductCategory.class);
-                intent.putExtra("type", list.get(position).getId_category());
-                String a = category.getId_category();
-                Log.v("Hello Tuoi", a);
-                context.startActivity(intent);
-            }
+        item.setOnClickListener(view1 -> {
+            Intent intent = new Intent(context, ShowProductCategory.class);
+            intent.putExtra("type", list.get(position).getId_category());
+            String a = category.getId_category();
+            context.startActivity(intent);
         });
+
         return view;
     }
 

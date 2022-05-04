@@ -15,12 +15,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.activities.DetailActivity;
 import com.example.ecomapplication.adapters.CategoryAdapter;
@@ -28,11 +26,15 @@ import com.example.ecomapplication.adapters.HistorySearchAdapter;
 import com.example.ecomapplication.adapters.SearchAdapter;
 import com.example.ecomapplication.models.Category;
 import com.example.ecomapplication.models.Product;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SearchFragment extends Fragment {
 
@@ -123,6 +125,7 @@ public class SearchFragment extends Fragment {
 
         historyView.setOnItemClickListener((adapterView, view, i, l) -> {
             String historyItem = historyView.getItemAtPosition(i).toString();
+
             searchView.setText(historyItem);
             searchForProduct(historyItem);
             history.clear();
@@ -130,6 +133,15 @@ public class SearchFragment extends Fragment {
         });
 
         resultView.setOnItemClickListener(((adapterView, view, i, l) -> {
+            String searchText = searchView.getText().toString();
+            Map<String, String> search = new HashMap<>();
+            search.put("id_user", "1");
+            search.put("text", searchText);
+            firestore.collection("SearchHistory")
+                    .add(search).addOnSuccessListener(documentReference -> {
+                        Log.v("Result", "Added new search history");
+                    });
+
             Product product = (Product) adapterView.getItemAtPosition(i);
 
             Intent intent = new Intent (view.getContext(), DetailActivity.class);
