@@ -117,7 +117,13 @@
         android:layout_below="@+id/toolbarRl"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/my_product_view"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:layout_marginTop="6dp"
+            android:padding="5dp" />
     </RelativeLayout>
 
     <!-- order -->

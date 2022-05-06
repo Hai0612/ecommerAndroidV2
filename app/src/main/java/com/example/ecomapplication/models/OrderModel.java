@@ -5,21 +5,29 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class OrderModel implements Serializable {
-    String orderAddress;
-    Date orderDate;
-    Date shippedDate;
-    int total;
-    String id;
+    private String id;
+    private String id_user;
+    private String orderAddress;
+    private Date orderDate;
+    private  Date shippedDate;
+    private  int total;
+    public OrderModel(){
 
-    public OrderModel() {
+    }
+    public String getId() {
+        return id;
     }
 
-    public OrderModel(String orderAddress, Date orderDate, Date shippedDate, int total, String id) {
-        this.orderAddress = orderAddress;
-        this.orderDate = orderDate;
-        this.shippedDate = shippedDate;
-        this.total = total;
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public String getId_user() {
+        return id_user;
+    }
+
+    public void setId_user(String id_user) {
+        this.id_user = id_user;
     }
 
     public String getOrderAddress() {
@@ -54,11 +62,14 @@ public class OrderModel implements Serializable {
         this.total = total;
     }
 
-    public String getId() {
-        return id;
+    public OrderModel(String id, String id_user, String orderAddress, Date orderDate, Date shippedDate, int total) {
+        this.id = id;
+        this.id_user = id_user;
+        this.orderAddress = orderAddress;
+        this.orderDate = orderDate;
+        this.shippedDate = shippedDate;
+        this.total = total;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+
 }

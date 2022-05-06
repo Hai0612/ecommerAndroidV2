@@ -3,6 +3,7 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,38 +13,60 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.example.ecomapplication.R;
 
 import com.example.ecomapplication.adapters.AddressAdapter;
+import com.example.ecomapplication.adapters.CheckoutAdapter;
+import com.example.ecomapplication.adapters.MyCartAdapter;
+import com.example.ecomapplication.models.MyCartModel;
 import com.example.ecomapplication.models.UserInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CheckoutActitvity extends AppCompatActivity {
+public class CheckoutActitvity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     List<String> listAddress;
     AddressAdapter addressAdapter;
     RecyclerView addressListView;
     private Button new_address_button;
     private Button click_to_payment;
+        List<MyCartModel> cartModelList;
+    CheckoutAdapter cartAdapter;
+    RecyclerView productsCheckoutRecyclerView;
     FirebaseFirestore db;
-
+    private FirebaseAuth auth;
+    Spinner listAddressSpinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout_actitvity);
         db = FirebaseFirestore.getInstance();
         new_address_button = findViewById(R.id.new_address_button);
-        addressListView = findViewById(R.id.list_address);
         click_to_payment = findViewById(R.id.click_to_payment);
+        productsCheckoutRecyclerView = findViewById(R.id.orderList);
+        listAddressSpinner = findViewById(R.id.list_drop_address);
+
+        //getListAddress
+        listAddress = new ArrayList<>();
+        getListAddress();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, listAddress);
+//set the spinners adapter to the previously created one.
+        listAddressSpinner.setAdapter(adapter);
+        listAddressSpinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
         click_to_payment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,6 +74,8 @@ public class CheckoutActitvity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        auth = FirebaseAuth.getInstance();
+
         new_address_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,13 +83,56 @@ public class CheckoutActitvity extends AppCompatActivity {
             }
         });
 
-        listAddress = new ArrayList<>();
-        getListAddress();
-        addressAdapter = new AddressAdapter(this, listAddress);
-        addressListView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        addressListView.setAdapter(addressAdapter);
+
+        //get product
+        getProductCheckout();
+        productsCheckoutRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        cartAdapter = new CheckoutAdapter(this, cartModelList);
+        productsCheckoutRecyclerView.setAdapter(cartAdapter);
 
     }
+    public void getProductCheckout () {
+        cartModelList = new ArrayList<>();
+        db.collection("Cart").document(auth.getUid())
+//        firestore.collection("Cart").document(auth.getCurrentUser().getUid())
+                .collection("Products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot doc :task.getResult().getDocuments()) {
+//                        Log.v("Test", auth.getCurrentUser().getUid());
+                        MyCartModel myCartModel = doc.toObject(MyCartModel.class);
+                        myCartModel.setDocumentId(doc.getId());
+                        cartModelList.add(myCartModel);
+                        Log.v("Tag", myCartModel.getDescription());
+                        cartAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        });
+    }
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+
+        switch (position) {
+            case 0:
+                Log.v("TAGGG" , "(String) parent.getItemAtPosition(position)");
+                break;
+            case 1:
+                Log.v("TAGGG" , (String) parent.getItemAtPosition(position));
+                break;
+            case 2:
+                // Whatever you want to happen when the thrid item gets selected
+                break;
+
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
     public void showDialog(){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
@@ -109,7 +177,6 @@ public class CheckoutActitvity extends AppCompatActivity {
                                 for(int i = 0; i < user.getAddress().size() ; i++){
                                     listAddress.add(user.getAddress().get(i));
                                 }
-                                addressAdapter.notifyDataSetChanged();
                             } else {
                                 Log.d(TAG, "No such document");
                             }

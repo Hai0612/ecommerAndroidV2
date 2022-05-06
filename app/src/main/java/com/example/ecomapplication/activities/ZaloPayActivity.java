@@ -3,6 +3,7 @@ package com.example.ecomapplication.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -24,7 +25,7 @@ import vn.zalopay.sdk.listeners.PayOrderListener;
 
 public class ZaloPayActivity extends AppCompatActivity {
     Button btnPay;
-    String amount = "10000";
+    String amount = "10";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class ZaloPayActivity extends AppCompatActivity {
                 try {
                     JSONObject data = orderApi.createOrder(amount);
                     String code = data.getString("returncode");
-
+                    Log.v("TAGGG" , code);
                     if (code.equals("1")) {
 
                         String token = data.getString("zptranstoken");

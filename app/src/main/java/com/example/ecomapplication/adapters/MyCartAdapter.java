@@ -76,7 +76,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
                 if (cartModel.getQuantity() <= 1) {
                     return;
                 } else {
-                        firestore.collection("Cart").document("SXcZhdR7152RN49UawTz")
+                        firestore.collection("Cart").document(auth.getUid())
                             .collection("Products").document(id_document)
                             .update("quantity", cartModel.getQuantity() - 1);
                         list.get(position).setQuantity(cartModel.getQuantity() - 1);
@@ -88,9 +88,9 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
                 }
                 int totalCart = 0;
                 for(int i = 0 ; i< list.size() ; i++){
-                    totalCart = Integer.parseInt(list.get(i).getPrice()) * list.get(i).getQuantity();
+                    totalCart = Integer.parseInt(String.valueOf(list.get(i).getPrice())) * list.get(i).getQuantity();
                 }
-                int totalPrice = Integer.parseInt(list.get(position).getPrice()) * list.get(position).getQuantity();
+                int totalPrice = Integer.parseInt(String.valueOf(list.get(position).getPrice())) * list.get(position).getQuantity();
                 holder.price.setText(String.valueOf(totalPrice));
                 Intent intent = new Intent("MyTotalAmount");
                 intent.putExtra("totalAmount", totalCart);
@@ -102,7 +102,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, cartModel.getQuantity() + "", Toast.LENGTH_SHORT).show();
-                firestore.collection("Cart").document("SXcZhdR7152RN49UawTz")
+                firestore.collection("Cart").document(auth.getUid())
                         .collection("Products").document(id_document)
                         .update("quantity", cartModel.getQuantity() + 1);
                 list.get(position).setQuantity(cartModel.getQuantity() + 1);
@@ -111,9 +111,9 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
 //                reload?
                 int totalCart = 0;
                 for(int i = 0 ; i< list.size() ; i++){
-                    totalCart = Integer.parseInt(list.get(i).getPrice()) * list.get(i).getQuantity();
+                    totalCart = list.get(i).getPrice() * list.get(i).getQuantity();
                 }
-                int totalPrice = Integer.parseInt(list.get(position).getPrice()) * list.get(position).getQuantity();
+                int totalPrice = list.get(position).getPrice() * list.get(position).getQuantity();
                 holder.price.setText(String.valueOf(totalPrice));
                 Intent intent = new Intent("MyTotalAmount");
                 intent.putExtra("totalAmount", totalCart);
@@ -121,7 +121,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
             }
         });
 
-        int totalPrice = Integer.parseInt(list.get(position).getPrice()) * list.get(position).getQuantity();
+        int totalPrice = list.get(position).getPrice() * list.get(position).getQuantity();
         totalAmount = totalAmount + totalPrice;
         Intent intent = new Intent("MyTotalAmount");
         intent.putExtra("totalAmount", totalAmount);

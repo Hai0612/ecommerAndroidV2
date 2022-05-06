@@ -43,6 +43,8 @@
         <activity android:name=".activities.ShowAllProductsActivity" />
         <activity android:name=".activities.ShowAllCategoryActivity" />
         <activity android:name=".activities.SellerActivity" />
+        <activity android:name=".activities.NewProductActivity" />
+
     </application>
 
 </manifest>

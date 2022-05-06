@@ -25,17 +25,17 @@ public class MyCartModel {
         this.description = description;
         this.rating = rating;
     }
-
-    public MyCartModel(String name, String img_url, String id_category,
-                   int price, String size, int quantity, String description) {
-        this.name = name;
-        this.img_url = img_url;
-        this.id_category = id_category;
-        this.price = price;
-        this.size = size;
-        this.quantity = quantity;
-        this.description = description;
-    }
+//
+//    public MyCartModel(String name, String img_url, String id_category,
+//                   int price, String size, int quantity, String description) {
+//        this.name = name;
+//        this.img_url = img_url;
+//        this.id_category = id_category;
+//        this.price = price;
+//        this.size = size;
+//        this.quantity = quantity;
+//        this.description = description;
+//    }
 
     public String getProductId() {
         return id;
@@ -69,8 +69,8 @@ public class MyCartModel {
         this.id_category = id_category;
     }
 
-    public String getPrice() {
-        return String.valueOf(price);
+    public int getPrice() {
+        return price;
     }
 
     public void setPrice(int price) {

@@ -42,7 +42,6 @@ public class OrderDetailActivity extends AppCompatActivity {
         }
         OrderModel orderModel = (OrderModel) bundle.get("object_order");
         id = orderModel.getId();
-        Log.v(TAG, id + " ____fdsfsfsd");
         firestore = FirebaseFirestore.getInstance();
         productView = findViewById(R.id.productList);
         total = findViewById(R.id.all_total_price_order);
@@ -55,7 +54,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                     Product product = document.toObject(Product.class);
                     productList.add(product);
                     productAdapter.notifyDataSetChanged();
-                    totalPr += product.getQuantity() * Integer.parseInt(product.getPrice());
+                    totalPr += product.getQuantity() * product.getPrice();
                     Log.v("Testtt", String.valueOf(totalPr));
                     total.setText(totalPr + " VNĐ");
                 }

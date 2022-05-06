@@ -10,22 +10,28 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.ecomapplication.R;
+import com.example.ecomapplication.adapters.CheckoutAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class OrderPlace extends Dialog implements
@@ -40,11 +46,15 @@ public class OrderPlace extends Dialog implements
     private String orderAddress;
     private  String id_user;
     private Date orderDate;
+    CheckoutAdapter cartAdapter;
+    List<MyCartModel> cartModelList;
     private Date shippedDate;
      private int number;
      private String id;
+    private FirebaseAuth auth;
+
     private int total;
-    public OrderPlace(Activity activity , String orderAddress, int total ,String id_user  , Date orderDate , Date shippedDate, int number) {
+    public OrderPlace(Activity activity , String orderAddress, int total ,String id_user  , Date orderDate , Date shippedDate) {
         super(activity);
         this.activity = activity;
         this.orderAddress = orderAddress;
@@ -52,7 +62,6 @@ public class OrderPlace extends Dialog implements
         this.id_user = id_user;
         this.orderDate = orderDate;
         this.shippedDate = shippedDate;
-        this.number = number;
     }
 
     @Override
@@ -67,10 +76,10 @@ public class OrderPlace extends Dialog implements
         addressText = findViewById(R.id.address_order);
         totalText.setText(String.valueOf(total));
         addressText.setText(orderAddress);
-
+        auth = FirebaseAuth.getInstance();
         yes.setOnClickListener(this);
-
         no.setOnClickListener(this);
+        getProductToPayment();
 
     }
     public void orderPlace(){
@@ -78,8 +87,6 @@ public class OrderPlace extends Dialog implements
         Date d  = Calendar.getInstance().getTime();
         Map<String, Object> order = new HashMap<>();
         id = getAlphaNumericString(5);
-        order.put("id", id);
-        order.put("id_user", id_user);
         order.put("orderAddress", orderAddress);
         order.put("orderDate", orderDate);
         order.put("shippedDate", shippedDate);
@@ -88,41 +95,76 @@ public class OrderPlace extends Dialog implements
 
 // Add a new document with a generated ID
         db.collection("Order")
-                .add(order)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        AddProductListToOrderDetail();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Them order that bai", e);
-                    }
-                });
+                .document(auth.getUid())
+                .collection("Orders")
+                .add(order).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                String id_order = task.getResult().getId();
+                AddProductListToOrderDetail(id_order);
+            } else {
+                Log.w(TAG, "Them order that bai");
+            }
+        });
+
 
     }
-    public void AddProductListToOrderDetail(){
-        Map<String, Object> order = new HashMap<>();
-        order.put(id, 1);
-        order.put("id_product", "2");
-        order.put("product_quantity", 2);
+    public void getProductToPayment(){
+        cartModelList = new ArrayList<>();
+        db.collection("Cart").document(auth.getUid())
+//        firestore.collection("Cart").document(auth.getCurrentUser().getUid())
+                .collection("Products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot doc :task.getResult().getDocuments()) {
+//                        Log.v("Test", auth.getCurrentUser().getUid());
+                        MyCartModel myCartModel = doc.toObject(MyCartModel.class);
+                        myCartModel.setDocumentId(doc.getId());
+                        cartModelList.add(myCartModel);
+                    }
+                }
+            }
+        });
+    }
+    public void AddProductListToOrderDetail(String id_order){
+        for(int i  = 0 ; i < cartModelList.size(); i ++){
+            db.collection("OrderDetail").document(id_order)
+                    .collection("Products")
+                    .add(cartModelList.get(i))
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.v(TAG, "ADD order detail thanh cong");
+                            deleteProductsInCartOfUser();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Them order detail that bai", e);
+                        }
+                    });
+        }
+
 
 
 // Add a new document with a generated ID
-        db.collection("OrderDetail")
-                .add(order)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+
+    }
+    public void deleteProductsInCartOfUser() {
+        Log.v("ID_user" , auth.getUid());
+        db.collection("Cart").document(auth.getUid())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.v(TAG, "ADD order detail thanh cong");
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Delete product in cart successfully");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Them order detail that bai", e);
+                        Log.w(TAG, "Error deleting document", e);
                     }
                 });
     }

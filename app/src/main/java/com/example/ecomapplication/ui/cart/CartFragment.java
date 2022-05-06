@@ -87,7 +87,8 @@ public class CartFragment extends Fragment {
                 startActivity(new Intent(getContext(), CheckoutActitvity.class));
             }
         });
-        firestore.collection("Cart").document("SXcZhdR7152RN49UawTz")
+
+        firestore.collection("Cart").document(auth.getUid())
 //        firestore.collection("Cart").document(auth.getCurrentUser().getUid())
                 .collection("Products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

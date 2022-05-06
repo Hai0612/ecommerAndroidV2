@@ -3,6 +3,9 @@ package com.example.ecomapplication.activities;
 import static android.content.ContentValues.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.GridView;
@@ -24,9 +27,8 @@ import java.util.List;
 
 public class ShowAllProductsActivity extends AppCompatActivity {
     FirebaseFirestore firestore;
-    GridView productView;
-    ProductAdapter productAdapter;
-
+    PopularProductAdapter popularProductAdapter;
+    private RecyclerView recyclerViewCategory, newProductRecyclerview, productAllView ;
     List<Product> productList;
 
     @Override
@@ -35,11 +37,12 @@ public class ShowAllProductsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_products);
 
         firestore = FirebaseFirestore.getInstance();
-        productView = findViewById(R.id.productList);
+        productAllView = findViewById(R.id.productList);
 
         getProductFromFireBase();
-        productAdapter = new ProductAdapter(this, productList);
-        productView.setAdapter(productAdapter);
+        popularProductAdapter = new PopularProductAdapter(this, productList);
+        productAllView.setLayoutManager(new GridLayoutManager(this,2));
+        productAllView.setAdapter(popularProductAdapter);
     }
 
     private void getProductFromFireBase() {
@@ -50,7 +53,7 @@ public class ShowAllProductsActivity extends AppCompatActivity {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Product product = document.toObject(Product.class);
                     productList.add(product);
-                    productAdapter.notifyDataSetChanged();
+                    popularProductAdapter.notifyDataSetChanged();
                 }
             } else {
                 Log.w(TAG, "Error getting documents.", task.getException());

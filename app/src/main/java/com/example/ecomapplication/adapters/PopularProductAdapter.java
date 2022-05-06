@@ -2,11 +2,13 @@ package com.example.ecomapplication.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +24,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class PopularProductAdapter extends RecyclerView.Adapter<PopularProductAdapter.ViewHolder> {
+public class PopularProductAdapter extends RecyclerView.Adapter<PopularProductAdapter.ViewHolder> implements ListAdapter {
 
     private Context context;
     private FirebaseStorage storage;
@@ -45,7 +47,7 @@ public class PopularProductAdapter extends RecyclerView.Adapter<PopularProductAd
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.productId = products.get(position).getProductId();
         holder.name.setText(products.get(position).getName());
-        holder.price.setText(products.get(position).getPrice());
+        holder.price.setText(String.valueOf(products.get(position).getPrice()));
 
         StorageReference storageReference = storage.getReferenceFromUrl(products.get(position).getImg_url());
 
@@ -69,6 +71,51 @@ public class PopularProductAdapter extends RecyclerView.Adapter<PopularProductAd
     @Override
     public int getItemCount() {
         return products.size();
+    }
+
+    @Override
+    public boolean areAllItemsEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled(int i) {
+        return false;
+    }
+
+    @Override
+    public void registerDataSetObserver(DataSetObserver dataSetObserver) {
+
+    }
+
+    @Override
+    public void unregisterDataSetObserver(DataSetObserver dataSetObserver) {
+
+    }
+
+    @Override
+    public int getCount() {
+        return products.size();
+    }
+
+    @Override
+    public Object getItem(int i) {
+        return null;
+    }
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        return null;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 1;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {

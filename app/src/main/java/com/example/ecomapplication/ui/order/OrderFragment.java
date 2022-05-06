@@ -68,7 +68,7 @@ import java.util.List;
             orderAdapter = new OrderAdapter(getContext(), orderModels);
             recyclerView.setAdapter(orderAdapter);
 
-            firestore.collection("Orders")
+            firestore.collection("Order").document(auth.getUid()).collection("Orders")
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -79,6 +79,8 @@ import java.util.List;
                                 for (DocumentSnapshot doc :task.getResult().getDocuments()) {
                                     OrderModel orderModel = doc.toObject(OrderModel.class);
                                     orderModels.add(orderModel);
+                                    orderModel.setId(doc.getId());
+                                    Log.v("taggg" , doc.getId());
                                     orderAdapter.notifyDataSetChanged();
                                 }
                             } else {

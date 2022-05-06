@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.adapters.CategoryAdapter;
+import com.example.ecomapplication.adapters.PopularProductAdapter;
 import com.example.ecomapplication.adapters.ShowAllAdapter;
 import com.example.ecomapplication.models.Product;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,7 +25,7 @@ import java.util.List;
 public class ShowProductCategory extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    ShowAllAdapter showAllAdapter;
+    PopularProductAdapter popularProductAdapter;
     CategoryAdapter categoryAdapter;
     List<Product> list;
     FirebaseFirestore firestore;
@@ -40,8 +41,8 @@ public class ShowProductCategory extends AppCompatActivity {
         recyclerView = findViewById(R.id.show_all_cate);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         list = new ArrayList<>();
-        showAllAdapter = new ShowAllAdapter(this, list);
-        recyclerView.setAdapter(showAllAdapter);
+        popularProductAdapter = new PopularProductAdapter(this, list);
+        recyclerView.setAdapter(popularProductAdapter);
 
 
         if(type == null && type.isEmpty()){
@@ -55,7 +56,7 @@ public class ShowProductCategory extends AppCompatActivity {
                                     // show all
                                     Product product = doc.toObject(Product.class);
                                     list.add(product);
-                                    showAllAdapter.notifyDataSetChanged();
+                                    popularProductAdapter.notifyDataSetChanged();
                                 }
                             }
                         }
@@ -71,7 +72,7 @@ public class ShowProductCategory extends AppCompatActivity {
                                 for (DocumentSnapshot doc :task.getResult().getDocuments()){
                                     Product product = doc.toObject(Product.class);
                                     list.add(product);
-                                    showAllAdapter.notifyDataSetChanged();
+                                    popularProductAdapter.notifyDataSetChanged();
                                 }
                             }
                         }
@@ -88,7 +89,7 @@ public class ShowProductCategory extends AppCompatActivity {
                                 for (DocumentSnapshot doc :task.getResult().getDocuments()){
                                     Product product = doc.toObject(Product.class);
                                     list.add(product);
-                                    showAllAdapter.notifyDataSetChanged();
+                                    popularProductAdapter.notifyDataSetChanged();
                                 }
                             }
                         }
@@ -105,7 +106,7 @@ public class ShowProductCategory extends AppCompatActivity {
                                 for (DocumentSnapshot doc :task.getResult().getDocuments()){
                                     Product product = doc.toObject(Product.class);
                                     list.add(product);
-                                    showAllAdapter.notifyDataSetChanged();
+                                    popularProductAdapter.notifyDataSetChanged();
                                 }
                             }
                         }
@@ -122,7 +123,7 @@ public class ShowProductCategory extends AppCompatActivity {
                                 for (DocumentSnapshot doc :task.getResult().getDocuments()){
                                     Product product = doc.toObject(Product.class);
                                     list.add(product);
-                                    showAllAdapter.notifyDataSetChanged();
+                                    popularProductAdapter.notifyDataSetChanged();
                                 }
                             }
                         }
@@ -139,7 +140,7 @@ public class ShowProductCategory extends AppCompatActivity {
                                 for (DocumentSnapshot doc :task.getResult().getDocuments()){
                                     Product product = doc.toObject(Product.class);
                                     list.add(product);
-                                    showAllAdapter.notifyDataSetChanged();
+                                    popularProductAdapter.notifyDataSetChanged();
                                 }
                             }
                         }
@@ -156,7 +157,7 @@ public class ShowProductCategory extends AppCompatActivity {
                                 for (DocumentSnapshot doc :task.getResult().getDocuments()){
                                     Product product = doc.toObject(Product.class);
                                     list.add(product);
-                                    showAllAdapter.notifyDataSetChanged();
+                                    popularProductAdapter.notifyDataSetChanged();
                                 }
                             }
                         }
@@ -173,7 +174,7 @@ public class ShowProductCategory extends AppCompatActivity {
                                 for (DocumentSnapshot doc :task.getResult().getDocuments()){
                                     Product product = doc.toObject(Product.class);
                                     list.add(product);
-                                    showAllAdapter.notifyDataSetChanged();
+                                    popularProductAdapter.notifyDataSetChanged();
                                 }
                             }
                         }
@@ -190,7 +191,7 @@ public class ShowProductCategory extends AppCompatActivity {
                                 for (DocumentSnapshot doc :task.getResult().getDocuments()){
                                     Product product = doc.toObject(Product.class);
                                     list.add(product);
-                                    showAllAdapter.notifyDataSetChanged();
+                                    popularProductAdapter.notifyDataSetChanged();
                                 }
                             }
                         }
@@ -207,7 +208,7 @@ public class ShowProductCategory extends AppCompatActivity {
                                 for (DocumentSnapshot doc :task.getResult().getDocuments()){
                                     Product product = doc.toObject(Product.class);
                                     list.add(product);
-                                    showAllAdapter.notifyDataSetChanged();
+                                    popularProductAdapter.notifyDataSetChanged();
                                 }
                             }
                         }

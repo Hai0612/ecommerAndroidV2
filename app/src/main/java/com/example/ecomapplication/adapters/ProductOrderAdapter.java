@@ -64,7 +64,7 @@ public class ProductOrderAdapter extends ArrayAdapter<Product> {
                     .addOnSuccessListener(uri -> Picasso.with(context).load(uri.toString()).into(imageView))
                     .addOnFailureListener(e -> Log.v("Error", "Error when get the images: " + e));
         }
-        int pri = Integer.parseInt(product.getPrice()) * product.getQuantity();
+        int pri = product.getPrice() * product.getQuantity();
         Log.v("Test", String.valueOf(pri));
 
         namePro.setText(product.getName());

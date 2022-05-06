@@ -21,14 +21,18 @@ import android.widget.TextView;
 
 import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
+import com.example.ecomapplication.adapters.CheckoutAdapter;
 import com.example.ecomapplication.adapters.PaymentAdapter;
+import com.example.ecomapplication.models.MyCartModel;
 import com.example.ecomapplication.models.OrderPlace;
 import com.example.ecomapplication.models.Payment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -48,6 +52,9 @@ public class PaymentActivity extends AppCompatActivity {
     List<Payment> paymentList;
     PaymentAdapter paymentAdapter;
     FirebaseFirestore db;
+    private FirebaseAuth auth;
+    List<MyCartModel> cartModelList;
+    CheckoutAdapter cartAdapter;
 
     Button makePayment,cancelOrder, zaloPay, momo, cod;
     TextView newPaypalText, newGooglePay, newMasterCard ;
@@ -55,7 +62,11 @@ public class PaymentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
+        auth = FirebaseAuth.getInstance();
+        Intent intent = getIntent();
+        String data = intent.getStringExtra("data");
 
+        Log.v("TAG---", data);
         paymentList = new ArrayList<>();
         mapping();
         recyclerListPayment = findViewById(R.id.list_payment_rec);
@@ -90,7 +101,7 @@ public class PaymentActivity extends AppCompatActivity {
 //
 //                AlertDialog alert11 = builder1.create();
 //                alert11.show();
-                OrderPlace cdd=new OrderPlace(PaymentActivity.this, "120 Nguyễn Tuan, Ha Noi", 123000, "1jk1kj31j2k",new Date() , new Date(), 3);
+                OrderPlace cdd = new OrderPlace(PaymentActivity.this, "144 Xuân Thủy, Cầu Giấy , Ha Noi", 123000, auth.getUid(),new Date() , new Date());
                 cdd.show();
             }
         });
@@ -144,6 +155,7 @@ public class PaymentActivity extends AppCompatActivity {
 //            }
 //        });
     }
+
     public void newPaymentMethod(String payment_type){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

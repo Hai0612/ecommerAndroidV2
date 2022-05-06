@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -38,30 +39,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import static android.content.ContentValues.TAG;
-
-import android.app.ProgressDialog;
-import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.GridView;
-import android.widget.ListView;
-
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -132,8 +109,8 @@ public class HomeFragment extends Fragment {
 
         //load product
         getProductDataFromFirebase();
-        popularRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-
+//        popularRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        popularRecyclerview.setLayoutManager(new GridLayoutManager(getContext(),2));
         popularProductAdapter = new PopularProductAdapter(getContext(), popularProductsList);
         popularRecyclerview.setAdapter(popularProductAdapter);
 
@@ -145,15 +122,16 @@ public class HomeFragment extends Fragment {
 
     public void getProductDataFromFirebase(){
         popularProductsList = new ArrayList<>();
-
-        firestore.collection("Product").get().addOnCompleteListener(task -> {
+        firestore.collection("Product").limit(6).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.v("product" , "document.getId()");
 
                 try {
+
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Product product = document.toObject(Product.class);
                         popularProductsList.add(product);
+
                         popularProductAdapter.notifyDataSetChanged();
                     }
                 }
