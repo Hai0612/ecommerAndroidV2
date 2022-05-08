@@ -61,12 +61,12 @@ public class PaymentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment);
+        setContentView(R.layout.activity_payment_test);
         auth = FirebaseAuth.getInstance();
         Intent intent = getIntent();
         String data = intent.getStringExtra("data");
 
-        Log.v("TAG---", data);
+//        Log.v("TAG---", data);
         paymentList = new ArrayList<>();
         mapping();
         recyclerListPayment = findViewById(R.id.list_payment_rec);

@@ -17,8 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.adapters.AddressAdapter;
+import com.example.ecomapplication.adapters.OrderAdapter;
 import com.example.ecomapplication.adapters.PopularProductAdapter;
 import com.example.ecomapplication.models.MyCartModel;
+import com.example.ecomapplication.models.OrderModel;
 import com.example.ecomapplication.models.Product;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,6 +41,10 @@ public class SellerActivity extends AppCompatActivity {
     List<Product> myProduct;
     private RecyclerView  myProductRecyclerview ;
     private  PopularProductAdapter myProductAdapter;
+    List<OrderModel> myOrder;
+    private RecyclerView  myOrderRecyclerview ;
+    private OrderAdapter myOrderAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +62,7 @@ public class SellerActivity extends AppCompatActivity {
         productRl = findViewById(R.id.productRl);
         myProductRecyclerview = findViewById(R.id.my_product_view);
         orderRl = findViewById(R.id.orderRl);
+        myOrderRecyclerview = findViewById(R.id.my_order_view);
         db = FirebaseFirestore.getInstance();
 
         showProductUi();
@@ -104,6 +111,11 @@ public class SellerActivity extends AppCompatActivity {
         productRl.setVisibility(View.GONE);
         orderRl.setVisibility(View.VISIBLE);
 
+        getMyOrder();
+        myOrderRecyclerview.setLayoutManager(new GridLayoutManager(this,1));
+        myOrderAdapter = new OrderAdapter(this, myOrder);
+        myOrderRecyclerview.setAdapter(myOrderAdapter);
+
         productTab.setTextColor(getResources().getColor(R.color.white));
         productTab.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
@@ -121,6 +133,23 @@ public class SellerActivity extends AppCompatActivity {
                         Product product = doc.toObject(Product.class);
                         myProduct.add(product);
                         myProductAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        });
+    }
+
+    public  void getMyOrder(){
+        myOrder = new ArrayList<>();
+        db.collection("Order").document("ZXeAcAzbZ6SUVe0pxNLXSDY7WaM2")
+                .collection("Orders").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot doc :task.getResult().getDocuments()) {
+                        OrderModel orderModel = doc.toObject(OrderModel.class);
+                        myOrder.add(orderModel);
+                        myOrderAdapter.notifyDataSetChanged();
                     }
                 }
             }

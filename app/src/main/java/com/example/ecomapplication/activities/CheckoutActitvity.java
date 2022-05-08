@@ -3,13 +3,17 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.ecomapplication.R;
 
@@ -38,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CheckoutActitvity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+    TextView totalAmount;
     List<String> listAddress;
     AddressAdapter addressAdapter;
     RecyclerView addressListView;
@@ -58,6 +64,10 @@ public class CheckoutActitvity extends AppCompatActivity implements AdapterView.
         click_to_payment = findViewById(R.id.click_to_payment);
         productsCheckoutRecyclerView = findViewById(R.id.orderList);
         listAddressSpinner = findViewById(R.id.list_drop_address);
+        totalAmount = findViewById(R.id.totalLabel2);
+
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(mMessageReceiver, new IntentFilter("MyTotalAmount"));
 
         //getListAddress
         listAddress = new ArrayList<>();
@@ -187,4 +197,12 @@ public class CheckoutActitvity extends AppCompatActivity implements AdapterView.
                     }
                 });
     }
+
+    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int totalBill = intent.getIntExtra("totalAmount", 0);
+            totalAmount.setText(totalBill + "vnđ");
+        }
+    };
 }
