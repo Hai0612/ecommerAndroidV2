@@ -1,5 +1,9 @@
 package com.example.ecomapplication.activities;
 
+import static android.content.ContentValues.TAG;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +32,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.adapters.CommentAdapter;
 import com.example.ecomapplication.adapters.OrderAdapter;
+import com.example.ecomapplication.adapters.ProductSellerAdapter;
+import com.example.ecomapplication.models.Category;
 import com.example.ecomapplication.models.Comment;
 import com.example.ecomapplication.models.Product;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,6 +43,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -63,14 +70,13 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
-public class DetailActivity extends AppCompatActivity {
+public class SellerOrderDetailActivity extends AppCompatActivity {
     ImageView detailedImg;
-    TextView detailedName, detailedDesc, detailedPrice, quantityOrder, ratingValue;
+    TextView detailedName, detailedDesc, detailedPrice, ratingValue, quantityInStock;
     RatingBar detailedRating;
-    Button buyNow, addToCart, addItem, removeItem,addComment;
+    Button editProduct, deleteProduct, addComment;
     Product product;
     FirebaseStorage storage;
-    FirebaseFirestore firestore;
     CircularImageView userCommentImg;
     EditText postDetailComment;
     RecyclerView RvComment;
@@ -82,13 +88,14 @@ public class DetailActivity extends AppCompatActivity {
     List<Comment> list;
     CommentAdapter commentAdapter;
 
-    int quantity;
-    String productId;
+    List<Product> productList;
+    ProductSellerAdapter productSellerAdapter;
+
+    String productId, product_category, product_size, documentId = "";
 
     private void binding() {
         storage = FirebaseStorage.getInstance();
-        firestore = FirebaseFirestore.getInstance();
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_seller_oder_detail);
         RvComment = findViewById(R.id.rv_comment);
         detailedImg = findViewById(R.id.detailed_img);
         detailedName = findViewById(R.id.detailed_name);
@@ -96,11 +103,9 @@ public class DetailActivity extends AppCompatActivity {
         ratingValue = findViewById(R.id.rating_value);
         detailedDesc = findViewById(R.id.detailed_desc);
         detailedPrice = findViewById(R.id.detailed_price);
-        quantityOrder = findViewById(R.id.quantity);
-        buyNow = findViewById(R.id.buy_now);
-        addToCart = findViewById(R.id.add_to_cart);
-        addItem = findViewById(R.id.add_item);
-        removeItem = findViewById(R.id.remove_item);
+        quantityInStock = findViewById(R.id.seller_quantity);
+        editProduct = findViewById(R.id.edit_product);
+        deleteProduct = findViewById(R.id.delete_product);
         userCommentImg = findViewById(R.id.user_comment_img);
         addComment = findViewById(R.id.add_comment_btn);
         postDetailComment = findViewById(R.id.post_detail_comment);
@@ -110,37 +115,17 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    private void addProductToFirebaseCart(View view, Product newProduct) {
-        firestore.collection("Cart").document(auth.getUid())
-                .collection("Products")
-                .add(newProduct).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Toast.makeText(
-                        view.getContext(),
-                        "Added product ID " + newProduct.getProductId()
-                                + " of " + newProduct.getQuantity() + " products to cart",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(
-                        view.getContext(),
-                        "Fail to add product to cart",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Objects.requireNonNull(getSupportActionBar()).hide();
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_seller_oder_detail);
         binding();
 
-        final Object obj = getIntent().getSerializableExtra("productDetail");
+        final Object obj = getIntent().getSerializableExtra("productSellerDetail");
         if (obj instanceof Product) {
             product = (Product) obj;
-            quantity = 1;
             productId = product.getProductId();
             Log.v("Result", "Get product ID: " + productId);
         }
@@ -150,13 +135,17 @@ public class DetailActivity extends AppCompatActivity {
             detailedDesc.setText(product.getDescription());
             detailedPrice.setText(String.valueOf(product.getPrice()));
             ratingValue.setText(product.getRating());
+            quantityInStock.setText(String.valueOf(product.getQuantity()));
             detailedRating.setRating(Float.parseFloat(product.getRating()));
+            product_category = product.getId_category();
+            product_size = product.getSize();
+            Log.v("Chinsu", product.getId());
 
             StorageReference storageReference = storage.getReferenceFromUrl(product.getImg_url());
 
             // Dat anh lay tu Firebase cho item
             storageReference.getDownloadUrl()
-                    .addOnSuccessListener(uri -> Picasso.with(DetailActivity.this)
+                    .addOnSuccessListener(uri -> Picasso.with(SellerOrderDetailActivity.this)
                             .load(uri.toString())
                             .fit().centerInside()
                             .into(detailedImg))
@@ -174,6 +163,45 @@ public class DetailActivity extends AppCompatActivity {
 //        RvComment.setAdapter(commentAdapter);
 
 
+
+        deleteProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.v("Chocopie", product.getName());
+                new AlertDialog.Builder(SellerOrderDetailActivity.this)
+                        .setTitle("Xóa sản phẩm")
+                        .setMessage("Bạn muốn xóa sản phẩm " + product.getName() + " ?")
+
+                        // Specifying a listener allows you to take an action before dismissing the dialog.
+                        // The dialog is automatically dismissed when a dialog button is clicked.
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Continue with delete operation
+//                                db.collection("Product").document(product.getDocumentId()).delete();
+                                db.collection("Product").get().addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            Product prod = document.toObject(Product.class);
+                                            if(prod.getId().equals(product.getId())){
+                                                product.setDocumentId(document.getId());
+                                                Log.v("Chupachup", product.getDocumentId());
+                                                db.collection("Product").document(product.getDocumentId()).delete();
+                                                startActivity(new Intent(SellerOrderDetailActivity.this, SellerActivity.class));
+                                            }
+                                        }
+                                    } else {
+                                        Log.w(TAG, "Error getting documents.", task.getException());
+                                    }
+                                });
+                            }
+                        })
+
+                        // A null listener allows the button to dismiss the dialog and take no further action.
+                        .setNegativeButton(android.R.string.no, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+        });
 
         addComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,45 +282,66 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        editProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), EditProductActivity.class);
 
-        addItem.setOnClickListener(view -> {
-            quantity = Integer.parseInt((String) quantityOrder.getText());
-            quantity = quantity + 1;
-            quantityOrder.setText(String.valueOf(quantity));
-        });
+                String product_name_up = detailedName.getText().toString();
+                String product_desc_up = detailedDesc.getText().toString();
+                String price_up = detailedPrice.getText().toString();
+                String quantity_up = quantityInStock.getText().toString();
+                String rating_up = String.valueOf(detailedRating.getRating());
 
-        removeItem.setOnClickListener(view -> {
-            quantity = Integer.parseInt((String) quantityOrder.getText());
-            if (quantity > 1) {
-                quantity = quantity - 1;
-                quantityOrder.setText(String.valueOf(quantity));
+
+                db.collection("Product").get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Product prod = document.toObject(Product.class);
+//                            Log.v("Chocomint", prod.getDocumentId());
+                            if(prod.getId().equals(product.getId())){
+                                product.setDocumentId(document.getId());
+                                Log.v("Chupachup", product.getDocumentId());
+                                documentId = product.getDocumentId();
+                                intent.putExtra("Document ID", documentId);
+                            }
+                        }
+                    } else {
+                        Log.w(TAG, "Error getting documents.", task.getException());
+                    }
+                });
+
+                intent.putExtra("Product Name", product_name_up);
+                intent.putExtra("Description", product_desc_up);
+                intent.putExtra("Category", product_category);
+                intent.putExtra("Price", price_up);
+                intent.putExtra("Quantity", quantity_up);
+                intent.putExtra("Size", product_size);
+                intent.putExtra("Rating", rating_up);
+                intent.putExtra("ID", productId);
+
+                // start the Intent
+                startActivity(intent);
+
             }
         });
-
-        addToCart.setOnClickListener(view -> {
-            Product productCart = product;
-            productCart.setProductId(productId);
-
-            addProductToFirebaseCart(view, productCart);
-        });
-
-        buyNow.setOnClickListener(view -> {
-            Product productCart = new Product(
-                    product.getName(),
-                    product.getImg_url(),
-                    product.getId_category(),
-                    product.getPrice(),
-                    product.getSize(),
-                    quantity,
-                    product.getDescription()
-            );
-
-            productCart.setProductId(productId);
-
-            addProductToFirebaseCart(view, productCart);
-
-            Intent intent = new Intent(view.getContext(), CheckoutActitvity.class);
-            startActivity(intent);
-        });
+//        buyNow.setOnClickListener(view -> {
+//            Product productCart = new Product(
+//                    product.getName(),
+//                    product.getImg_url(),
+//                    product.getId_category(),
+//                    product.getPrice(),
+//                    product.getSize(),
+//                    quantity,
+//                    product.getDescription()
+//            );
+//
+//            productCart.setProductId(productId);
+//
+//            addProductToFirebaseCart(view, productCart);
+//
+//            Intent intent = new Intent(view.getContext(), CheckoutActitvity.class);
+//            startActivity(intent);
+//        });
     }
 }
