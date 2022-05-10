@@ -5,36 +5,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.adapters.CommentAdapter;
-import com.example.ecomapplication.adapters.OrderAdapter;
 import com.example.ecomapplication.models.Comment;
 import com.example.ecomapplication.models.Product;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -51,18 +36,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.ecomapplication.MainActivity;
-import com.example.ecomapplication.R;
-import com.example.ecomapplication.models.Product;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
-
-import java.util.Objects;
-
 public class DetailActivity extends AppCompatActivity {
     ImageView detailedImg;
     TextView detailedName, detailedDesc, detailedPrice, quantityOrder, ratingValue;
@@ -74,7 +47,6 @@ public class DetailActivity extends AppCompatActivity {
     CircularImageView userCommentImg;
     EditText postDetailComment;
     RecyclerView RvComment;
-    String PostKey;
     private FirebaseAuth auth;
 
     FirebaseFirestore db;
@@ -117,7 +89,7 @@ public class DetailActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 Toast.makeText(
                         view.getContext(),
-                        "Added product ID " + newProduct.getProductId()
+                        "Added product ID " + newProduct.getId()
                                 + " of " + newProduct.getQuantity() + " products to cart",
                         Toast.LENGTH_SHORT).show();
             } else {
@@ -141,7 +113,7 @@ public class DetailActivity extends AppCompatActivity {
         if (obj instanceof Product) {
             product = (Product) obj;
             quantity = 1;
-            productId = product.getProductId();
+            productId = product.getId();
             Log.v("Result", "Get product ID: " + productId);
         }
 
@@ -173,27 +145,20 @@ public class DetailActivity extends AppCompatActivity {
 //        commentAdapter = new CommentAdapter(getApplicationContext(), list);
 //        RvComment.setAdapter(commentAdapter);
 
-
-
-        addComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                iniRvComment();
-                commentAdapter = new CommentAdapter(getApplicationContext(), list);
-                RvComment.setAdapter(commentAdapter);
-                addComment.setVisibility(View.INVISIBLE);
-                String _imgUrl = "https://firebasestorage.googleapis.com/v0/b/ecommerce-de4aa.appspot.com/o/274736835_677983293549819_1786662699780048436_n.jpg?alt=media&token=23b9dcff-f1ce-436b-af77-101af401075f".trim();
-                String _id = "1".trim();
-                String _comment = postDetailComment.getText().toString().trim();
-                String _user = "dfdfsfdsf".trim();
-                Object date = ServerValue.TIMESTAMP;
-                AddCommentToFireBase(_comment, date, _id, _user, _imgUrl);
-            }
+        addComment.setOnClickListener(view -> {
+            iniRvComment();
+            commentAdapter = new CommentAdapter(getApplicationContext(), list);
+            RvComment.setAdapter(commentAdapter);
+            addComment.setVisibility(View.INVISIBLE);
+            String _imgUrl = "https://firebasestorage.googleapis.com/v0/b/ecommerce-de4aa.appspot.com/o/274736835_677983293549819_1786662699780048436_n.jpg?alt=media&token=23b9dcff-f1ce-436b-af77-101af401075f".trim();
+            String _id = "1".trim();
+            String _comment = postDetailComment.getText().toString().trim();
+            String _user = "dfdfsfdsf".trim();
+            Object date = ServerValue.TIMESTAMP;
+            AddCommentToFireBase(_comment, date, _id, _user, _imgUrl);
         });
-
-
-
     }
+
     public void AddCommentToFireBase(String content, Object date, String id_product, String id_user, String user_img){
         String docId = UUID.randomUUID().toString();
 
@@ -205,25 +170,16 @@ public class DetailActivity extends AppCompatActivity {
         doc.put("user_img", user_img);
 
         db.collection("Comment").document(docId).set(doc)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        postDetailComment.setText("");
-                        showMessage("Comment Successed");
-                        addComment.setVisibility(View.VISIBLE);
-                    }
+                .addOnCompleteListener(task -> {
+                    postDetailComment.setText("");
+                    showMessage("Comment Succeeded");
+                    addComment.setVisibility(View.VISIBLE);
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        showMessage("Comment Failed");
-                    }
-                });
+                .addOnFailureListener(e -> showMessage("Comment Failed"));
     }
 
     public void iniRvComment(){
         list = new ArrayList<>();
-
 
         db.collection("Comment").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -236,7 +192,6 @@ public class DetailActivity extends AppCompatActivity {
                         list.add(comment);
                         commentAdapter.notifyDataSetChanged();
                     }
-
                 }
                 catch (Exception e ) {
                     e.printStackTrace();
@@ -270,8 +225,16 @@ public class DetailActivity extends AppCompatActivity {
         });
 
         addToCart.setOnClickListener(view -> {
-            Product productCart = product;
-            productCart.setProductId(productId);
+            Product productCart = new Product(
+                    product.getName(),
+                    product.getImg_url(),
+                    product.getId_category(),
+                    product.getPrice(),
+                    product.getSize(),
+                    quantity,
+                    product.getDescription()
+            );
+            productCart.setId(productId);
 
             addProductToFirebaseCart(view, productCart);
         });
@@ -287,7 +250,7 @@ public class DetailActivity extends AppCompatActivity {
                     product.getDescription()
             );
 
-            productCart.setProductId(productId);
+            productCart.setId(productId);
 
             addProductToFirebaseCart(view, productCart);
 
@@ -295,8 +258,4 @@ public class DetailActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
-
-
-
-
-    }
+}

@@ -66,7 +66,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="0.5"
                 android:gravity="center">
 
                 <TextView
@@ -74,13 +74,13 @@
                     android:layout_height="wrap_content"
                     android:text="Tổng tiền : "
                     android:textColor="#f20"
-                    android:textSize="30sp" />
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 android:gravity="right|center">
 
                 <TextView
@@ -89,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:text="Giá trị"
                     android:textColor="#f20"
-                    android:textSize="30sp" />
+                    android:textSize="18sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

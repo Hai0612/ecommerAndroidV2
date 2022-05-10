@@ -124,14 +124,10 @@ public class HomeFragment extends Fragment {
         popularProductsList = new ArrayList<>();
         firestore.collection("Product").limit(6).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Log.v("product" , "document.getId()");
-
                 try {
-
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Product product = document.toObject(Product.class);
                         popularProductsList.add(product);
-
                         popularProductAdapter.notifyDataSetChanged();
                     }
                 }
