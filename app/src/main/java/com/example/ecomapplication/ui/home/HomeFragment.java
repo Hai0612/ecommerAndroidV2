@@ -137,7 +137,7 @@ public class HomeFragment extends Fragment {
                 }
                 catch (Exception e ) {
                     e.printStackTrace();
-                }
+                }   
             } else {
                 Log.w(TAG, "Error getting documents.", task.getException());
             }

@@ -63,10 +63,16 @@ public class PaymentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
         auth = FirebaseAuth.getInstance();
-        Intent intent = getIntent();
-        String data = intent.getStringExtra("data");
+//        Bundle orderAddressBunder = getIntent().getExtras();
+//        String orderAddress = orderAddressBunder.getString("orderAddress");
+//        Log.v("TAG---", orderAddress);
 
-        Log.v("TAG---", data);
+        Intent intent = getIntent();
+        String orderAddress = intent.getExtras().getString("orderAddress");
+        Log.v("address" , orderAddress);
+        String total = intent.getExtras().getString("total") != null ? intent.getStringExtra("total") : "120500";
+        Log.v("address" , total);
+
         paymentList = new ArrayList<>();
         mapping();
         recyclerListPayment = findViewById(R.id.list_payment_rec);
@@ -74,34 +80,16 @@ public class PaymentActivity extends AppCompatActivity {
         paymentAdapter = new PaymentAdapter(this, paymentList);
         recyclerListPayment.setAdapter(paymentAdapter);
         db = FirebaseFirestore.getInstance();
-
         getPaymentFireBase();
+
         makePayment.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-//                AlertDialog.Builder builder1 = new AlertDialog.Builder(PaymentActivity.this);
-//                builder1.setMessage("Bạn muốn đặt hàng ?");
-//                builder1.setCancelable(true);
-//
-//                builder1.setPositiveButton(
-//                        "Yes",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                dialog.cancel();
-//                            }
-//                        });
-//
-//                builder1.setNegativeButton(
-//                        "No",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                dialog.cancel();
-//                            }
-//                        });
-//
-//                AlertDialog alert11 = builder1.create();
-//                alert11.show();
-                OrderPlace cdd = new OrderPlace(PaymentActivity.this, "144 Xuân Thủy, Cầu Giấy , Ha Noi", 123000, auth.getUid(),new Date() , new Date());
+
+                Payment selectedPayment = paymentList.get(paymentAdapter.getSelected_position());
+
+                OrderPlace cdd = new OrderPlace(PaymentActivity.this, orderAddress, Integer.valueOf(total), auth.getUid(),new Date() , new Date(), selectedPayment);
                 cdd.show();
             }
         });
@@ -258,7 +246,6 @@ public class PaymentActivity extends AppCompatActivity {
                                     Payment payment = document.toObject(Payment.class);
                                     if(payment.getId_user().trim().equals("1")){
                                         Log.v("user_id_if" , payment.getId_user());
-
                                         paymentList.add(payment);
                                     }
                                     paymentAdapter.notifyDataSetChanged();

@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.activities.CheckoutActitvity;
+import com.example.ecomapplication.activities.PaymentActivity;
 import com.example.ecomapplication.adapters.MyCartAdapter;
 import com.example.ecomapplication.models.CartModel;
 import com.example.ecomapplication.models.MyCartModel;
@@ -61,7 +62,7 @@ public class CartFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_cart, container, false);
-        auth = FirebaseAuth.getInstance();
+
         firestore = FirebaseFirestore.getInstance();
 
         toolbar = root.findViewById(R.id.my_cart_toolbar);
@@ -71,7 +72,7 @@ public class CartFragment extends Fragment {
 //        get data from my cart adapter
         LocalBroadcastManager.getInstance(getContext())
                 .registerReceiver(mMessageReceiver, new IntentFilter("MyTotalAmount"));
-
+        auth = FirebaseAuth.getInstance();
         buttonMinus = root.findViewById(R.id.button_minus);
         buttonPlus = root.findViewById(R.id.button_plus);
         overAllAmount = root.findViewById(R.id.total_amount);
@@ -84,7 +85,9 @@ public class CartFragment extends Fragment {
         button_buy_now.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext(), CheckoutActitvity.class));
+                Intent intent = new Intent(getContext(), CheckoutActitvity.class);
+                intent.putExtra("totalOrder",overAllTotalAmount);
+                startActivity(intent);
             }
         });
 
@@ -98,8 +101,11 @@ public class CartFragment extends Fragment {
 //                        Log.v("Test", auth.getCurrentUser().getUid());
                         MyCartModel myCartModel = doc.toObject(MyCartModel.class);
                         myCartModel.setDocumentId(doc.getId());
-                        cartModelList.add(myCartModel);
-                        cartAdapter.notifyDataSetChanged();
+                        if(!myCartModel.getName().equals("init")){
+                            cartModelList.add(myCartModel);
+                            cartAdapter.notifyDataSetChanged();
+                        }
+
                     }
                 }
             }
@@ -139,8 +145,8 @@ public class CartFragment extends Fragment {
     public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int totalBill = intent.getIntExtra("totalAmount", 0);
-            overAllAmount.setText(totalBill + "VND");
+            overAllTotalAmount = intent.getIntExtra("totalAmount", 0);
+            overAllAmount.setText(overAllTotalAmount + "VND");
         }
     };
 

@@ -5,7 +5,6 @@ public class MyCartModel {
     private String id;
     private String name ;
     private String img_url;
-    private String id_category;
     private int price;
     private String size;
     private int quantity;
@@ -14,11 +13,10 @@ public class MyCartModel {
 
     public MyCartModel() {}
 
-    public MyCartModel(String id, String name, String img_url, String id_category, int price, String size, int quantity, String description, String rating) {
+    public MyCartModel(String id, String name, String img_url, int price, String size, int quantity, String description, String rating) {
         this.id = id;
         this.name = name;
         this.img_url = img_url;
-        this.id_category = id_category;
         this.price = price;
         this.size = size;
         this.quantity = quantity;
@@ -61,13 +59,7 @@ public class MyCartModel {
         this.img_url = img_url;
     }
 
-    public String getId_category() {
-        return id_category;
-    }
 
-    public void setId_category(String id_category) {
-        this.id_category = id_category;
-    }
 
     public int getPrice() {
         return price;

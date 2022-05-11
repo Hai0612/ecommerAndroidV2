@@ -3,7 +3,6 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,12 +17,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.ecomapplication.R;
 
 import com.example.ecomapplication.adapters.AddressAdapter;
 import com.example.ecomapplication.adapters.CheckoutAdapter;
-import com.example.ecomapplication.adapters.MyCartAdapter;
 import com.example.ecomapplication.models.MyCartModel;
 import com.example.ecomapplication.models.UserInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,10 +34,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class CheckoutActitvity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-    List<String> listAddress;
+public class CheckoutActitvity extends AppCompatActivity {
     AddressAdapter addressAdapter;
     RecyclerView addressListView;
     private Button new_address_button;
@@ -49,6 +48,9 @@ public class CheckoutActitvity extends AppCompatActivity implements AdapterView.
     FirebaseFirestore db;
     private FirebaseAuth auth;
     Spinner listAddressSpinner;
+    TextView totalCheckout ;
+    private String choosedAddress ;
+    private ArrayList<String> listAddress ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,25 +59,57 @@ public class CheckoutActitvity extends AppCompatActivity implements AdapterView.
         new_address_button = findViewById(R.id.new_address_button);
         click_to_payment = findViewById(R.id.click_to_payment);
         productsCheckoutRecyclerView = findViewById(R.id.orderList);
-        listAddressSpinner = findViewById(R.id.list_drop_address);
+//        listAddressSpinner = findViewById(R.id.list_drop_address);
+        totalCheckout = findViewById(R.id.totalAmount);
+        auth = FirebaseAuth.getInstance();
 
-        //getListAddress
+        choosedAddress = "";
         listAddress = new ArrayList<>();
+        Intent getIntent = getIntent();
+        totalCheckout.setText(String.valueOf(getIntent.getIntExtra("totalOrder" , 0)));
         getListAddress();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, listAddress);
-//set the spinners adapter to the previously created one.
-        listAddressSpinner.setAdapter(adapter);
-        listAddressSpinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
+        //spinner
+        Log.v("thanhcong ____" , String.valueOf(listAddress.size()));
+        String[] arrayAddress = new String[listAddress.size()];
+        for (int i = 0; i < listAddress.size(); i++) {
+            arrayAddress[i] = listAddress.get(i);
+        }
+        Spinner s = (Spinner) findViewById(R.id.list_drop_address);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, arrayAddress   );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        s.setAdapter(adapter);
+        s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.v("ChoosedString" , String.valueOf(adapterView.getItemAtPosition(i)));
+                choosedAddress = String.valueOf(adapterView.getItemAtPosition(i));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         click_to_payment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bundle addressBunder= new Bundle();
+                if(choosedAddress == ""){
+                    choosedAddress = "123 Nguyễn Trai, Thanh Xuan, Hà Nội";
+                }
+                addressBunder.putString("orderAddress", choosedAddress);
                 Intent intent = new Intent(CheckoutActitvity.this, PaymentActivity.class);
+                intent.putExtra("orderAddress", choosedAddress);
+                Log.v("addressđsfdf" ,choosedAddress);
+                Log.v("addressđsfdf" ,String.valueOf(getIntent.getIntExtra("totalOrder" , 120000)));
+
+                intent.putExtra("total", String.valueOf(getIntent.getIntExtra("totalOrder" , 120000)));
                 startActivity(intent);
             }
         });
-        auth = FirebaseAuth.getInstance();
-
         new_address_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,35 +137,17 @@ public class CheckoutActitvity extends AppCompatActivity implements AdapterView.
 //                        Log.v("Test", auth.getCurrentUser().getUid());
                         MyCartModel myCartModel = doc.toObject(MyCartModel.class);
                         myCartModel.setDocumentId(doc.getId());
-                        cartModelList.add(myCartModel);
-                        Log.v("Tag", myCartModel.getDescription());
-                        cartAdapter.notifyDataSetChanged();
+                        if(!myCartModel.getName().equals("init")){
+                            cartModelList.add(myCartModel);
+                            cartAdapter.notifyDataSetChanged();
+                        }
                     }
                 }
             }
         });
     }
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 
-        switch (position) {
-            case 0:
-                Log.v("TAGGG" , "(String) parent.getItemAtPosition(position)");
-                break;
-            case 1:
-                Log.v("TAGGG" , (String) parent.getItemAtPosition(position));
-                break;
-            case 2:
-                // Whatever you want to happen when the thrid item gets selected
-                break;
 
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
 
     public void showDialog(){
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -147,8 +163,9 @@ public class CheckoutActitvity extends AppCompatActivity implements AdapterView.
             public void onClick(DialogInterface dialog, int whichButton) {
                 String value = input.getText().toString();
                 Log.v("address_fire", value);
-                db.collection("UserInfo").document("CuGpKPBNtXlDfVpUEqY9").update(
+                db.collection("UserInfo").document(auth.getUid()).update(
                         "address", FieldValue.arrayUnion(value));
+                getListAddress();
             }
         });
 
@@ -161,24 +178,22 @@ public class CheckoutActitvity extends AppCompatActivity implements AdapterView.
         alert.show();
     }
     public void getListAddress(){
+        ArrayList<String> list = new ArrayList<>();
         db.collection("UserInfo")
-                .document("CuGpKPBNtXlDfVpUEqY9")
+                .document(auth.getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        Log.v("address_fire", "fdsfds");
-
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 Log.v("id_document", document.getId());
                                 UserInfo user = document.toObject(UserInfo.class);
                                 for(int i = 0; i < user.getAddress().size() ; i++){
-                                    listAddress.add(user.getAddress().get(i));
+                                    list.add(user.getAddress().get(i));
                                 }
-                            } else {
-                                Log.d(TAG, "No such document");
+                                renderListAddress(list);
                             }
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
@@ -186,5 +201,30 @@ public class CheckoutActitvity extends AppCompatActivity implements AdapterView.
 
                     }
                 });
+        Log.v("thanhcong__" , String.valueOf(listAddress.size()));
+
+    }
+    public void renderListAddress(ArrayList<String> listAddress){
+        String[] arrayAddress = new String[listAddress.size()];
+        for (int i = 0; i < listAddress.size(); i++) {
+            arrayAddress[i] = listAddress.get(i);
+        }
+        Spinner s = (Spinner) findViewById(R.id.list_drop_address);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, arrayAddress   );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        s.setAdapter(adapter);
+        s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.v("ChoosedString" , String.valueOf(adapterView.getItemAtPosition(i)));
+                choosedAddress = String.valueOf(adapterView.getItemAtPosition(i));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 }

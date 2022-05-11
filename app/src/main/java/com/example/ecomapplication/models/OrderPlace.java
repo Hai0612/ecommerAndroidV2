@@ -52,9 +52,9 @@ public class OrderPlace extends Dialog implements
      private int number;
      private String id;
     private FirebaseAuth auth;
-
+    private  Payment selectedPayment;
     private int total;
-    public OrderPlace(Activity activity , String orderAddress, int total ,String id_user  , Date orderDate , Date shippedDate) {
+    public OrderPlace(Activity activity , String orderAddress, int total ,String id_user  , Date orderDate , Date shippedDate , Payment selectedPayment) {
         super(activity);
         this.activity = activity;
         this.orderAddress = orderAddress;
@@ -62,6 +62,7 @@ public class OrderPlace extends Dialog implements
         this.id_user = id_user;
         this.orderDate = orderDate;
         this.shippedDate = shippedDate;
+        this.selectedPayment = selectedPayment;
     }
 
     @Override
@@ -82,6 +83,31 @@ public class OrderPlace extends Dialog implements
         getProductToPayment();
 
     }
+    public void addPaymentOfOrder(String id_order){
+
+        Map<String, Object> payment = new HashMap<>();
+        payment.put("account_nb", selectedPayment.getAccount_nb());
+        payment.put("expired", new Date());
+        payment.put("id_order", id_order);
+        payment.put("id_user", auth.getUid());
+        payment.put("payment_type", selectedPayment.getPayment_type());
+        payment.put("provider", selectedPayment.getProvider());
+        db.collection("Payment")
+                .add(payment)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.v(TAG, "ADD order detail thanh cong");
+                        deleteProductsInCartOfUser();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Them order detail that bai", e);
+                    }
+                });
+    }
     public void orderPlace(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date d  = Calendar.getInstance().getTime();
@@ -101,11 +127,11 @@ public class OrderPlace extends Dialog implements
             if (task.isSuccessful()) {
                 String id_order = task.getResult().getId();
                 AddProductListToOrderDetail(id_order);
+                addPaymentOfOrder(id_order);
             } else {
                 Log.w(TAG, "Them order that bai");
             }
         });
-
 
     }
     public void getProductToPayment(){

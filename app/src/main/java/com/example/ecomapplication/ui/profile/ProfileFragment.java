@@ -19,6 +19,7 @@ import com.example.ecomapplication.activities.EditProfileActivity;
 import com.example.ecomapplication.models.UserInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -30,6 +31,7 @@ import com.google.firebase.firestore.QuerySnapshot;
  */
 public class ProfileFragment extends Fragment {
 
+    private FirebaseAuth auth;
 
     TextView fullName, firstName, lastName, userName, city, password, email, phone, editProfile;
     FirebaseFirestore db;
@@ -50,6 +52,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        auth = FirebaseAuth.getInstance();
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
 
         fullName = root.findViewById(R.id.user_full_name);
@@ -94,6 +97,8 @@ public class ProfileFragment extends Fragment {
         return root;
     }
     public void getUserInfoFromFireBase(){
+//        Log.v("hello", userInfo.getId());
+
         db.collection("UserInfo")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
@@ -103,8 +108,8 @@ public class ProfileFragment extends Fragment {
                             try{
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     userInfo = document.toObject(UserInfo.class);
-                                    //Log.v("hello", userInfo.getFirstName());
-                                    if (userInfo.getId().equals("dfdfsfdsf")) {
+                                    Log.v("hello", userInfo.getId());
+                                    if (userInfo.getId().equals(auth.getUid())) {
                                         String first_name = userInfo.getFirstName();
                                         String last_name = userInfo.getLastName();
                                         String user_name = userInfo.getId();

@@ -36,11 +36,11 @@ public class Payment {
         return payment_type;
     }
 
-    public String getId() {
+    public String getId_order() {
         return id_order;
     }
 
-    public void setId(String id_order) {
+    public void setId_order(String id_order) {
         this.id_order = id_order;
     }
 
