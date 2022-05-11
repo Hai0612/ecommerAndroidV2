@@ -50,13 +50,7 @@ public class Product implements Serializable {
         this.id = id;
     }
 
-    public String getId_seller() {
-        return id_seller;
-    }
 
-    public void setId_seller(String id_seller) {
-        this.id_seller = id_seller;
-    }
 
     public String getDocumentId() {
         return documentId;
@@ -70,9 +64,6 @@ public class Product implements Serializable {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

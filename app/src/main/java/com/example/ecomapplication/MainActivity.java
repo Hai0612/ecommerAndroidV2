@@ -10,9 +10,11 @@ import android.view.View;
 import android.view.Menu;
 
 import com.example.ecomapplication.activities.MerchantActivity;
+import com.example.ecomapplication.activities.PaymentActivity;
 import com.example.ecomapplication.activities.ShowAllCategoryActivity;
 import com.example.ecomapplication.activities.ShowAllProductsActivity;
 import com.example.ecomapplication.activities.SellerActivity;
+import com.example.ecomapplication.activities.Test;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -94,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void showAllCategory(View view) {
         Intent intent = new Intent(this, ShowAllCategoryActivity.class);
+//        Intent intent = new Intent(this, Test.class);
+//        Intent intent = new Intent(this, PaymentActivity.class);
         startActivity(intent);
     }
 }

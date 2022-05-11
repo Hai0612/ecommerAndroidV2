@@ -3,12 +3,17 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -37,7 +42,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CheckoutActitvity extends AppCompatActivity {
+public class CheckoutActitvity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+    TextView totalAmount;
+    List<String> listAddress;
     AddressAdapter addressAdapter;
     RecyclerView addressListView;
     private Button new_address_button;
@@ -50,7 +57,6 @@ public class CheckoutActitvity extends AppCompatActivity {
     Spinner listAddressSpinner;
     TextView totalCheckout ;
     private String choosedAddress ;
-    private ArrayList<String> listAddress ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,14 +65,16 @@ public class CheckoutActitvity extends AppCompatActivity {
         new_address_button = findViewById(R.id.new_address_button);
         click_to_payment = findViewById(R.id.click_to_payment);
         productsCheckoutRecyclerView = findViewById(R.id.orderList);
-//        listAddressSpinner = findViewById(R.id.list_drop_address);
-        totalCheckout = findViewById(R.id.totalAmount);
+        listAddressSpinner = findViewById(R.id.list_drop_address);
+        totalAmount = findViewById(R.id.totalLabel2);
         auth = FirebaseAuth.getInstance();
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(mMessageReceiver, new IntentFilter("MyTotalAmount"));
 
         choosedAddress = "";
         listAddress = new ArrayList<>();
         Intent getIntent = getIntent();
-        totalCheckout.setText(String.valueOf(getIntent.getIntExtra("totalOrder" , 0)));
+        totalAmount.setText(String.valueOf(getIntent.getIntExtra("totalOrder" , 0)));
         getListAddress();
 
         //spinner
@@ -226,5 +234,23 @@ public class CheckoutActitvity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int totalBill = intent.getIntExtra("totalAmount", 0);
+            totalAmount.setText(totalBill + "vnd");
+        }
+    };
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

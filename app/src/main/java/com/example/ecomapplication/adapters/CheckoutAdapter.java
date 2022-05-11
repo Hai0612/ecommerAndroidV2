@@ -1,6 +1,7 @@
 package com.example.ecomapplication.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.DisplayMetrics;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -29,6 +31,7 @@ public class CheckoutAdapter  extends RecyclerView.Adapter<CheckoutAdapter.ViewH
     private Context context;
     private List<MyCartModel> products;
     private FirebaseStorage storage;
+    int totalAmount = 0;
 
     public CheckoutAdapter(Context context, List<MyCartModel> products) {
         this.context = context;
@@ -38,17 +41,22 @@ public class CheckoutAdapter  extends RecyclerView.Adapter<CheckoutAdapter.ViewH
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.product_checkout_item , parent, false)) ;
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.product_checkout_item_test , parent, false)) ;
     }
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-//        Glide.with(context).load(popularProductAdapterList.get(position).getImg_url()).into(holder.imageView);
         holder.name.setText(products.get(position).getName());
-        holder.quantity.setText(String.valueOf(products.get(position).getQuantity()));
-//        holder.price.setText((Integer) products.get(position).getPrice());
+        int pr = products.get(position).getQuantity() * products.get(position).getPrice();
+        holder.price.setText(String.valueOf(pr));
+        holder.quantity.setText("x" + products.get(position).getQuantity());
+
+        totalAmount = totalAmount + pr;
+        Intent intent = new Intent("MyTotalAmount");
+        intent.putExtra("totalAmount", totalAmount);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
         final long ONE_MEGABYTE = 1024 * 1024;
         StorageReference storageReference = storage.getReferenceFromUrl(products.get(position).getImg_url());
-
         // Dat anh lay tu Firebase cho item
         storageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(bytes -> {
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
