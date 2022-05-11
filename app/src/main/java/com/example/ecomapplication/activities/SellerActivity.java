@@ -120,6 +120,7 @@ public class SellerActivity extends AppCompatActivity {
                     for (DocumentSnapshot doc :task.getResult().getDocuments()) {
 //                        Log.v("Test", auth.getCurrentUser().getUid());
                         Product product = doc.toObject(Product.class);
+                        product.setDocumentId(doc.getId());
                         myProduct.add(product);
                         myProductAdapter.notifyDataSetChanged();
                     }

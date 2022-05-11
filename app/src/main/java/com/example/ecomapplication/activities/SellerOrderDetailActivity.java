@@ -127,6 +127,7 @@ public class SellerOrderDetailActivity extends AppCompatActivity {
         if (obj instanceof Product) {
             product = (Product) obj;
             productId = product.getProductId();
+
             Log.v("Result", "Get product ID: " + productId);
         }
 
@@ -287,38 +288,38 @@ public class SellerOrderDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), EditProductActivity.class);
 
-                String product_name_up = detailedName.getText().toString();
-                String product_desc_up = detailedDesc.getText().toString();
-                String price_up = detailedPrice.getText().toString();
-                String quantity_up = quantityInStock.getText().toString();
-                String rating_up = String.valueOf(detailedRating.getRating());
+//                String product_name_up = detailedName.getText().toString();
+//                String product_desc_up = detailedDesc.getText().toString();
+//                String price_up = detailedPrice.getText().toString();
+//                String quantity_up = quantityInStock.getText().toString();
+//                String rating_up = String.valueOf(detailedRating.getRating());
+//
+//
+//                db.collection("Product").get().addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {
+//                        for (QueryDocumentSnapshot document : task.getResult()) {
+//                            Product prod = document.toObject(Product.class);
+////                            Log.v("Chocomint", prod.getDocumentId());
+//                            if(prod.getId().equals(product.getId())){
+//                                product.setDocumentId(document.getId());
+//                                Log.v("Chupachup", product.getDocumentId());
+//                                documentId = product.getDocumentId();
+//                                intent.putExtra("Document ID", documentId);
+//                            }
+//                        }
+//                    } else {
+//                        Log.w(TAG, "Error getting documents.", task.getException());
+//                    }
+//                });
 
-
-                db.collection("Product").get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Product prod = document.toObject(Product.class);
-//                            Log.v("Chocomint", prod.getDocumentId());
-                            if(prod.getId().equals(product.getId())){
-                                product.setDocumentId(document.getId());
-                                Log.v("Chupachup", product.getDocumentId());
-                                documentId = product.getDocumentId();
-                                intent.putExtra("Document ID", documentId);
-                            }
-                        }
-                    } else {
-                        Log.w(TAG, "Error getting documents.", task.getException());
-                    }
-                });
-
-                intent.putExtra("Product Name", product_name_up);
-                intent.putExtra("Description", product_desc_up);
-                intent.putExtra("Category", product_category);
-                intent.putExtra("Price", price_up);
-                intent.putExtra("Quantity", quantity_up);
-                intent.putExtra("Size", product_size);
-                intent.putExtra("Rating", rating_up);
-                intent.putExtra("ID", productId);
+                intent.putExtra("ProductToEdit", product);
+//                intent.putExtra("Description", product_desc_up);
+//                intent.putExtra("Category", product_category);
+//                intent.putExtra("Price", price_up);
+//                intent.putExtra("Quantity", quantity_up);
+//                intent.putExtra("Size", product_size);
+//                intent.putExtra("Rating", rating_up);
+//                intent.putExtra("ID", productId);
 
                 // start the Intent
                 startActivity(intent);
