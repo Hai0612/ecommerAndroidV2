@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment {
 
     private ViewPager2 viewPager2;
     private List<Category> categoryList;
-    private  RecyclerView recyclerViewCategory, newProductRecyclerview, popularRecyclerview ;
+    private RecyclerView recyclerViewCategory, newProductRecyclerview, popularRecyclerview ;
     CategoryAdapter categoryAdapter;
     GridView categoryView;
     ProgressDialog progressDialog;
@@ -72,7 +72,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root =  inflater.inflate(R.layout.fragment_home, container, false);
+        View root = inflater.inflate(R.layout.fragment_home, container, false);
         firestore = FirebaseFirestore.getInstance();
 
         //        ImageSlider imageSlider = root.findViewById((R.id.image_slider));
@@ -94,7 +94,7 @@ public class HomeFragment extends Fragment {
         List<SlideItemHome> slideItemHomes = new ArrayList<>();
         slideItemHomes.add(new SlideItemHome(R.drawable.banner1));
         slideItemHomes.add(new SlideItemHome(R.drawable.banner2));
-        slideItemHomes.add(new SlideItemHome(R.drawable.banner3))       ;
+        slideItemHomes.add(new SlideItemHome(R.drawable.banner3));
         viewPager2.setAdapter(new SliderAdapter(slideItemHomes,viewPager2));
 
         // progress dialog

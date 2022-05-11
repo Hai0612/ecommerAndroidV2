@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.ecomapplication" >
+    package="com.example.ecomapplication">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,7 +13,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EcomApplication"
-        tools:replace="android:theme" >
+        tools:replace="android:theme">
+        <activity
+            android:name=".activities.EditProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.SellerOrderDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.ShowProductCategory"
             android:exported="false" />
@@ -24,7 +30,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.EcomApplication.NoActionBar" >
+            android:theme="@style/Theme.EcomApplication.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,7 +50,6 @@
         <activity android:name=".activities.ShowAllCategoryActivity" />
         <activity android:name=".activities.SellerActivity" />
         <activity android:name=".activities.NewProductActivity" />
-
     </application>
 
 </manifest>

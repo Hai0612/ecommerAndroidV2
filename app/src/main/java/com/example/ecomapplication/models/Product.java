@@ -14,6 +14,7 @@ public class Product implements Serializable {
     private String description;
     private String rating;
     private String id_seller;
+    private String documentId;
 
     public Product() {}
 
@@ -42,6 +43,30 @@ public class Product implements Serializable {
     }
 
     public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId_seller() {
+        return id_seller;
+    }
+
+    public void setId_seller(String id_seller) {
+        this.id_seller = id_seller;
+    }
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
+    }
+
+    public String getProductId() {
         return id;
     }
 

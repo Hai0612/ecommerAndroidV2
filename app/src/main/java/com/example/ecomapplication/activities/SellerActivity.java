@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.adapters.AddressAdapter;
 import com.example.ecomapplication.adapters.PopularProductAdapter;
+import com.example.ecomapplication.adapters.ProductSellerAdapter;
 import com.example.ecomapplication.models.MyCartModel;
 import com.example.ecomapplication.models.Product;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,7 +39,7 @@ public class SellerActivity extends AppCompatActivity {
     FirebaseFirestore db;
     List<Product> myProduct;
     private RecyclerView  myProductRecyclerview ;
-    private  PopularProductAdapter myProductAdapter;
+    private  ProductSellerAdapter myProductAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +90,7 @@ public class SellerActivity extends AppCompatActivity {
 
         getMyProduct();
         myProductRecyclerview.setLayoutManager(new GridLayoutManager(this,2));
-        myProductAdapter = new PopularProductAdapter(this, myProduct);
+        myProductAdapter = new ProductSellerAdapter(this, myProduct);
         myProductRecyclerview.setAdapter(myProductAdapter);
 
         productTab.setTextColor(getResources().getColor(R.color.black));

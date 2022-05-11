@@ -70,11 +70,7 @@ public class ProfileFragment extends Fragment {
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-
                 Intent intent = new Intent(getContext(), EditProfileActivity.class);
-
 
                 String first_name_up = firstName.getText().toString();
                 String last_name_up = lastName.getText().toString();

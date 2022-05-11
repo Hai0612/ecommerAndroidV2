@@ -68,7 +68,7 @@ import java.util.List;
             orderAdapter = new OrderAdapter(getContext(), orderModels);
             recyclerView.setAdapter(orderAdapter);
 
-            firestore.collection("Order").document(auth.getUid()).collection("Orders")
+            firestore.collection("Order").document("ZXeAcAzbZ6SUVe0pxNLXSDY7WaM2").collection("Orders")
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
