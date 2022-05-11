@@ -55,10 +55,15 @@
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/drawable/ic_remove_circle_full.xml" value="0.1" />
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/drawable/ic_remove_circle_outline.xml" value="0.1" />
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/activity_detail.xml" value="0.22" />
+        <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/cart_item_test.xml" value="0.20416666666666666" />
+        <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/category_item.xml" value="0.20416666666666666" />
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/content_main.xml" value="0.20416666666666666" />
+        <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/fragment_cart.xml" value="0.20416666666666666" />
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/fragment_search.xml" value="0.20416666666666666" />
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/fragment_slideshow.xml" value="0.20416666666666666" />
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/history_search_item.xml" value="0.25" />
+        <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/my_cart_item.xml" value="0.20416666666666666" />
+        <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/my_order_item.xml" value="0.20416666666666666" />
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/search_item.xml" value="0.20416666666666666" />
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/test.xml" value="0.20416666666666666" />
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/menu/activity_main_drawer.xml" value="0.20416666666666666" />

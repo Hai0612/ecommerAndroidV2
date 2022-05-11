@@ -67,6 +67,7 @@ public class RegistrationFragment extends Fragment {
         linktoSignIn = root.findViewById(R.id.linkToSignIn);
 
         signUpButton.setOnClickListener(view -> {
+            Log.v("TAGGGG" , "FDFDS");
             if (TextUtils.isEmpty(nameSignUp.getText())) {
                 Toast.makeText(getContext(), "Please enter your name!", Toast.LENGTH_SHORT).show();
                 return;

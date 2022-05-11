@@ -36,17 +36,8 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-//        Glide.with(context).load(newProductList.get(position).getImg_url()).into(holder.newImg);
         holder.newName.setText(productList.get(position).getName());
         holder.newPrice.setText(productList.get(position).getPrice());
-//        holder.itemView.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v){
-//                Intent intent = new Intent(context, DetailActivity.class);
-//                intent.putExtra("detailed", (Serializable) productList.get(position));
-//                context.startActivity(intent); ;
-//            };
-//        });
     }
 
     @Override

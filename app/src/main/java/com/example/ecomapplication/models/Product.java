@@ -30,18 +30,6 @@ public class Product implements Serializable {
         this.id_seller = id_seller;
     }
 
-    public Product(String name, String img_url, String id_category, int price,
-                   String size, int quantity, String description, String rating) {
-        this.name = name;
-        this.img_url = img_url;
-        this.id_category = id_category;
-        this.price = price;
-        this.size = size;
-        this.quantity = quantity;
-        this.description = description;
-        this.rating = rating;
-    }
-
     public Product(String name, String img_url, String id_category,
                    int price, String size, int quantity, String description) {
         this.name = name;
@@ -53,12 +41,12 @@ public class Product implements Serializable {
         this.description = description;
     }
 
-    public String getProductId() {
+    public String getId() {
         return id;
     }
 
-    public void setProductId(String productId) {
-        this.id = productId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -123,5 +111,13 @@ public class Product implements Serializable {
 
     public void setRating(String rating) {
         this.rating = rating;
+    }
+
+    public String getId_seller() {
+        return id_seller;
+    }
+
+    public void setId_seller(String id_seller) {
+        this.id_seller = id_seller;
     }
 }

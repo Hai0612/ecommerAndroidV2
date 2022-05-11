@@ -45,7 +45,7 @@ public class PopularProductAdapter extends RecyclerView.Adapter<PopularProductAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.productId = products.get(position).getProductId();
+        holder.productId = products.get(position).getId();
         holder.name.setText(products.get(position).getName());
         holder.price.setText(String.valueOf(products.get(position).getPrice()));
 
