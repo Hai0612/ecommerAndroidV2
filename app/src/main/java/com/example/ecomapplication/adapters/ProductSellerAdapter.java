@@ -59,12 +59,16 @@ public class ProductSellerAdapter extends RecyclerView.Adapter<ProductSellerAdap
         holder.setItemClickListener((view, clickPosition, isLongClick) -> {
             if (isLongClick) {
                 Toast.makeText(context, "Long click on product ID: " + holder.productId, Toast.LENGTH_SHORT).show();
+                Log.v("Mouse", products.get(position).getDocumentId());
             } else {
                 Intent intent = new Intent(context, SellerOrderDetailActivity.class);
+
                 intent.putExtra("productSellerDetail", products.get(position));
-                Log.v("CowBaby", products.get(position).getName().toString());
+                Log.v("Mouse1", products.get(position).getDocumentId());
+              //  Log.v("CowBaby", products.get(position).getName().toString());
                 context.startActivity(intent);
             }
+
         });
     }
 

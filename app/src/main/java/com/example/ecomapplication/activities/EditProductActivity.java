@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
+import com.example.ecomapplication.models.Product;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -21,6 +22,7 @@ public class EditProductActivity extends AppCompatActivity {
     TextView update_product;
     String id_product;
     FirebaseFirestore db;
+    Product product;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,35 @@ public class EditProductActivity extends AppCompatActivity {
         product_rating = findViewById(R.id.rating_update);
         update_product = findViewById(R.id.update_product);
 
+
+
+
+
+
+        final Object obj = getIntent().getSerializableExtra("ProductToEdit");
+        if (obj instanceof Product) {
+            product = (Product) obj;
+            Log.v("Hiiii", product.getName());
+
+            product_name.getEditText().setText(product.getName());
+            product_desc.getEditText().setText(product.getDescription());
+            product_category.getEditText().setText(product.getId_category());
+            product_price.getEditText().setText(String.valueOf(product.getPrice()));
+            product_quantity.getEditText().setText(String.valueOf(product.getQuantity()));
+            product_size.getEditText().setText(product.getSize());
+            product_rating.getEditText().setText(product.getRating());
+
+            product_name_ = product.getName();
+            product_desc_ = product.getDescription();
+            product_category_ = product.getId_category();
+            product_price_ = String.valueOf( product.getPrice());
+            product_quantity_ = String.valueOf(product.getQuantity());
+            product_rating_ = product.getRating();
+            product_size_ = product.getSize();
+        }
+
+
+
         update_product.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,33 +78,23 @@ public class EditProductActivity extends AppCompatActivity {
             }
         });
 
-        product_name_ = getIntent().getExtras().getString("Product Name");
-        product_desc_ = getIntent().getExtras().getString("Description");
-        product_category_ = getIntent().getExtras().getString("Category");
-        product_price_ = getIntent().getExtras().getString("Price");
-        product_quantity_ = getIntent().getExtras().getString("Quantity");
-        product_size_ = getIntent().getExtras().getString("Size");
-        product_rating_ = getIntent().getExtras().getString("Rating");
-        document_ = getIntent().getExtras().getString("ID");
+
 
 //        Log.v("Ajinomoto", document_);
 
-        product_name.getEditText().setText(product_name_);
-        product_desc.getEditText().setText(product_desc_);
-        product_category.getEditText().setText(product_category_);
-        product_price.getEditText().setText(product_price_);
-        product_quantity.getEditText().setText(product_quantity_);
-        product_size.getEditText().setText(product_size_);
-        product_rating.getEditText().setText(product_rating_);
+
     }
 
     public void updateProduct(){
         if (!isProductNameChanged() && !isProductDescChanged() && !isProductCateChanged() &&
                 !isProductPriceChanged() && !isProductQuantityChanged() && !isProductSizeChanged() && !isProductRateChanged()){
-            Toast.makeText(this, "Update Failed", Toast.LENGTH_SHORT).show();
+            Log.v("Cat", product_name.getEditText().getText().toString());
+            Toast.makeText(this, "Nothing changed", Toast.LENGTH_SHORT).show();
+
         }
         else {
-            db.collection("Product").document(document_)
+            Log.v("Cat1", product_name.getEditText().getText().toString());
+            db.collection("Product").document(product.getDocumentId())
                     .update("name", product_name.getEditText().getText().toString(),
                             "description", product_desc.getEditText().getText().toString(),
                             "id_category", product_category.getEditText().getText().toString(),
