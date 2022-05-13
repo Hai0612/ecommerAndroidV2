@@ -121,7 +121,9 @@ public class CheckoutActitvity extends AppCompatActivity implements AdapterView.
         new_address_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialog();
+//                showDialog();
+                Intent intent = new Intent(view.getContext(), MapsActivity.class);
+                startActivity(intent);
             }
         });
 

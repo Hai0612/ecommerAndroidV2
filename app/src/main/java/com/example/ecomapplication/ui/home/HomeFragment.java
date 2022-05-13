@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,9 +34,11 @@ import com.example.ecomapplication.adapters.SliderAdapter;
 import com.example.ecomapplication.databinding.FragmentHomeBinding;
 import com.example.ecomapplication.models.Category;
 import com.example.ecomapplication.models.Product;
+import com.example.ecomapplication.models.SliderData;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.smarteist.autoimageslider.SliderView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +53,7 @@ public class HomeFragment extends Fragment {
     GridView categoryView;
     ProgressDialog progressDialog;
     FirebaseFirestore firestore;
-
+    private static int TIME_OUT = 2500 ;
     RecyclerView categoryRecyclerView;
     ListView viewCategory;
 
@@ -63,6 +67,13 @@ public class HomeFragment extends Fragment {
 
     FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
     CollectionReference applicationsRef;
+    ArrayList<Product> sliderDataArrayList;
+    SliderAdapter SlideraAapter;
+
+    //slider demo
+    String url1 = "https://www.geeksforgeeks.org/wp-content/uploads/gfg_200X200-1.png";
+    String url2 = "https://qphs.fs.quoracdn.net/main-qimg-8e203d34a6a56345f86f1a92570557ba.webp";
+    String url3 = "https://bizzbucket.co/wp-content/uploads/2020/08/Life-in-The-Metro-Blog-Title-22.png";
 
     public HomeFragment() {
         // Required empty public constructor
@@ -86,16 +97,28 @@ public class HomeFragment extends Fragment {
         //        newProductRecyclerview = root.findViewById(R.id.new_product_rec);
 
         //binding
-        viewPager2 = root.findViewById(R.id.home_slider);
         categoryView = root.findViewById(R.id.rec_category);
         popularRecyclerview = root.findViewById(R.id.new_product_rec);
 
         // create slider
-        List<SlideItemHome> slideItemHomes = new ArrayList<>();
-        slideItemHomes.add(new SlideItemHome(R.drawable.banner1));
-        slideItemHomes.add(new SlideItemHome(R.drawable.banner2));
-        slideItemHomes.add(new SlideItemHome(R.drawable.banner3));
-        viewPager2.setAdapter(new SliderAdapter(slideItemHomes,viewPager2));
+
+        SliderView sliderView = root.findViewById(R.id.slider);
+        getProductForSlider();
+
+//        sliderDataArrayList.add(new SliderData(url1));
+//        sliderDataArrayList.add(new SliderData(url2));
+//        sliderDataArrayList.add(new SliderData(url3));
+        sliderView.setAutoCycleDirection(SliderView.LAYOUT_DIRECTION_LTR);
+        sliderView.setSliderAdapter(SlideraAapter);
+        // below method is use to set
+        // scroll time in seconds.
+        sliderView.setScrollTimeInSec(2
+        );
+        // to set it scrollable automatically
+        // we use below method.
+        sliderView.setAutoCycle(true);
+        // to start autocycle below method is used.
+        sliderView.startAutoCycle();
 
         // progress dialog
         progressDialog = new ProgressDialog(getActivity());
@@ -103,7 +126,15 @@ public class HomeFragment extends Fragment {
         progressDialog.setMessage("Please wait...");
         progressDialog.setCanceledOnTouchOutside(true);
         progressDialog.show();
-
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                //Do something here
+                progressDialog.dismiss();
+            }
+        }, TIME_OUT);
         // load Category
         getCategoryDataFromFirebase();
 
@@ -120,6 +151,33 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
+    public void getProductForSlider(){
+        sliderDataArrayList = new ArrayList<>();
+        SlideraAapter = new SliderAdapter(getContext(), sliderDataArrayList);
+        firestore.collection("Product").limit(5).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.v("TAGG", "trueeeee");
+                try {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Product product = document.toObject(Product.class);
+//                        SliderData sliderData = new SliderData(product.getImg_url());
+//                        sliderData.setProductId(document.getId());
+                        Log.v("TAGG", String.valueOf(sliderDataArrayList.size()));
+                        Log.v("TAGG", product.getImg_url());
+
+                        sliderDataArrayList.add(product);
+                        SlideraAapter.notifyDataSetChanged();
+
+                    }
+                }
+                catch (Exception e ) {
+                    e.printStackTrace();
+                }
+            } else {
+                Log.w(TAG, "Error getting documents.", task.getException());
+            }
+        });
+    }
     public void getProductDataFromFirebase(){
         popularProductsList = new ArrayList<>();
         firestore.collection("Product").limit(6).get().addOnCompleteListener(task -> {
