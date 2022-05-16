@@ -3,6 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/drawable/ic_baseline_back.xml" value="0.1995" />
+        <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.1995" />
+        <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/drawable/ic_baseline_edit_24.xml" value="0.1995" />
+        <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/drawable/ic_baseline_email_24.xml" value="0.1995" />
+        <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.1995" />
+        <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/drawable/ic_baseline_list_24.xml" value="0.1995" />
+        <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/drawable/markera.xml" value="0.202" />
+        <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/drawable/markerb.xml" value="0.202" />
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/layout/activity_add_product.xml" value="0.358695652173913" />
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/layout/activity_cart.xml" value="0.23385416666666667" />
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/layout/activity_checkout_actitvity.xml" value="0.358695652173913" />
