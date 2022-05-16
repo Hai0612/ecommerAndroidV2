@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.activities.CheckoutActitvity;
 import com.example.ecomapplication.activities.PaymentActivity;
@@ -112,6 +113,15 @@ public class CartFragment extends Fragment {
         });
         return root;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getActivity() != null) {
+            ((MainActivity) getActivity()).setActionBarTitle("My Cart");
+        }
+    }
+
     public void getProductData(){
         final List<CartModel> productModelList = new ArrayList<>();
 //        db.collection("Cart").get()

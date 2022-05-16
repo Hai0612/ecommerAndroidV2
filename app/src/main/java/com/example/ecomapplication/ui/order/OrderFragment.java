@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.adapters.OrderAdapter;
 import com.example.ecomapplication.models.OrderModel;
@@ -91,4 +92,11 @@ import java.util.List;
             return root;
         }
 
+        @Override
+        public void onResume() {
+            super.onResume();
+            if (getActivity() != null) {
+                ((MainActivity) getActivity()).setActionBarTitle("My Order");
+            }
+        }
     }

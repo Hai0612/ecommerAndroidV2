@@ -6,39 +6,44 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_baseline_home_24"
             android:title="@string/menu_home" />
 
         <item
             android:id="@+id/nav_cart"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_baseline_shopping_cart_24"
             android:title="@string/menu_cart" />
 
         <item
             android:id="@+id/nav_order"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_baseline_quantity_24"
             android:title="@string/menu_order" />
         <item
             android:id="@+id/nav_search"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@android:drawable/ic_menu_search"
             android:title="@string/menu_search" />
         <item
             android:id="@+id/nav_notification"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@android:drawable/stat_notify_chat"
             android:title="@string/menu_notification" />
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_baseline_account_circle"
             android:title="@string/menu_profile" />
 
         <item
             android:id="@+id/nav_login"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_baseline_loginout"
             android:title="@string/menu_login" />
         <item
             android:id="@+id/nav_signup"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_add_circle_outline"
             android:title="@string/menu_registration" />
+
+        <item
+            android:id="@+id/nav_signout"
+            android:icon="@drawable/ic_baseline_logout"
+            android:title="Sign Out" />
 
 
     </group>

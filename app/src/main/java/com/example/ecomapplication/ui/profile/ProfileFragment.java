@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.activities.EditProfileActivity;
 import com.example.ecomapplication.models.UserInfo;
@@ -92,6 +93,15 @@ public class ProfileFragment extends Fragment {
         });
         return root;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getActivity() != null) {
+            ((MainActivity) getActivity()).setActionBarTitle("My Profile");
+        }
+    }
+
     public void getUserInfoFromFireBase(){
 //        Log.v("hello", userInfo.getId());
 

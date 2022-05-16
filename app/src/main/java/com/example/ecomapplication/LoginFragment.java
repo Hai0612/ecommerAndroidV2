@@ -2,10 +2,6 @@ package com.example.ecomapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +11,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
 import com.example.ecomapplication.databinding.ActivityLoginBinding;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.concurrent.Executor;
 
 public class LoginFragment extends Fragment {
     ActivityLoginBinding loginBinding;
@@ -26,6 +23,7 @@ public class LoginFragment extends Fragment {
     private Button signInButton;
     private TextView linkToSignUp;
     private EditText emailSignIn,passwordSignIn;
+
     // TODO: Rename and change types and number of parameters
     public static LoginFragment newInstance(String param1, String param2) {
         LoginFragment fragment = new LoginFragment();
@@ -36,7 +34,6 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -44,7 +41,10 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_login, container, false);
+
         auth = FirebaseAuth.getInstance();
+
+
         signInButton = root.findViewById(R.id.signInButton);
         linkToSignUp = root.findViewById(R.id.linkToSignUp);
         emailSignIn = root.findViewById(R.id.emailSignIn);
@@ -78,5 +78,13 @@ public class LoginFragment extends Fragment {
         });
 
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getActivity() != null) {
+            ((MainActivity) getActivity()).setActionBarTitle("Sign In");
+        }
     }
 }
