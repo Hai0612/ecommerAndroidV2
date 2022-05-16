@@ -57,6 +57,7 @@
         <activity android:name=".activities.ShowAllCategoryActivity" />
         <activity android:name=".activities.SellerActivity" />
         <activity android:name=".activities.NewProductActivity" />
+        <activity android:name=".activities.RegistrationSellerActivity" />
     </application>
 
 </manifest>
