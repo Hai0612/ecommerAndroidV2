@@ -8,15 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.GridView;
-import android.widget.ListAdapter;
 
 import com.example.ecomapplication.R;
-import com.example.ecomapplication.adapters.CategoryAdapter;
-import com.example.ecomapplication.adapters.NewProductAdapter;
 import com.example.ecomapplication.adapters.PopularProductAdapter;
-import com.example.ecomapplication.adapters.ProductAdapter;
-import com.example.ecomapplication.models.Category;
 import com.example.ecomapplication.models.Product;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -28,8 +22,9 @@ import java.util.List;
 public class ShowAllProductsActivity extends AppCompatActivity {
     FirebaseFirestore firestore;
     PopularProductAdapter popularProductAdapter;
-    private RecyclerView recyclerViewCategory, newProductRecyclerview, productAllView ;
+    private RecyclerView productAllView ;
     List<Product> productList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -18,15 +18,11 @@
         tools:layout="@layout/fragment_new_product" />
 
     <fragment
-        android:id="@+id/blankFragment"
-        android:name="com.example.ecomapplication.BlankFragment"
-        android:label="fragment_blank"
-        tools:layout="@layout/fragment_blank" />
-    <fragment
         android:id="@+id/nav_category"
         android:name="com.example.ecomapplication.ui.category.CategoryFragment"
         android:label="fragment_category"
         tools:layout="@layout/fragment_category" />
+
     <fragment
         android:id="@+id/nav_search"
         android:name="com.example.ecomapplication.ui.search.SearchFragment"
@@ -36,36 +32,32 @@
             android:id="@+id/search_back_to_main"
             app:destination="@id/nav_home" />
     </fragment>
+
     <fragment
         android:id="@+id/nav_cart"
         android:name="com.example.ecomapplication.ui.cart.CartFragment"
         android:label="fragment_cart"
         tools:layout="@layout/fragment_cart" />
+
     <fragment
         android:id="@+id/nav_ordermanager"
         android:name="com.example.ecomapplication.ui.ordermanager.OrderManagerFragment"
         android:label="fragment_order_manager"
         tools:layout="@layout/fragment_order_manager" />
+
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.example.ecomapplication.ui.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
-    <fragment
-        android:id="@+id/nav_myorder"
-        android:name="com.example.ecomapplication.ui.order1.MyOrderFragment"
-        android:label="fragment_my_order"
-        tools:layout="@layout/fragment_my_order" />
-    <fragment
-        android:id="@+id/nav_myproducts"
-        android:name="com.example.ecomapplication.ui.myproduct.MyProductFragment"
-        android:label="fragment_my_product"
-        tools:layout="@layout/fragment_my_product" />
+
+
     <fragment
         android:id="@+id/nav_notification"
         android:name="com.example.ecomapplication.ui.notification.NotificationFragment"
         android:label="fragment_notification"
         tools:layout="@layout/fragment_notification" />
+
     <fragment
         android:id="@+id/nav_login"
         android:name="com.example.ecomapplication.LoginFragment"
@@ -75,6 +67,7 @@
             android:id="@+id/action_nav_login_to_nav_signup"
             app:destination="@id/nav_signup" />
     </fragment>
+
     <fragment
         android:id="@+id/nav_signup"
         android:name="com.example.ecomapplication.RegistrationFragment"
@@ -83,7 +76,9 @@
         <action
             android:id="@+id/action_nav_signup_to_nav_login"
             app:destination="@id/nav_login" />
+
     </fragment>
+
     <fragment
         android:id="@+id/nav_order"
         android:name="com.example.ecomapplication.ui.order.OrderFragment"

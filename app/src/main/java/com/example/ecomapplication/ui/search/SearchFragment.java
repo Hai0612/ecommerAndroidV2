@@ -19,6 +19,7 @@ import android.widget.ListView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.activities.DetailActivity;
 import com.example.ecomapplication.adapters.CategoryAdapter;
@@ -87,6 +88,10 @@ public class SearchFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        if (getActivity() != null) {
+            ((MainActivity) getActivity()).setActionBarTitle("Search");
+        }
 
         searchView.setOnTouchListener((view, motionEvent) -> {
             final int DRAWABLE_LEFT = 0;

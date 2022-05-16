@@ -106,6 +106,15 @@ public class RegistrationFragment extends Fragment {
 
         return root;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getActivity() != null) {
+            ((MainActivity) getActivity()).setActionBarTitle("Sign Up");
+        }
+    }
+
     public void addUserInfo(){
             Map<String, Object> doc = new HashMap<>();
             doc.put("city", "");
@@ -132,7 +141,7 @@ public class RegistrationFragment extends Fragment {
     }
     public void initCart(){
         Map<String, Object> prodt = new HashMap<>();
-// Add a new document with a generated ID
+
         prodt.put("description", "description");
         prodt.put("productId", null);
         prodt.put("id_category", "1");
