@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.models.UserInfo;
+import com.example.ecomapplication.ui.profile.ProfileFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,6 +43,7 @@ public class EditProfileActivity extends AppCompatActivity {
     DatabaseReference reference;
     FirebaseFirestore db;
     UserInfo userInfo;
+    FirebaseAuth auth;
 
 
     @Override
@@ -50,11 +52,9 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
 
         db = FirebaseFirestore.getInstance();
-
+        auth = FirebaseAuth.getInstance();
 
         firstName = findViewById(R.id.first_name_update);
-        lastName = findViewById(R.id.last_name_update);
-        userName = findViewById(R.id.username_update);
         city = findViewById(R.id.city_update);
         email = findViewById(R.id.email_update);
         phone = findViewById(R.id.phone_update);
@@ -71,16 +71,12 @@ public class EditProfileActivity extends AppCompatActivity {
         });
 
         _firstName = getIntent().getExtras().getString("First Name");
-        _lastName = getIntent().getExtras().getString("Last Name");
-        _userName = getIntent().getExtras().getString("User Name");
         _city = getIntent().getExtras().getString("City");
         _phone = getIntent().getExtras().getString("Phone");
         _email = getIntent().getExtras().getString("Email");
 
         // Get data from user activity
         firstName.getEditText().setText(_firstName);
-        lastName.getEditText().setText(_lastName);
-        userName.getEditText().setText(_userName);
         city.getEditText().setText(_city);
         email.getEditText().setText(_email);
         phone.getEditText().setText(_phone);
@@ -88,15 +84,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
     public void updateProfile(){
-        if (!isFirstNameChanged() && !isLastNameChanged() && !isUserNameChanged() &&
-                !isCityChanged() && !isEmailChanged() && !isPhoneChanged()){
+        if (!isFirstNameChanged() && !isCityChanged() && !isEmailChanged() && !isPhoneChanged()){
             Toast.makeText(this, "Update Failed", Toast.LENGTH_SHORT).show();
         }
         else {
-            db.collection("UserInfo").document("CuGpKPBNtXlDfVpUEqY9")
+            db.collection("UserInfo").document(auth.getUid())
                     .update("firstName", firstName.getEditText().getText().toString(),
-                            "lastName", lastName.getEditText().getText().toString(),
-                            "id", userName.getEditText().getText().toString(),
                             "city", city.getEditText().getText().toString(),
                             "email", email.getEditText().getText().toString(),
                             "phone", phone.getEditText().getText().toString());
@@ -106,20 +99,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
     public boolean isFirstNameChanged(){
         if (!_firstName.equals(firstName.getEditText().getText().toString())){
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isLastNameChanged(){
-        if (!_lastName.equals(lastName.getEditText().getText().toString())){
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isUserNameChanged(){
-        if (!_userName.equals(userName.getEditText().getText().toString())){
             return true;
         }
         return false;

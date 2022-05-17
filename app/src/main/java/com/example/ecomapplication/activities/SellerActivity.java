@@ -1,5 +1,7 @@
 package com.example.ecomapplication.activities;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,10 +25,12 @@ import com.example.ecomapplication.adapters.ProductSellerAdapter;
 import com.example.ecomapplication.models.MyCartModel;
 import com.example.ecomapplication.models.OrderModel;
 import com.example.ecomapplication.models.Product;
+import com.example.ecomapplication.models.SellerInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -36,7 +40,7 @@ import java.util.List;
 public class SellerActivity extends AppCompatActivity {
 
     ImageButton logOut, editProfile, addProduct;
-    TextView userName, shopName, email, productTab, orderTab;
+    TextView shopPhone, shopName, email, productTab, orderTab;
     RelativeLayout productRl, orderRl;
     FirebaseFirestore db;
     List<Product> myProduct;
@@ -45,6 +49,7 @@ public class SellerActivity extends AppCompatActivity {
     List<OrderModel> myOrder;
     private RecyclerView  myOrderRecyclerview ;
     private OrderAdapter myOrderAdapter;
+    String shopAddress;
 
 
     @Override
@@ -55,8 +60,8 @@ public class SellerActivity extends AppCompatActivity {
         logOut = findViewById(R.id.logout_btn);
         editProfile = findViewById(R.id.edit_profile_btn);
         addProduct = findViewById(R.id.add_product_btn);
-        userName = findViewById(R.id.username_seller);
-        shopName = findViewById(R.id.shop_name);
+        shopName = findViewById(R.id.username_seller);
+        shopPhone = findViewById(R.id.shop_phone);
         email = findViewById(R.id.shop_email);
         productTab = findViewById(R.id.product_tab);
         orderTab = findViewById(R.id.order_tab);
@@ -67,6 +72,7 @@ public class SellerActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         showProductUi();
+        getSellerInfo();
         addProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,6 +90,54 @@ public class SellerActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showOrderUi();
+            }
+        });
+
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SellerActivity.this, EditSellerInfoActivity.class);
+
+                String shop_name_up = shopName.getText().toString();
+                String shop_phone_up = shopPhone.getText().toString();
+                String shop_email_up = email.getText().toString();
+
+                intent.putExtra("Shop Name", shop_name_up);
+                intent.putExtra("Shop Phone", shop_phone_up);
+                intent.putExtra("Shop Email", shop_email_up);
+                intent.putExtra("Shop Address", shopAddress);
+
+                // start the Intent
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void getSellerInfo(){
+        db.collection("SellerInfo").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                try {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        SellerInfo sellerInfo = document.toObject(SellerInfo.class);
+                        Log.v("Hellooo", sellerInfo.getEmail());
+
+                        if(sellerInfo.getId().equals("AxJzJYZv90bdD9QsmcBP2aB2jF53")){
+                            String shop_name = sellerInfo.getShopName();
+                            String shop_phone = sellerInfo.getPhone();
+                            String shop_email = sellerInfo.getEmail();
+                            shopAddress = sellerInfo.getAddress();
+
+                            shopName.setText(shop_name);
+                            shopPhone.setText(shop_phone);
+                            email.setText(shop_email);
+                        }
+                    }
+                }
+                catch (Exception e ) {
+                    e.printStackTrace();
+                }
+            } else {
+                Log.w(TAG, "Error getting documents.", task.getException());
             }
         });
     }

@@ -14,6 +14,15 @@ public class UserInfo {
     private String id;
     private String lastName;
     private String phone;
+    private String documentId;
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
+    }
 
     public UserInfo(){
 
