@@ -10,21 +10,12 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.adapters.CheckoutAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -94,19 +85,11 @@ public class OrderPlace extends Dialog implements
         payment.put("provider", selectedPayment.getProvider());
         db.collection("Payment")
                 .add(payment)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.v(TAG, "ADD order detail thanh cong");
-                        deleteProductsInCartOfUser();
-                    }
+                .addOnSuccessListener(documentReference -> {
+                    Log.v(TAG, "ADD order detail thanh cong");
+                    deleteProductsInCartOfUser();
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Them order detail that bai", e);
-                    }
-                });
+                .addOnFailureListener(e -> Log.w(TAG, "Them order detail that bai", e));
     }
     public void orderPlace(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -137,39 +120,26 @@ public class OrderPlace extends Dialog implements
     public void getProductToPayment(){
         cartModelList = new ArrayList<>();
         db.collection("Cart").document(auth.getUid())
-//        firestore.collection("Cart").document(auth.getCurrentUser().getUid())
-                .collection("Products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot doc :task.getResult().getDocuments()) {
-//                        Log.v("Test", auth.getCurrentUser().getUid());
-                        MyCartModel myCartModel = doc.toObject(MyCartModel.class);
-                        myCartModel.setDocumentId(doc.getId());
-                        cartModelList.add(myCartModel);
+                .collection("Products").get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot doc :task.getResult().getDocuments()) {
+                            MyCartModel myCartModel = doc.toObject(MyCartModel.class);
+                            myCartModel.setDocumentId(doc.getId());
+                            cartModelList.add(myCartModel);
+                        }
                     }
-                }
-            }
-        });
+                });
     }
     public void AddProductListToOrderDetail(String id_order){
         for(int i  = 0 ; i < cartModelList.size(); i ++){
             db.collection("OrderDetail").document(id_order)
                     .collection("Products")
                     .add(cartModelList.get(i))
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Log.v(TAG, "ADD order detail thanh cong");
-                            deleteProductsInCartOfUser();
-                        }
+                    .addOnSuccessListener(documentReference -> {
+                        Log.v("Result", "ADD order detail thanh cong");
+                        deleteProductsInCartOfUser();
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Them order detail that bai", e);
-                        }
-                    });
+                    .addOnFailureListener(e -> Log.v("Result", "Them order detail that bai", e));
         }
 
 
@@ -181,18 +151,8 @@ public class OrderPlace extends Dialog implements
         Log.v("ID_user" , auth.getUid());
         db.collection("Cart").document(auth.getUid())
                 .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Delete product in cart successfully");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error deleting document", e);
-                    }
-                });
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Delete product in cart successfully"))
+                .addOnFailureListener(e -> Log.w(TAG, "Error deleting document", e));
     }
     @Override
     public void onClick(View v) {

@@ -50,8 +50,6 @@ public class Product implements Serializable {
         this.id = id;
     }
 
-
-
     public String getDocumentId() {
         return documentId;
     }
@@ -59,11 +57,6 @@ public class Product implements Serializable {
     public void setDocumentId(String documentId) {
         this.documentId = documentId;
     }
-
-    public String getProductId() {
-        return id;
-    }
-
 
     public String getName() {
         return name;

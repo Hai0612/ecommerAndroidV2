@@ -12,6 +12,7 @@ import android.util.Log;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.adapters.PopularProductAdapter;
 import com.example.ecomapplication.models.Product;
+import com.example.ecomapplication.models.UserInfo;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 

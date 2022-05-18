@@ -126,7 +126,7 @@ public class SellerOrderDetailActivity extends AppCompatActivity {
         final Object obj = getIntent().getSerializableExtra("productSellerDetail");
         if (obj instanceof Product) {
             product = (Product) obj;
-            productId = product.getProductId();
+            productId = product.getId();
 
             Log.v("Result", "Get product ID: " + productId);
         }
