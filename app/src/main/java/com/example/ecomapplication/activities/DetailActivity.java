@@ -38,7 +38,7 @@ import java.util.UUID;
 
 public class DetailActivity extends AppCompatActivity {
     ImageView detailedImg;
-    TextView detailedName, detailedDesc, detailedPrice, quantityOrder, ratingValue;
+    TextView detailedName, detailedDesc, detailedPrice, quantityOrder, ratingValue, orderWarning;
     RatingBar detailedRating;
     Button buyNow, addToCart, addItem, removeItem,addComment;
     Product product;
@@ -76,29 +76,10 @@ public class DetailActivity extends AppCompatActivity {
         userCommentImg = findViewById(R.id.user_comment_img);
         addComment = findViewById(R.id.add_comment_btn);
         postDetailComment = findViewById(R.id.post_detail_comment);
+        orderWarning = findViewById(R.id.order_warning);
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
-
-    }
-
-    private void addProductToFirebaseCart(View view, Product newProduct) {
-        firestore.collection("Cart").document(auth.getUid())
-                .collection("Products")
-                .add(newProduct).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Toast.makeText(
-                        view.getContext(),
-                        "Added product ID " + newProduct.getId()
-                                + " of " + newProduct.getQuantity() + " products to cart",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(
-                        view.getContext(),
-                        "Fail to add product to cart",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
@@ -132,10 +113,11 @@ public class DetailActivity extends AppCompatActivity {
                             .load(uri.toString())
                             .fit().centerInside()
                             .into(detailedImg))
-                    .addOnFailureListener(e -> Log.v("Error", "Error when get the images: " + e));
+                    .addOnFailureListener(e -> Log.v("Result", "Error when get the images: " + e));
         }
-        iniRvComment();
 
+        checkHasBoughtProduct();
+        iniRvComment();
 
         RvComment.setLayoutManager(new LinearLayoutManager(this));
         commentAdapter = new CommentAdapter(getApplicationContext(), list);
@@ -178,6 +160,25 @@ public class DetailActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> showMessage("Comment Failed"));
     }
 
+    private void addProductToFirebaseCart(View view, Product newProduct) {
+        firestore.collection("Cart").document(auth.getUid())
+                .collection("Products")
+                .add(newProduct).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(
+                                view.getContext(),
+                                "Added product ID " + newProduct.getId()
+                                        + " of " + newProduct.getQuantity() + " products to cart",
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(
+                                view.getContext(),
+                                "Fail to add product to cart",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     public void iniRvComment(){
         list = new ArrayList<>();
 
@@ -204,6 +205,40 @@ public class DetailActivity extends AppCompatActivity {
 
     public void showMessage(String message){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void checkHasBoughtProduct() {
+        String userId = FirebaseAuth.getInstance().getUid();
+        Log.v("Result", "User: " + userId);
+
+        firestore.collection("Order").document(userId)
+                .collection("Orders").get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        ArrayList<String> orders = new ArrayList<>();
+                        for (QueryDocumentSnapshot documentSnapshot: task.getResult()) {
+                            orders.add(documentSnapshot.getId());
+                        }
+
+                        for (String order: orders) {
+                            firestore.collection("OrderDetail").document(order)
+                                    .collection("Products").get().addOnSuccessListener(queryDocumentSnapshots -> {
+                                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                            Product product = document.toObject(Product.class);
+
+                                            if (product.getId() != null
+                                                    && product.getId().equals(productId)) {
+                                                userCommentImg.setVisibility(View.VISIBLE);
+                                                postDetailComment.setVisibility(View.VISIBLE);
+                                                addComment.setVisibility(View.VISIBLE);
+                                                orderWarning.setVisibility(View.INVISIBLE);
+                                                return;
+                                            }
+
+                                        }
+                                    });
+                        }
+                    }
+                });
     }
 
     @Override

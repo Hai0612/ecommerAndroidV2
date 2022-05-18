@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment {
     GridView categoryView;
     ProgressDialog progressDialog;
     FirebaseFirestore firestore;
-    private static int TIME_OUT = 2500 ;
+    private static int TIME_OUT = 2000 ;
     RecyclerView categoryRecyclerView;
     ListView viewCategory;
 

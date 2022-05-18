@@ -35,12 +35,12 @@ public class MyCartModel {
 //        this.description = description;
 //    }
 
-    public String getProductId() {
+    public String getId() {
         return id;
     }
 
-    public void setProductId(String productId) {
-        this.id = productId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -58,8 +58,6 @@ public class MyCartModel {
     public void setImg_url(String img_url) {
         this.img_url = img_url;
     }
-
-
 
     public int getPrice() {
         return price;

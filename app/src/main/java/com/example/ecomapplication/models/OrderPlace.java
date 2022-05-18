@@ -4,14 +4,16 @@ import static android.content.ContentValues.TAG;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -20,11 +22,8 @@ import com.example.ecomapplication.R;
 import com.example.ecomapplication.activities.RegistrationActivity;
 import com.example.ecomapplication.adapters.CheckoutAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -55,6 +54,8 @@ public class OrderPlace extends Dialog implements
     private Date shippedDate;
      private int number;
      private String id;
+    ProgressDialog progressDialog;
+
     private FirebaseAuth auth;
     private  Payment selectedPayment;
     private int total;
@@ -98,19 +99,11 @@ public class OrderPlace extends Dialog implements
         payment.put("provider", selectedPayment.getProvider());
         db.collection("Payment")
                 .add(payment)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.v(TAG, "ADD order detail thanh cong");
-                        deleteProductsInCartOfUser();
-                    }
+                .addOnSuccessListener(documentReference -> {
+                    Log.v(TAG, "ADD order detail thanh cong");
+                    deleteProductsInCartOfUser();
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Them order detail that bai", e);
-                    }
-                });
+                .addOnFailureListener(e -> Log.w(TAG, "Them order detail that bai", e));
     }
     public void orderPlace(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -122,7 +115,20 @@ public class OrderPlace extends Dialog implements
         order.put("shippedDate", shippedDate);
         order.put("total", total);
 
-
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle("Đang thanh toán");
+        progressDialog.setMessage("Vui lòng chờ...");
+        progressDialog.setCanceledOnTouchOutside(true);
+        progressDialog.show();
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                //Do something here
+                progressDialog.dismiss();
+            }
+        }, 1500);
 // Add a new document with a generated ID
         db.collection("Order")
                 .document(auth.getUid())
@@ -141,39 +147,26 @@ public class OrderPlace extends Dialog implements
     public void getProductToPayment(){
         cartModelList = new ArrayList<>();
         db.collection("Cart").document(auth.getUid())
-//        firestore.collection("Cart").document(auth.getCurrentUser().getUid())
-                .collection("Products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot doc :task.getResult().getDocuments()) {
-//                        Log.v("Test", auth.getCurrentUser().getUid());
-                        MyCartModel myCartModel = doc.toObject(MyCartModel.class);
-                        myCartModel.setDocumentId(doc.getId());
-                        cartModelList.add(myCartModel);
+                .collection("Products").get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot doc :task.getResult().getDocuments()) {
+                            MyCartModel myCartModel = doc.toObject(MyCartModel.class);
+                            myCartModel.setDocumentId(doc.getId());
+                            cartModelList.add(myCartModel);
+                        }
                     }
-                }
-            }
-        });
+                });
     }
     public void AddProductListToOrderDetail(String id_order){
         for(int i  = 0 ; i < cartModelList.size(); i ++){
             db.collection("OrderDetail").document(id_order)
                     .collection("Products")
                     .add(cartModelList.get(i))
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Log.v(TAG, "ADD order detail thanh cong");
-                            deleteProductsInCartOfUser();
-                        }
+                    .addOnSuccessListener(documentReference -> {
+                        Log.v("Result", "ADD order detail thanh cong");
+                        deleteProductsInCartOfUser();
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Them order detail that bai", e);
-                        }
-                    });
+                    .addOnFailureListener(e -> Log.v("Result", "Them order detail that bai", e));
         }
 
 
