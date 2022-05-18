@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,9 +16,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EcomApplication"
         tools:replace="android:theme">
+        <activity
+            android:name=".activities.EditSellerInfoActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDNI_ZWPqvdS6r6gPVO50I4TlYkfkZdXh8" />
+
         <activity
             android:name=".activities.MapsActivity"
             android:exported="false" />

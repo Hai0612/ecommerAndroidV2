@@ -65,35 +65,6 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:hint="Họ"
-        android:id="@+id/last_name_update"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:drawableLeft="@drawable/ic_baseline_person_24"
-            android:drawablePadding="10dp"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:backgroundTint="@color/blur"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:hint="Tên đăng nhập"
-        android:id="@+id/username_update"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:drawableLeft="@drawable/ic_baseline_username"
-            android:drawablePadding="10dp"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:backgroundTint="@color/blur"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:hint="Thành phố"
