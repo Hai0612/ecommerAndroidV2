@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class EditSellerInfoActivity extends AppCompatActivity {
@@ -19,11 +20,13 @@ public class EditSellerInfoActivity extends AppCompatActivity {
     TextView saveProfile;
     FirebaseFirestore db;
     String shop_name, shop_phone, shop_address, shop_email;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_seller_info);
+        auth = FirebaseAuth.getInstance();
 
         db = FirebaseFirestore.getInstance();
 
@@ -60,7 +63,7 @@ public class EditSellerInfoActivity extends AppCompatActivity {
             Toast.makeText(this, "Nothing Changed", Toast.LENGTH_SHORT).show();
         }
         else {
-            db.collection("SellerInfo").document("AxJzJYZv90bdD9QsmcBP2aB2jF53")
+            db.collection("SellerInfo").document(auth.getUid())
                     .update("address", shopAddress.getEditText().getText().toString(),
                             "email", shopEmail.getEditText().getText().toString(),
                             "phone", shopPhone.getEditText().getText().toString(),

@@ -52,11 +52,14 @@ public class OrderDetailActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Product product = document.toObject(Product.class);
-                    productList.add(product);
-                    productAdapter.notifyDataSetChanged();
-                    totalPr += product.getQuantity() * product.getPrice();
-                    Log.v("Testtt", String.valueOf(totalPr));
-                    total.setText(totalPr + " VNĐ");
+                    if(!product.getName().equals("init")){
+                        productList.add(product);
+                        productAdapter.notifyDataSetChanged();
+                        totalPr += product.getQuantity() * product.getPrice();
+                        Log.v("Testtt", String.valueOf(totalPr));
+                        total.setText(totalPr + " VNĐ");
+                    }
+
                 }
             } else {
                 Log.w(TAG, "Error getting documents.", task.getException());

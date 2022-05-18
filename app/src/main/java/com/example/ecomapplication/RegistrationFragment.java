@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,7 +119,7 @@ public class RegistrationFragment extends Fragment {
     public void addUserInfo(){
             Map<String, Object> doc = new HashMap<>();
             doc.put("city", "");
-            doc.put("date", "");
+            doc.put("date", new Date());
              doc.put("address", Arrays.asList("120 Nguyễn Trãi, Thanh Xuân, Hà Nội"));
             doc.put("email", emailSignUp.getText().toString());
             doc.put("firstName", nameSignUp.getText().toString());
@@ -130,7 +131,7 @@ public class RegistrationFragment extends Fragment {
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            initCart();
+//                            initCart();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -157,7 +158,7 @@ public class RegistrationFragment extends Fragment {
                 .add(prodt).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 startActivity(new Intent(getContext(), MainActivity.class));
-                Log.w(TAG, "Thanfh cong");
+                Log.w(TAG, "Thanh cong");
 
             } else {
                 Log.w(TAG, "that bai");

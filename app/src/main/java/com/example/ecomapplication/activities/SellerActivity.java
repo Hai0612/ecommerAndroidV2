@@ -27,8 +27,10 @@ import com.example.ecomapplication.models.MyCartModel;
 import com.example.ecomapplication.models.OrderModel;
 import com.example.ecomapplication.models.Product;
 import com.example.ecomapplication.models.SellerInfo;
+import com.example.ecomapplication.models.UserInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -52,12 +54,14 @@ public class SellerActivity extends AppCompatActivity {
     private OrderAdapterSeller myOrderAdapterSeller;
     private OrderAdapter myOrderAdapter;
     String shopAddress;
+    private FirebaseAuth auth;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_seller_home);
+        auth = FirebaseAuth.getInstance();
 
         logOut = findViewById(R.id.logout_btn);
         editProfile = findViewById(R.id.edit_profile_btn);
@@ -116,32 +120,28 @@ public class SellerActivity extends AppCompatActivity {
     }
 
     public void getSellerInfo(){
-        db.collection("SellerInfo").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                try {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        SellerInfo sellerInfo = document.toObject(SellerInfo.class);
-                        Log.v("Hellooo", sellerInfo.getEmail());
 
-                        if(sellerInfo.getId().equals("AxJzJYZv90bdD9QsmcBP2aB2jF53")){
+        db.collection("SellerInfo").document(auth.getUid())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        try {
+                            SellerInfo sellerInfo = task.getResult().toObject(SellerInfo.class);
                             String shop_name = sellerInfo.getShopName();
                             String shop_phone = sellerInfo.getPhone();
                             String shop_email = sellerInfo.getEmail();
                             shopAddress = sellerInfo.getAddress();
-
                             shopName.setText(shop_name);
                             shopPhone.setText(shop_phone);
                             email.setText(shop_email);
                         }
+                        catch (Exception e ) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Log.w(TAG, "Error getting documents.", task.getException());
                     }
-                }
-                catch (Exception e ) {
-                    e.printStackTrace();
-                }
-            } else {
-                Log.w(TAG, "Error getting documents.", task.getException());
-            }
-        });
+                });
     }
 
     public void showProductUi(){

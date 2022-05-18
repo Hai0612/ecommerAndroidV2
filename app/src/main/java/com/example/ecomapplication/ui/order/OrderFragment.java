@@ -68,20 +68,18 @@ import java.util.List;
             orderModels = new ArrayList<>();
             orderAdapter = new OrderAdapter(getContext(), orderModels);
             recyclerView.setAdapter(orderAdapter);
-
-            firestore.collection("Order").document("ZXeAcAzbZ6SUVe0pxNLXSDY7WaM2").collection("Orders")
+            Log.v("loggg" , auth.getUid());
+            firestore.collection("Order").document(auth.getUid()).collection("Orders")
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                             if (task.isSuccessful()) {
-
                                 for (DocumentSnapshot doc :task.getResult().getDocuments()) {
                                     OrderModel orderModel = doc.toObject(OrderModel.class);
                                     orderModels.add(orderModel);
                                     orderModel.setId(doc.getId());
-                                    Log.v("taggg" , doc.getId());
                                     orderAdapter.notifyDataSetChanged();
                                 }
                             } else {

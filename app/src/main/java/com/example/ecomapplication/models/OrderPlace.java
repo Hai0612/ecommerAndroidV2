@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,7 +15,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
+import com.example.ecomapplication.activities.RegistrationActivity;
 import com.example.ecomapplication.adapters.CheckoutAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
@@ -179,18 +183,19 @@ public class OrderPlace extends Dialog implements
     }
     public void deleteProductsInCartOfUser() {
         Log.v("ID_user" , auth.getUid());
-        db.collection("Cart").document(auth.getUid())
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+
+        db.collection("Cart").document(auth.getUid()).collection("Products")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Delete product in cart successfully");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error deleting document", e);
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                db.collection("Cart").document(auth.getUid()).
+                                        collection("Products").document(document.getId()).delete();
+                            }
+                            getContext().startActivity(new Intent(getContext(), MainActivity.class));
+                        } else {
+                        }
                     }
                 });
     }
