@@ -1,5 +1,7 @@
 package com.example.ecomapplication.activities;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,7 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.adapters.CommentAdapter;
 import com.example.ecomapplication.models.Comment;
+import com.example.ecomapplication.models.Order;
 import com.example.ecomapplication.models.Product;
+import com.example.ecomapplication.models.UserInfo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
@@ -55,7 +59,7 @@ public class DetailActivity extends AppCompatActivity {
     CommentAdapter commentAdapter;
 
     int quantity;
-    String productId;
+    String productId, emailUser;
 
     private void binding() {
         storage = FirebaseStorage.getInstance();
@@ -109,6 +113,23 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         binding();
 
+        db.collection("UserInfo").document(auth.getUid())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        try {
+                            UserInfo userInfo = task.getResult().toObject(UserInfo.class);
+                            Log.v("Le Thanh Huyen", userInfo.getEmail());
+                            emailUser = userInfo.getEmail();
+                        }
+                        catch (Exception e ) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Log.w(TAG, "Error getting documents.", task.getException());
+                    }
+                });
+
         final Object obj = getIntent().getSerializableExtra("productDetail");
         if (obj instanceof Product) {
             product = (Product) obj;
@@ -134,7 +155,7 @@ public class DetailActivity extends AppCompatActivity {
                             .into(detailedImg))
                     .addOnFailureListener(e -> Log.v("Error", "Error when get the images: " + e));
         }
-        iniRvComment();
+        iniRvComment(productId);
 
 
         RvComment.setLayoutManager(new LinearLayoutManager(this));
@@ -146,16 +167,16 @@ public class DetailActivity extends AppCompatActivity {
 //        RvComment.setAdapter(commentAdapter);
 
         addComment.setOnClickListener(view -> {
-            iniRvComment();
+            iniRvComment(productId);
             commentAdapter = new CommentAdapter(getApplicationContext(), list);
             RvComment.setAdapter(commentAdapter);
             addComment.setVisibility(View.INVISIBLE);
             String _imgUrl = "https://firebasestorage.googleapis.com/v0/b/ecommerce-de4aa.appspot.com/o/274736835_677983293549819_1786662699780048436_n.jpg?alt=media&token=23b9dcff-f1ce-436b-af77-101af401075f".trim();
-            String _id = "1".trim();
+            String _id = productId.trim();
             String _comment = postDetailComment.getText().toString().trim();
-            String _user = "dfdfsfdsf".trim();
+  //          String _user = "dfdfsfdsf".trim();
             Object date = ServerValue.TIMESTAMP;
-            AddCommentToFireBase(_comment, date, _id, _user, _imgUrl);
+            AddCommentToFireBase(_comment, date, _id, emailUser, _imgUrl);
         });
     }
 
@@ -178,7 +199,7 @@ public class DetailActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> showMessage("Comment Failed"));
     }
 
-    public void iniRvComment(){
+    public void iniRvComment(String prod_id){
         list = new ArrayList<>();
 
         db.collection("Comment").get().addOnCompleteListener(task -> {
@@ -189,8 +210,11 @@ public class DetailActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Comment comment = document.toObject(Comment.class);
                         Log.v("name", comment.getContent());
-                        list.add(comment);
-                        commentAdapter.notifyDataSetChanged();
+                        if(comment.getId_product().equals(prod_id)){
+
+                            list.add(comment);
+                            commentAdapter.notifyDataSetChanged();
+                        }
                     }
                 }
                 catch (Exception e ) {
@@ -256,6 +280,26 @@ public class DetailActivity extends AppCompatActivity {
 
             Intent intent = new Intent(view.getContext(), CheckoutActitvity.class);
             startActivity(intent);
+        });
+    }
+
+    public void hasUserBoughtYet(String userId){
+        db.collection("Order").document(auth.getUid()).collection("Orders").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.v("comment" , "document.getId()");
+
+                try {
+//                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                        Order order = document.toObject(Order.class);
+//
+//                    }
+                }
+                catch (Exception e ) {
+                    e.printStackTrace();
+                }
+            } else {
+                Log.w("TAG", "Error getting documents.", task.getException());
+            }
         });
     }
 }
