@@ -1,5 +1,9 @@
 package com.example.ecomapplication;
 
+import static android.content.ContentValues.TAG;
+
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,6 +13,23 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import com.example.ecomapplication.activities.MerchantActivity;
+import com.example.ecomapplication.activities.PaymentActivity;
+import com.example.ecomapplication.activities.RegistrationSellerActivity;
+import com.example.ecomapplication.activities.ShowAllCategoryActivity;
+import com.example.ecomapplication.activities.ShowAllProductsActivity;
+import com.example.ecomapplication.activities.SellerActivity;
+import com.example.ecomapplication.activities.Test;
+import com.example.ecomapplication.models.OrderModel;
+import com.example.ecomapplication.models.UserInfo;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -21,12 +42,24 @@ import com.example.ecomapplication.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private FirebaseAuth auth;
+    FirebaseFirestore db;
+    UserInfo userInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +113,20 @@ public class MainActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_merchant:
-                startActivity(new Intent(this, SellerActivity.class));
+                final boolean[] check = {false};
+                FirebaseFirestore.getInstance().collection("UserInfo").document(auth.getUid())
+                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        check[0] = documentSnapshot.getBoolean("is_seller");
+                        if (check[0]) {
+                            startActivity(new Intent(getBaseContext(), SellerActivity.class));
+                        } else {
+                            startActivity(new Intent(getBaseContext(), RegistrationSellerActivity.class));
+                        }
+                    }
+                });
+
                 return true;
 
             default:

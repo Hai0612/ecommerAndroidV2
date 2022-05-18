@@ -24,12 +24,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
+public class OrderAdapterSeller extends RecyclerView.Adapter<OrderAdapterSeller.ViewHolder> {
     Context context;
     List<OrderModel> list;
 //    private FirebaseStorage storage;
 
-    public OrderAdapter(Context context, List<OrderModel> list) {
+    public OrderAdapterSeller(Context context, List<OrderModel> list) {
         this.context = context;
         this.list = list;
 //        this.storage = FirebaseStorage.getInstance();
@@ -38,7 +38,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new OrderAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.my_order_item, parent, false));
+        return new OrderAdapterSeller.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item_seller, parent, false));
     }
 
     @Override
@@ -62,10 +62,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         holder.shippedDate.setText(shippedDate);
         holder.total.setText(String.valueOf(list.get(position).getTotal()));
 
-        holder.buttonReceived.setOnClickListener(new View.OnClickListener() {
+        holder.buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Button Received is clicked!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Button Cancel is clicked!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        holder.buttonConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "Button Confirm is clicked!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -86,7 +92,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView orderAddress, orderDate, shippedDate, total;
         RelativeLayout layoutItem;
-        Button buttonReceived;
+        Button buttonCancel, buttonConfirm;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -95,7 +101,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             shippedDate = itemView.findViewById(R.id.shipped_date);
             total = itemView.findViewById(R.id.total);
             layoutItem = itemView.findViewById(R.id.order_item);
-            buttonReceived = itemView.findViewById(R.id.btn_received);
+            buttonCancel = itemView.findViewById(R.id.btn_cancel);
+            buttonConfirm = itemView.findViewById(R.id.btn_confirm);
         }
     }
 }

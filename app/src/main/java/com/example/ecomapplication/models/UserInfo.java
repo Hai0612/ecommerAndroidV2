@@ -14,11 +14,12 @@ public class UserInfo {
     private String id;
     private String lastName;
     private String phone;
+    private boolean is_seller;
 
     public UserInfo(){
 
     }
-    public UserInfo(List<String> address, String city, Date date, String email, String firstName, String id, String lastName, String phone) {
+    public UserInfo(List<String> address, String city, Date date, String email, String firstName, String id, String lastName, String phone, boolean is_seller) {
         this.address = address;
         this.city = city;
         this.date = date;
@@ -27,6 +28,7 @@ public class UserInfo {
         this.id = id;
         this.lastName = lastName;
         this.phone = phone;
+        this.is_seller = is_seller;
     }
 
     public String getCity() {
@@ -91,5 +93,13 @@ public class UserInfo {
 
     public void setAddress(List<String> address) {
         this.address = address;
+    }
+
+    public boolean isIs_seller() {
+        return is_seller;
+    }
+
+    public void setIs_seller(boolean is_seller) {
+        this.is_seller = is_seller;
     }
 }

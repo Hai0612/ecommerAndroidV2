@@ -10,7 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FB9FDE"
+        android:backgroundTint="#E1D9D9"
+        android:background="@drawable/shape_rect02"
         android:orientation="vertical"
         android:padding="7dp">
 
@@ -32,9 +33,10 @@
             <TextView
                 android:id="@+id/order_address"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:fontFamily="@font/amethysta"
+                android:gravity="right"
                 android:text="Order Address: "
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -61,6 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="right"
                 android:fontFamily="@font/amethysta"
                 android:text="Order Date: "
                 android:textSize="16sp"
@@ -88,6 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="right"
                 android:fontFamily="@font/amethysta"
                 android:text="Shipped Date: "
                 android:textSize="16sp"
@@ -115,10 +119,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="right"
                 android:fontFamily="@font/amethysta"
                 android:text="Total: "
                 android:textSize="16sp"
                 android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_received"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:textAllCaps="false"
+                android:text="Received"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

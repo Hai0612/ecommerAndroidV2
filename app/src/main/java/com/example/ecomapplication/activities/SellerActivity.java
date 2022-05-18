@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.adapters.AddressAdapter;
 import com.example.ecomapplication.adapters.OrderAdapter;
+import com.example.ecomapplication.adapters.OrderAdapterSeller;
 import com.example.ecomapplication.adapters.PopularProductAdapter;
 import com.example.ecomapplication.adapters.ProductSellerAdapter;
 import com.example.ecomapplication.models.MyCartModel;
@@ -44,7 +45,7 @@ public class SellerActivity extends AppCompatActivity {
     private  ProductSellerAdapter myProductAdapter;
     List<OrderModel> myOrder;
     private RecyclerView  myOrderRecyclerview ;
-    private OrderAdapter myOrderAdapter;
+    private OrderAdapterSeller myOrderAdapterSeller;
 
 
     @Override
@@ -114,8 +115,8 @@ public class SellerActivity extends AppCompatActivity {
 
         getMyOrder();
         myOrderRecyclerview.setLayoutManager(new GridLayoutManager(this,1));
-        myOrderAdapter = new OrderAdapter(this, myOrder);
-        myOrderRecyclerview.setAdapter(myOrderAdapter);
+        myOrderAdapterSeller = new OrderAdapterSeller(this, myOrder);
+        myOrderRecyclerview.setAdapter(myOrderAdapterSeller);
 
         productTab.setTextColor(getResources().getColor(R.color.white));
         productTab.setBackgroundColor(getResources().getColor(android.R.color.transparent));
@@ -151,7 +152,7 @@ public class SellerActivity extends AppCompatActivity {
                     for (DocumentSnapshot doc :task.getResult().getDocuments()) {
                         OrderModel orderModel = doc.toObject(OrderModel.class);
                         myOrder.add(orderModel);
-                        myOrderAdapter.notifyDataSetChanged();
+                        myOrderAdapterSeller.notifyDataSetChanged();
                     }
                 }
             }
