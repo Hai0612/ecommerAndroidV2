@@ -4,6 +4,7 @@ package com.example.ecomapplication.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.activities.OrderDetailActivity;
 import com.example.ecomapplication.models.OrderModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -28,6 +31,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     Context context;
     List<OrderModel> list;
 //    private FirebaseStorage storage;
+    FirebaseFirestore db;
+    private FirebaseAuth auth;
 
     public OrderAdapter(Context context, List<OrderModel> list) {
         this.context = context;
@@ -38,6 +43,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
         return new OrderAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.my_order_item, parent, false));
     }
 
@@ -50,7 +57,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                 onClickGoToDetail(orderModel);
             }
         });
-
         Date ordered = list.get(position).getOrderDate();
         Date shipped = list.get(position).getShippedDate();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
@@ -60,16 +66,38 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         holder.orderAddress.setText(list.get(position).getOrderAddress());
         holder.orderDate.setText(orderDate);
         holder.shippedDate.setText(shippedDate);
+        holder.status_order.setText(list.get(position).getStatus());
         holder.total.setText(String.valueOf(list.get(position).getTotal()));
-
+        if(list.get(position).getStatus().equals("pending")){
+            holder.buttonReceived.setEnabled(false);
+            holder.status_order.setText("Đang chờ xử lí đơn hàng");
+            holder.buttonReceived.setText("Đang chờ xử lí đơn hàng");
+        }else if(list.get(position).getStatus().equals("processed")){
+            holder.buttonReceived.setEnabled(true);
+            holder.status_order.setText("Đã xử lí đơn hàng");
+            holder.buttonReceived.setText("Nhận đơn hàng");
+        }else if(list.get(position).getStatus().equals("received")){
+            holder.buttonReceived.setEnabled(false);
+            holder.status_order.setText("Đã nhận đơn hàng");
+            holder.buttonReceived.setText("Đã nhận hàng");
+        }
+        int id = position;
         holder.buttonReceived.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Button Received is clicked!", Toast.LENGTH_SHORT).show();
+                holder.buttonReceived.setText("Đã nhận hàng");
+                holder.status_order.setText("Đã nhận đơn hàng");
+                holder.buttonReceived.setEnabled(false);
+                ReceiveOrder(id);
+                Toast.makeText(context, "Bạn đã xác nhận hàng thành công!", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    public void ReceiveOrder(int position){
+        db.collection("Order").document(auth.getUid()).collection("Orders").document(list.get(position).getId()).update(
+                "status", "received");
+    }
     private void onClickGoToDetail(OrderModel orderModel) {
         Intent intent = new Intent(context, OrderDetailActivity.class);
         Bundle bundle = new Bundle();
@@ -84,7 +112,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView orderAddress, orderDate, shippedDate, total;
+        TextView orderAddress, orderDate, shippedDate, total, status_order;
         RelativeLayout layoutItem;
         Button buttonReceived;
 
@@ -94,6 +122,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             orderDate = itemView.findViewById(R.id.order_date);
             shippedDate = itemView.findViewById(R.id.shipped_date);
             total = itemView.findViewById(R.id.total);
+            status_order = itemView.findViewById(R.id.status_order);
             layoutItem = itemView.findViewById(R.id.order_item);
             buttonReceived = itemView.findViewById(R.id.btn_received);
         }

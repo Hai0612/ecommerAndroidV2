@@ -166,10 +166,29 @@ public class OrderPlace extends Dialog implements
                     .set(cartModelList.get(i))
                     .addOnSuccessListener(documentReference -> {
                         Log.v("Result", "ADD order detail thanh cong");
-                        deleteProductsInCartOfUser();
+                        FireOrderToSeller(id_order);
                     })
                     .addOnFailureListener(e -> Log.v("Result", "Them order detail that bai", e));
         }
+
+
+
+// Add a new document with a generated ID
+
+    }
+    public void FireOrderToSeller(String id_order){
+        for(int i  = 0 ; i < cartModelList.size(); i ++){
+            SellerOrder sellerOrder = new SellerOrder(id_order,cartModelList.get(i).getDocumentId(),auth.getUid(),new Date(), new Date(), cartModelList.get(i).getQuantity(), "pending", cartModelList.get(i).getId_seller());
+            db.collection("SellerOrder").document(cartModelList.get(i).getId_seller())
+                    .collection("Orders")
+                    .add(sellerOrder)
+                    .addOnSuccessListener(documentReference -> {
+                        Log.v("Result", "ADD order seller thanh cong");
+                    })
+                    .addOnFailureListener(e -> Log.v("Result", "Them order detail that bai", e));
+        }
+        deleteProductsInCartOfUser();
+
 
 
 

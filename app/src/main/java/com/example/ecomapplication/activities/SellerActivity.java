@@ -27,6 +27,7 @@ import com.example.ecomapplication.models.MyCartModel;
 import com.example.ecomapplication.models.OrderModel;
 import com.example.ecomapplication.models.Product;
 import com.example.ecomapplication.models.SellerInfo;
+import com.example.ecomapplication.models.SellerOrder;
 import com.example.ecomapplication.models.UserInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -49,7 +50,7 @@ public class SellerActivity extends AppCompatActivity {
     List<Product> myProduct;
     private RecyclerView  myProductRecyclerview ;
     private  ProductSellerAdapter myProductAdapter;
-    List<OrderModel> myOrder;
+    List<SellerOrder> myOrder;
     private RecyclerView  myOrderRecyclerview ;
     private OrderAdapterSeller myOrderAdapterSeller;
     private OrderAdapter myOrderAdapter;
@@ -203,14 +204,15 @@ public class SellerActivity extends AppCompatActivity {
     }
     public  void getMyOrder(){
         myOrder = new ArrayList<>();
-        db.collection("Order").document("ZXeAcAzbZ6SUVe0pxNLXSDY7WaM2")
+        db.collection("SellerOrder").document(auth.getUid())
                 .collection("Orders").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot doc :task.getResult().getDocuments()) {
-                        OrderModel orderModel = doc.toObject(OrderModel.class);
-                        myOrder.add(orderModel);
+                        SellerOrder sellerOrder = doc.toObject(SellerOrder.class);
+                        sellerOrder.setIdDocument(doc.getId());
+                        myOrder.add(sellerOrder);
                         myOrderAdapterSeller.notifyDataSetChanged();
                     }
                 }

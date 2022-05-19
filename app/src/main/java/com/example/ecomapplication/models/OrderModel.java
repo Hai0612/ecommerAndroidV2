@@ -10,6 +10,7 @@ public class OrderModel implements Serializable {
     private String orderAddress;
     private Date orderDate;
     private  Date shippedDate;
+    private String status;
     private  int total;
     public OrderModel(){
 
@@ -58,17 +59,26 @@ public class OrderModel implements Serializable {
         return total;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public void setTotal(int total) {
         this.total = total;
     }
 
-    public OrderModel(String id, String id_user, String orderAddress, Date orderDate, Date shippedDate, int total) {
+    public OrderModel(String id, String id_user, String orderAddress, Date orderDate, Date shippedDate, String status,int total) {
         this.id = id;
         this.id_user = id_user;
         this.orderAddress = orderAddress;
         this.orderDate = orderDate;
         this.shippedDate = shippedDate;
         this.total = total;
+        this.status = status;
     }
 
 

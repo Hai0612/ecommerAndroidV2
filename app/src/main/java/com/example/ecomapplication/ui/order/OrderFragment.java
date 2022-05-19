@@ -78,6 +78,7 @@ import java.util.List;
                             if (task.isSuccessful()) {
                                 for (DocumentSnapshot doc :task.getResult().getDocuments()) {
                                     OrderModel orderModel = doc.toObject(OrderModel.class);
+                                    Log.v("local", orderModel.getStatus());
                                     orderModels.add(orderModel);
                                     orderModel.setId(doc.getId());
                                     orderAdapter.notifyDataSetChanged();

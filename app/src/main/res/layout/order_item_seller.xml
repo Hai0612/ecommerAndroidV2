@@ -26,18 +26,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/amethysta"
-                android:text="Order Address: "
+                android:text="Người mua: "
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/order_address"
+                android:id="@+id/user_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
                 android:fontFamily="@font/amethysta"
-                android:text="Order Address: "
+                android:text="Admiin"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/amethysta"
-                android:text="Order Date: "
+                android:text="Ngày mua "
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -65,7 +65,7 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:fontFamily="@font/amethysta"
-                android:text="Order Date: "
+                android:text="01/01/2022"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -82,18 +82,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/amethysta"
-                android:text="Shipped Date: "
+                android:text="Số lượng"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/shipped_date"
+                android:id="@+id/quantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
                 android:fontFamily="@font/amethysta"
-                android:text="Shipped Date: "
+                android:text="5"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -110,17 +110,17 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/amethysta"
-                android:text="Total: "
+                android:text="Tên sản phẩm"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/total"
+                android:id="@+id/product_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/amethysta"
-                android:text="Total: "
+                android:text="Quạt điện"
                 android:gravity="right"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -136,7 +136,7 @@
                 android:id="@+id/btn_cancel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cancel"
+                android:text="Hủy bỏ"
                 android:layout_marginRight="5dp"
                 android:textAllCaps="false"
                 android:layout_weight="1"/>
@@ -145,7 +145,7 @@
                 android:id="@+id/btn_confirm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Confirm"
+                android:text="Xác nhận"
                 android:layout_marginLeft="5dp"
                 android:textAllCaps="false"
                 android:layout_weight="1"/>
