@@ -185,7 +185,8 @@ public class HomeFragment extends Fragment {
                 try {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Product product = document.toObject(Product.class);
-                        Log.v("Hellooo", product.getName());
+                        product.setDocumentId(document.getId());
+
                         popularProductsList.add(product);
                         popularProductAdapter.notifyDataSetChanged();
                     }

@@ -19,6 +19,7 @@ import com.example.ecomapplication.models.Product;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -33,6 +34,7 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
     Spinner category_;
     String text;
     Product product;
+    private FirebaseAuth auth;
 
     String id = UUID.randomUUID().toString();
     @Override
@@ -41,6 +43,7 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
         setContentView(R.layout.fragment_new_product);
         // Inflate the layout for this fragment
         productImg = findViewById(R.id.product_Img);
+        auth = FirebaseAuth.getInstance();
 
         productName = findViewById(R.id.product_name);
         productDesc = findViewById(R.id.product_desc);
@@ -93,7 +96,6 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
 
         Map<String, Object> doc = new HashMap<>();
         doc.put("description", description);
-        doc.put("id", id);
         doc.put("id_category", id_category);
         doc.put("img_url", img_url);
         doc.put("name", name);
@@ -101,8 +103,7 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
         doc.put("quantity", quantity);
         doc.put("rating", rating);
         doc.put("size", size);
-        doc.put("id_seller", "SXcZhdR7152RN49UawTz");
-
+        doc.put("id_seller", auth.getUid());
         db.collection("Product").document(docId).set(doc)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

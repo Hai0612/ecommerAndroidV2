@@ -36,7 +36,6 @@ public class ShowProductCategory extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_product_cate);
         String type = getIntent().getStringExtra("type");
-
         firestore = FirebaseFirestore.getInstance();
         recyclerView = findViewById(R.id.show_all_cate);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -55,32 +54,17 @@ public class ShowProductCategory extends AppCompatActivity {
                                 for (DocumentSnapshot doc :task.getResult().getDocuments()){
                                     // show all
                                     Product product = doc.toObject(Product.class);
+                                    product.setDocumentId(doc.getId());
                                     list.add(product);
                                     popularProductAdapter.notifyDataSetChanged();
                                 }
                             }
                         }
                     });
-        }
-        if(type != null && type.equalsIgnoreCase("1")){
-            firestore.collection("Product").whereEqualTo("id_category", "1")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful()){
-                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
-                                    Product product = doc.toObject(Product.class);
-                                    list.add(product);
-                                    popularProductAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }
-                    });
-        }
+        }else if(type != null){
+            Log.v("typeddd" , type);
 
-        if(type != null && type.equalsIgnoreCase("2")){
-            firestore.collection("Product").whereEqualTo("id_category", "2")
+            firestore.collection("Product").whereEqualTo("id_category", type)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -88,6 +72,7 @@ public class ShowProductCategory extends AppCompatActivity {
                             if(task.isSuccessful()){
                                 for (DocumentSnapshot doc :task.getResult().getDocuments()){
                                     Product product = doc.toObject(Product.class);
+                                    product.setDocumentId(doc.getId());
                                     list.add(product);
                                     popularProductAdapter.notifyDataSetChanged();
                                 }
@@ -95,125 +80,158 @@ public class ShowProductCategory extends AppCompatActivity {
                         }
                     });
         }
-
-        if(type != null && type.equalsIgnoreCase("3")){
-            firestore.collection("Product").whereEqualTo("id_category", "3")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful()){
-                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
-                                    Product product = doc.toObject(Product.class);
-                                    list.add(product);
-                                    popularProductAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }
-                    });
-        }
-
-        if(type != null && type.equalsIgnoreCase("4")){
-            firestore.collection("Product").whereEqualTo("id_category", "4")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful()){
-                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
-                                    Product product = doc.toObject(Product.class);
-                                    list.add(product);
-                                    popularProductAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }
-                    });
-        }
-
-        if(type != null && type.equalsIgnoreCase("5")){
-            firestore.collection("Product").whereEqualTo("id_category", "5")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful()){
-                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
-                                    Product product = doc.toObject(Product.class);
-                                    list.add(product);
-                                    popularProductAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }
-                    });
-        }
-
-        if(type != null && type.equalsIgnoreCase("6")){
-            firestore.collection("Product").whereEqualTo("id_category", "6")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful()){
-                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
-                                    Product product = doc.toObject(Product.class);
-                                    list.add(product);
-                                    popularProductAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }
-                    });
-        }
-
-        if(type != null && type.equalsIgnoreCase("7")){
-            firestore.collection("Product").whereEqualTo("id_category", "7")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful()){
-                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
-                                    Product product = doc.toObject(Product.class);
-                                    list.add(product);
-                                    popularProductAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }
-                    });
-        }
-
-        if(type != null && type.equalsIgnoreCase("8")){
-            firestore.collection("Product").whereEqualTo("id_category", "8")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful()){
-                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
-                                    Product product = doc.toObject(Product.class);
-                                    list.add(product);
-                                    popularProductAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }
-                    });
-        }
-
-        if(type != null && type.equalsIgnoreCase("9")){
-            firestore.collection("Product").whereEqualTo("id_category", "9")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful()){
-                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
-                                    Product product = doc.toObject(Product.class);
-                                    list.add(product);
-                                    popularProductAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }
-                    });
-        }
+//        if(type != null && type.equalsIgnoreCase("1")){
+//            firestore.collection("Product").whereEqualTo("id_category", "1")
+//                    .get()
+//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if(task.isSuccessful()){
+//                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
+//                                    Product product = doc.toObject(Product.class);
+//                                    list.add(product);
+//                                    popularProductAdapter.notifyDataSetChanged();
+//                                }
+//                            }
+//                        }
+//                    });
+//        }
+//
+//        if(type != null && type.equalsIgnoreCase("2")){
+//            firestore.collection("Product").whereEqualTo("id_category", "2")
+//                    .get()
+//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if(task.isSuccessful()){
+//                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
+//                                    Product product = doc.toObject(Product.class);
+//                                    list.add(product);
+//                                    popularProductAdapter.notifyDataSetChanged();
+//                                }
+//                            }
+//                        }
+//                    });
+//        }
+//
+//        if(type != null && type.equalsIgnoreCase("3")){
+//            firestore.collection("Product").whereEqualTo("id_category", "3")
+//                    .get()
+//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if(task.isSuccessful()){
+//                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
+//                                    Product product = doc.toObject(Product.class);
+//                                    list.add(product);
+//                                    popularProductAdapter.notifyDataSetChanged();
+//                                }
+//                            }
+//                        }
+//                    });
+//        }
+//
+//        if(type != null && type.equalsIgnoreCase("4")){
+//            firestore.collection("Product").whereEqualTo("id_category", "4")
+//                    .get()
+//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if(task.isSuccessful()){
+//                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
+//                                    Product product = doc.toObject(Product.class);
+//                                    list.add(product);
+//                                    popularProductAdapter.notifyDataSetChanged();
+//                                }
+//                            }
+//                        }
+//                    });
+//        }
+//
+//        if(type != null && type.equalsIgnoreCase("5")){
+//            firestore.collection("Product").whereEqualTo("id_category", "5")
+//                    .get()
+//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if(task.isSuccessful()){
+//                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
+//                                    Product product = doc.toObject(Product.class);
+//                                    list.add(product);
+//                                    popularProductAdapter.notifyDataSetChanged();
+//                                }
+//                            }
+//                        }
+//                    });
+//        }
+//
+//        if(type != null && type.equalsIgnoreCase("6")){
+//            firestore.collection("Product").whereEqualTo("id_category", "6")
+//                    .get()
+//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if(task.isSuccessful()){
+//                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
+//                                    Product product = doc.toObject(Product.class);
+//                                    list.add(product);
+//                                    popularProductAdapter.notifyDataSetChanged();
+//                                }
+//                            }
+//                        }
+//                    });
+//        }
+//
+//        if(type != null && type.equalsIgnoreCase("7")){
+//            firestore.collection("Product").whereEqualTo("id_category", "7")
+//                    .get()
+//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if(task.isSuccessful()){
+//                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
+//                                    Product product = doc.toObject(Product.class);
+//                                    list.add(product);
+//                                    popularProductAdapter.notifyDataSetChanged();
+//                                }
+//                            }
+//                        }
+//                    });
+//        }
+//
+//        if(type != null && type.equalsIgnoreCase("8")){
+//            firestore.collection("Product").whereEqualTo("id_category", "8")
+//                    .get()
+//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if(task.isSuccessful()){
+//                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
+//                                    Product product = doc.toObject(Product.class);
+//                                    list.add(product);
+//                                    popularProductAdapter.notifyDataSetChanged();
+//                                }
+//                            }
+//                        }
+//                    });
+//        }
+//
+//        if(type != null && type.equalsIgnoreCase("9")){
+//            firestore.collection("Product").whereEqualTo("id_category", "9")
+//                    .get()
+//                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                            if(task.isSuccessful()){
+//                                for (DocumentSnapshot doc :task.getResult().getDocuments()){
+//                                    Product product = doc.toObject(Product.class);
+//                                    list.add(product);
+//                                    popularProductAdapter.notifyDataSetChanged();
+//                                }
+//                            }
+//                        }
+//                    });
+//        }
 
     }
 }

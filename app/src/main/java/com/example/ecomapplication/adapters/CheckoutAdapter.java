@@ -29,11 +29,11 @@ import java.util.List;
 public class CheckoutAdapter  extends RecyclerView.Adapter<CheckoutAdapter.ViewHolder> {
 
     private Context context;
-    private List<MyCartModel> products;
+    private List<Product> products;
     private FirebaseStorage storage;
     int totalAmount = 0;
 
-    public CheckoutAdapter(Context context, List<MyCartModel> products) {
+    public CheckoutAdapter(Context context, List<Product> products) {
         this.context = context;
         this.products = products;
         this.storage = FirebaseStorage.getInstance();

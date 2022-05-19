@@ -140,7 +140,6 @@ public class SellerOrderDetailActivity extends AppCompatActivity {
             detailedRating.setRating(Float.parseFloat(product.getRating()));
             product_category = product.getId_category();
             product_size = product.getSize();
-            Log.v("Chinsu", product.getId());
 
             StorageReference storageReference = storage.getReferenceFromUrl(product.getImg_url());
 

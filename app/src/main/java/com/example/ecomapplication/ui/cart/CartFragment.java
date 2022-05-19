@@ -49,7 +49,7 @@ public class CartFragment extends Fragment {
     TextView overAllAmount;
     Toolbar toolbar;
     RecyclerView recyclerView;
-    List<MyCartModel> cartModelList;
+    List<Product> cartModelList;
     MyCartAdapter cartAdapter;
     private FirebaseAuth auth;
     private FirebaseFirestore firestore;
@@ -100,7 +100,7 @@ public class CartFragment extends Fragment {
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot doc :task.getResult().getDocuments()) {
 //                        Log.v("Test", auth.getCurrentUser().getUid());
-                        MyCartModel myCartModel = doc.toObject(MyCartModel.class);
+                        Product myCartModel = doc.toObject(Product.class);
                         myCartModel.setDocumentId(doc.getId());
                         if(!myCartModel.getName().equals("init")){
                             cartModelList.add(myCartModel);

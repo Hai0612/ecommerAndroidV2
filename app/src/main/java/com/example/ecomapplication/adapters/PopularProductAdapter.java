@@ -61,7 +61,7 @@ public class PopularProductAdapter extends RecyclerView.Adapter<PopularProductAd
                 Toast.makeText(context, "Long click on product ID: " + holder.productId, Toast.LENGTH_SHORT).show();
             } else {
                 Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra("productDetail", products.get(position));
+                intent.putExtra("id_prodcut",  products.get(position).getDocumentId());
 
                 context.startActivity(intent);
             }

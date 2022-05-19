@@ -3,9 +3,11 @@ package com.example.ecomapplication.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +25,12 @@ public class EditProductActivity extends AppCompatActivity {
     String id_product;
     FirebaseFirestore db;
     Product product;
-
+    ImageView back;
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,12 +41,18 @@ public class EditProductActivity extends AppCompatActivity {
         product_name = findViewById(R.id.product_name_update);
         product_desc = findViewById(R.id.product_desc_update);
         product_category = findViewById(R.id.product_category_update);
+        back = findViewById(R.id.back_action);
         product_price = findViewById(R.id.price_update);
         product_quantity = findViewById(R.id.quantity_update);
         product_size = findViewById(R.id.size_update);
         product_rating = findViewById(R.id.rating_update);
         update_product = findViewById(R.id.update_product);
-
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
 
 

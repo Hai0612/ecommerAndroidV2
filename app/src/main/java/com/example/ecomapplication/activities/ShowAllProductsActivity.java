@@ -48,6 +48,7 @@ public class ShowAllProductsActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Product product = document.toObject(Product.class);
+                    product.setDocumentId(document.getId());
                     productList.add(product);
                     popularProductAdapter.notifyDataSetChanged();
                 }

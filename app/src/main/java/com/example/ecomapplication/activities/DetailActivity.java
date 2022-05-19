@@ -1,5 +1,7 @@
 package com.example.ecomapplication.activities;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +32,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +56,7 @@ public class DetailActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     List<Comment> list;
     CommentAdapter commentAdapter;
-
+    private  String productIdIntent;
     int quantity;
     String productId;
 
@@ -85,35 +88,17 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.v("fdsfs", "fdsfdfdsfdsfds");
 
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_detail);
         binding();
 
-        final Object obj = getIntent().getSerializableExtra("productDetail");
-        if (obj instanceof Product) {
-            product = (Product) obj;
-            quantity = 1;
-            productId = product.getId();
-            Log.v("Result", "Get product ID: " + productId);
-        }
-
-        if (product != null) {
-            detailedName.setText(product.getName());
-            detailedDesc.setText(product.getDescription());
-            detailedPrice.setText(String.valueOf(product.getPrice()));
-            ratingValue.setText(product.getRating());
-            detailedRating.setRating(Float.parseFloat(product.getRating()));
-
-            StorageReference storageReference = storage.getReferenceFromUrl(product.getImg_url());
-
-            // Dat anh lay tu Firebase cho item
-            storageReference.getDownloadUrl()
-                    .addOnSuccessListener(uri -> Picasso.with(DetailActivity.this)
-                            .load(uri.toString())
-                            .fit().centerInside()
-                            .into(detailedImg))
-                    .addOnFailureListener(e -> Log.v("Result", "Error when get the images: " + e));
+        final Object productIdIntent = getIntent().getSerializableExtra("id_prodcut");
+        productId = (String) productIdIntent;
+        if(productIdIntent != null){
+            Log.v("fsdfdsf", "fdsfsdf");
+             getProductInfo((String) productIdIntent);
         }
 
         checkHasBoughtProduct();
@@ -141,6 +126,36 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
+    public void getProductInfo(String productId){
+        firestore.collection("Product").document(productId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                try {
+                    Product res = task.getResult().toObject(Product.class);
+                   product = res;
+                    detailedName.setText(product.getName());
+                    detailedDesc.setText(product.getDescription());
+                    detailedPrice.setText(String.valueOf(product.getPrice()));
+                    ratingValue.setText(product.getRating());
+                    detailedRating.setRating(Float.parseFloat(product.getRating()));
+
+                    StorageReference storageReference = storage.getReferenceFromUrl(product.getImg_url());
+
+                    // Dat anh lay tu Firebase cho item
+                    storageReference.getDownloadUrl()
+                            .addOnSuccessListener(uri -> Picasso.with(DetailActivity.this)
+                                    .load(uri.toString())
+                                    .fit().centerInside()
+                                    .into(detailedImg))
+                            .addOnFailureListener(e -> Log.v("Result", "Error when get the images: " + e));
+                }
+                catch (Exception e ) {
+                    e.printStackTrace();
+                }
+            } else {
+                Log.w(TAG, "Error getting documents.", task.getException());
+            }
+        });
+    }
     public void AddCommentToFireBase(String content, Object date, String id_product, String id_user, String user_img){
         String docId = UUID.randomUUID().toString();
 
@@ -160,14 +175,24 @@ public class DetailActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> showMessage("Comment Failed"));
     }
 
-    private void addProductToFirebaseCart(View view, Product newProduct) {
+    private void addProductToFirebaseCart(View view, Product newProduct, String productId) {
+        Map<String, Object> product_to_add = new HashMap<>();
+        product_to_add.put("description", newProduct.getDescription());
+        product_to_add.put("id_category", newProduct.getId_category());
+        product_to_add.put("id_seller", newProduct.getId_seller());
+        product_to_add.put("img_url", newProduct.getImg_url());
+        product_to_add.put("quantity", newProduct.getQuantity());
+        product_to_add.put("price", newProduct.getPrice());
+        product_to_add.put("name", newProduct.getName());
+        product_to_add.put("rating", newProduct.getRating());
+        product_to_add.put("size", newProduct.getSize());
         firestore.collection("Cart").document(auth.getUid())
-                .collection("Products")
-                .add(newProduct).addOnCompleteListener(task -> {
+                .collection("Products").document(productId)
+                .set(product_to_add).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(
                                 view.getContext(),
-                                "Added product ID " + newProduct.getId()
+                                "Added product ID " + newProduct.getDocumentId()
                                         + " of " + newProduct.getQuantity() + " products to cart",
                                 Toast.LENGTH_SHORT).show();
                     } else {
@@ -244,7 +269,6 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         addItem.setOnClickListener(view -> {
             quantity = Integer.parseInt((String) quantityOrder.getText());
             quantity = quantity + 1;
@@ -260,6 +284,7 @@ public class DetailActivity extends AppCompatActivity {
         });
 
         addToCart.setOnClickListener(view -> {
+            Log.v("addtocart", "dfsfds");
             Product productCart = new Product(
                     product.getName(),
                     product.getImg_url(),
@@ -267,11 +292,13 @@ public class DetailActivity extends AppCompatActivity {
                     product.getPrice(),
                     product.getSize(),
                     quantity,
-                    product.getDescription()
+                    product.getDescription(),
+                    product.getRating(),
+                    product.getId_seller()
             );
-            productCart.setId(productId);
 
-            addProductToFirebaseCart(view, productCart);
+
+            addProductToFirebaseCart(view, productCart , productId);
         });
 
         buyNow.setOnClickListener(view -> {
@@ -285,9 +312,8 @@ public class DetailActivity extends AppCompatActivity {
                     product.getDescription()
             );
 
-            productCart.setId(productId);
 
-            addProductToFirebaseCart(view, productCart);
+            addProductToFirebaseCart(view, productCart, productId);
 
             Intent intent = new Intent(view.getContext(), CheckoutActitvity.class);
             startActivity(intent);

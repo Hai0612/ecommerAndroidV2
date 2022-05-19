@@ -181,7 +181,7 @@ public class SellerActivity extends AppCompatActivity {
     }
     public  void getMyProduct(){
         myProduct = new ArrayList<>();
-        db.collection("Product").whereEqualTo("id_seller", "SXcZhdR7152RN49UawTz").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("Product").whereEqualTo("id_seller", auth.getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -196,7 +196,11 @@ public class SellerActivity extends AppCompatActivity {
             }
         });
     }
-
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+    }
     public  void getMyOrder(){
         myOrder = new ArrayList<>();
         db.collection("Order").document("ZXeAcAzbZ6SUVe0pxNLXSDY7WaM2")

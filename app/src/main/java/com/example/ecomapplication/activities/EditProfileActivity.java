@@ -44,7 +44,11 @@ public class EditProfileActivity extends AppCompatActivity {
     FirebaseFirestore db;
     UserInfo userInfo;
     FirebaseAuth auth;
-
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

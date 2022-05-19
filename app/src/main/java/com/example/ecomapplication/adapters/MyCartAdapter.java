@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.models.MyCartModel;
+import com.example.ecomapplication.models.Product;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -33,13 +34,13 @@ import java.util.List;
 //public class MyCartAdapter extends FirestoreRecyclerAdapter.Adapter<MyCartAdapter.ViewHolder> {
 public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder> {
     Context context;
-    List<MyCartModel> list;
+    List<Product> list;
     private final FirebaseStorage storage;
     int totalAmount = 0;
     private FirebaseAuth auth;
     private FirebaseFirestore firestore;
 
-    public MyCartAdapter(Context context, List<MyCartModel> list) {
+    public MyCartAdapter(Context context, List<Product> list) {
         this.context = context;
         this.list = list;
         this.storage = FirebaseStorage.getInstance();
@@ -59,7 +60,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
     public void onBindViewHolder(@NonNull final ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         auth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
-        MyCartModel cartModel = list.get(position);
+        Product cartModel = list.get(position);
         String id_document = list.get(position).getDocumentId();
 
         holder.buttonMinus.setOnClickListener(view -> {

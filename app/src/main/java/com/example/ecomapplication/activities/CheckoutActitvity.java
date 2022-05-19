@@ -24,11 +24,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.ecomapplication.Helper.BackAction;
+import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
 
 import com.example.ecomapplication.adapters.AddressAdapter;
 import com.example.ecomapplication.adapters.CheckoutAdapter;
 import com.example.ecomapplication.models.MyCartModel;
+import com.example.ecomapplication.models.Product;
 import com.example.ecomapplication.models.UserInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -49,7 +52,7 @@ public class CheckoutActitvity extends AppCompatActivity implements AdapterView.
     RecyclerView addressListView;
     private Button new_address_button;
     private Button click_to_payment;
-        List<MyCartModel> cartModelList;
+        List<Product> cartModelList;
     CheckoutAdapter cartAdapter;
     RecyclerView productsCheckoutRecyclerView;
     FirebaseFirestore db;
@@ -135,6 +138,32 @@ public class CheckoutActitvity extends AppCompatActivity implements AdapterView.
         productsCheckoutRecyclerView.setAdapter(cartAdapter);
 
     }
+    public void back(){
+        super.onBackPressed();
+    }
+    @Override
+    public void onBackPressed()
+    {
+        BackAction appdialog = new BackAction();
+        appdialog.Confirm(this, "Xác nhận hủy bỏ", "Bạn có muốn thanh toán trong lần tới không",
+                "Cancel", "OK", aproc(), bproc());
+
+    }
+    public Runnable aproc(){
+        return new Runnable() {
+            public void run() {
+                startActivity(new Intent(CheckoutActitvity.this, MainActivity.class));
+            }
+        };
+    }
+
+    public Runnable bproc(){
+        return new Runnable() {
+            public void run() {
+                startActivity(new Intent(CheckoutActitvity.this, MainActivity.class));
+            }
+        };
+    }
     public void getProductCheckout () {
         cartModelList = new ArrayList<>();
         db.collection("Cart").document(auth.getUid())
@@ -145,10 +174,10 @@ public class CheckoutActitvity extends AppCompatActivity implements AdapterView.
                 if (task.isSuccessful()) {
                     for (DocumentSnapshot doc :task.getResult().getDocuments()) {
 //                        Log.v("Test", auth.getCurrentUser().getUid());
-                        MyCartModel myCartModel = doc.toObject(MyCartModel.class);
-                        myCartModel.setDocumentId(doc.getId());
-                        if(!myCartModel.getName().equals("init")){
-                            cartModelList.add(myCartModel);
+                        Product product = doc.toObject(Product.class);
+                        product.setDocumentId(doc.getId());
+                        if(!product.getName().equals("init")){
+                            cartModelList.add(product);
                             cartAdapter.notifyDataSetChanged();
                         }
                     }

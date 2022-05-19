@@ -50,7 +50,7 @@ public class OrderPlace extends Dialog implements
     private  String id_user;
     private Date orderDate;
     CheckoutAdapter cartAdapter;
-    List<MyCartModel> cartModelList;
+    List<Product> cartModelList;
     private Date shippedDate;
      private int number;
      private String id;
@@ -113,6 +113,7 @@ public class OrderPlace extends Dialog implements
         order.put("orderAddress", orderAddress);
         order.put("orderDate", orderDate);
         order.put("shippedDate", shippedDate);
+        order.put("status", "pending");
         order.put("total", total);
 
         progressDialog = new ProgressDialog(getContext());
@@ -150,7 +151,8 @@ public class OrderPlace extends Dialog implements
                 .collection("Products").get().addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (DocumentSnapshot doc :task.getResult().getDocuments()) {
-                            MyCartModel myCartModel = doc.toObject(MyCartModel.class);
+                            Log.v("dfsfsf", doc.getId());
+                            Product myCartModel = doc.toObject(Product.class);
                             myCartModel.setDocumentId(doc.getId());
                             cartModelList.add(myCartModel);
                         }
@@ -160,8 +162,8 @@ public class OrderPlace extends Dialog implements
     public void AddProductListToOrderDetail(String id_order){
         for(int i  = 0 ; i < cartModelList.size(); i ++){
             db.collection("OrderDetail").document(id_order)
-                    .collection("Products")
-                    .add(cartModelList.get(i))
+                    .collection("Products").document(cartModelList.get(i).getDocumentId())
+                    .set(cartModelList.get(i))
                     .addOnSuccessListener(documentReference -> {
                         Log.v("Result", "ADD order detail thanh cong");
                         deleteProductsInCartOfUser();
@@ -176,7 +178,6 @@ public class OrderPlace extends Dialog implements
     }
     public void deleteProductsInCartOfUser() {
         Log.v("ID_user" , auth.getUid());
-
         db.collection("Cart").document(auth.getUid()).collection("Products")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

@@ -61,8 +61,6 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         item.setOnClickListener(view1 -> {
             Intent intent = new Intent(context, ShowProductCategory.class);
             intent.putExtra("type", list.get(position).getId_category());
-            String a = category.getId_category();
-            Log.v("test" , a);
             context.startActivity(intent);
         });
 
