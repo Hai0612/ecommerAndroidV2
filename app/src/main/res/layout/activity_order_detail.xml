@@ -41,7 +41,6 @@
         android:layout_width="350dp"
         android:layout_height="46dp"
         android:layout_margin="10dp"
-        android:background="@color/purple_200"
         android:orientation="horizontal"
         android:weightSum="2"
         app:layout_constraintBottom_toTopOf="@id/button"

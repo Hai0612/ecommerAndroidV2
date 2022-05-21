@@ -4,6 +4,9 @@
     android:layout_height="wrap_content"
     android:weightSum="10"
     android:gravity="center"
+    android:backgroundTint="#E1D9D9"
+    android:layout_margin="5dp"
+    android:background="@drawable/shape_rect02"
     android:orientation="horizontal">
 
     <LinearLayout
