@@ -125,7 +125,7 @@ public class CheckoutActitvity extends AppCompatActivity implements AdapterView.
             @Override
             public void onClick(View view) {
 //                showDialog();
-                Intent intent = new Intent(view.getContext(), MapsActivity.class);
+                Intent intent = new Intent(view.getContext(), TestMapDis.class);
                 startActivity(intent);
             }
         });

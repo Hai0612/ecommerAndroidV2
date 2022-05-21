@@ -208,11 +208,11 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="40dp"
             android:src="@drawable/avatar"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buy_now"
-            android:visibility="invisible" />
+            app:layout_constraintTop_toBottomOf="@+id/buy_now" />
 
         <EditText
             android:id="@+id/post_detail_comment"
@@ -223,11 +223,11 @@
             android:ems="19"
             android:hint="Write Comment"
             android:inputType="textPersonName"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/user_comment_img"
             app:layout_constraintStart_toEndOf="@+id/user_comment_img"
             app:layout_constraintTop_toTopOf="@+id/user_comment_img"
-            app:layout_constraintVertical_bias="0.0"
-            android:visibility="invisible" />
+            app:layout_constraintVertical_bias="0.833" />
 
         <Button
             android:id="@+id/add_comment_btn"

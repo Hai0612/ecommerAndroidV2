@@ -90,7 +90,6 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v("fdsfs", "fdsfdfdsfdsfds");
 
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_detail);
@@ -99,7 +98,6 @@ public class DetailActivity extends AppCompatActivity {
         final Object productIdIntent = getIntent().getSerializableExtra("id_prodcut");
         productId = (String) productIdIntent;
         if(productIdIntent != null){
-            Log.v("fsdfdsf", "fdsfsdf");
              getProductInfo((String) productIdIntent);
         }
 
@@ -266,13 +264,16 @@ public class DetailActivity extends AppCompatActivity {
                         }
 
                         for (String order: orders) {
+                            Log.v("fdsfs_order", order);
+                            Log.v("fdsfs__", productId);
                             firestore.collection("OrderDetail").document(order)
                                     .collection("Products").get().addOnSuccessListener(queryDocumentSnapshots -> {
                                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                                             Product product = document.toObject(Product.class);
 
-                                            if (product.getId() != null
-                                                    && product.getId().equals(productId)) {
+                                            if (product.getDocumentId() != null
+                                                    && product.getDocumentId().equals(productId)) {
+
                                                 userCommentImg.setVisibility(View.VISIBLE);
                                                 postDetailComment.setVisibility(View.VISIBLE);
                                                 addComment.setVisibility(View.VISIBLE);
@@ -341,23 +342,5 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
-    public void hasUserBoughtYet(String userId){
-        db.collection("Order").document(auth.getUid()).collection("Orders").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Log.v("comment" , "document.getId()");
 
-                try {
-//                    for (QueryDocumentSnapshot document : task.getResult()) {
-//                        Order order = document.toObject(Order.class);
-//
-//                    }
-                }
-                catch (Exception e ) {
-                    e.printStackTrace();
-                }
-            } else {
-                Log.w("TAG", "Error getting documents.", task.getException());
-            }
-        });
-    }
 }
