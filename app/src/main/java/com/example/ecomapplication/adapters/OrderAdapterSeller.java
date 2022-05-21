@@ -21,14 +21,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.activities.OrderDetailActivity;
 import com.example.ecomapplication.models.OrderModel;
+import com.example.ecomapplication.models.Product;
 import com.example.ecomapplication.models.SellerInfo;
 import com.example.ecomapplication.models.SellerOrder;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -94,12 +100,53 @@ public class OrderAdapterSeller extends RecyclerView.Adapter<OrderAdapterSeller.
                 holder.buttonConfirm.setEnabled(false);
                 holder.buttonConfirm.setText("Đã xác nhận");
                 holder.buttonCancel.setEnabled(false);
-
-
             }
         });
     }
+    public void checkOrderStatus(String id_order){
+        final String[] id_user = new String[1];
+        ArrayList<Product> listProductOfOrder = new ArrayList<>();
+        Log.v("fsdf", id_order);
+        db.collection("OrderDetail").document(id_order).collection("Products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot doc :task.getResult().getDocuments()) {
+//                        Log.v("Test", auth.getCurrentUser().getUid());
+                        Product product = doc.toObject(Product.class);
+                        product.setDocumentId(doc.getId());
+                        listProductOfOrder.add(product);
 
+                    }
+                    int[] check = {0};
+                    for(int i = 0 ; i <listProductOfOrder.size(); i++){
+                        Log.v("sellerOrder", listProductOfOrder.get(i).getId_seller());
+                        db.collection("SellerOrder").document(listProductOfOrder.get(i).getId_seller()).collection("Orders").whereEqualTo("id_order", id_order).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (DocumentSnapshot doc :task.getResult().getDocuments()) {
+//                        Log.v("Test", auth.getCurrentUser().getUid());
+                                        SellerOrder order = doc.toObject(SellerOrder.class);
+                                        id_user[0] = order.getId_user();
+                                        if(order.getStatus().equals("confirm")){
+                                            check[0]++;
+                                            if(check[0] == listProductOfOrder.size()){
+                                                db.collection("Order").document(id_user[0]).collection("Orders").document(id_order).update(
+                                                        "status", "processed");
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+
+
+    }
     private void onClickGoToDetail(SellerOrder orderModel) {
 //        Intent intent = new Intent(context, OrderDetailActivity.class);
 //        Bundle bundle = new Bundle();
@@ -111,6 +158,8 @@ public class OrderAdapterSeller extends RecyclerView.Adapter<OrderAdapterSeller.
         Log.v("comfim" , list.get(position).getIdDocument());
         db.collection("SellerOrder").document(list.get(position).getId_seller()).collection("Orders").document(list.get(position).getIdDocument()).update(
                 "status", "confirm");
+        checkOrderStatus(list.get(position).getId_order());
+
     }
 
     @Override

@@ -160,16 +160,18 @@ public class OrderPlace extends Dialog implements
                 });
     }
     public void AddProductListToOrderDetail(String id_order){
+         boolean[] check = {false};
         for(int i  = 0 ; i < cartModelList.size(); i ++){
             db.collection("OrderDetail").document(id_order)
                     .collection("Products").document(cartModelList.get(i).getDocumentId())
                     .set(cartModelList.get(i))
                     .addOnSuccessListener(documentReference -> {
+                        check[0] = true;
                         Log.v("Result", "ADD order detail thanh cong");
-                        FireOrderToSeller(id_order);
                     })
                     .addOnFailureListener(e -> Log.v("Result", "Them order detail that bai", e));
         }
+            FireOrderToSeller(id_order);
 
 
 
@@ -178,6 +180,8 @@ public class OrderPlace extends Dialog implements
     }
     public void FireOrderToSeller(String id_order){
         for(int i  = 0 ; i < cartModelList.size(); i ++){
+            Log.v("dfsfd", String.valueOf(cartModelList.size()));
+            Log.v("dfsfd", String.valueOf(cartModelList.get(i).getId_seller()));
             SellerOrder sellerOrder = new SellerOrder(id_order,cartModelList.get(i).getDocumentId(),auth.getUid(),new Date(), new Date(), cartModelList.get(i).getQuantity(), "pending", cartModelList.get(i).getId_seller());
             db.collection("SellerOrder").document(cartModelList.get(i).getId_seller())
                     .collection("Orders")
