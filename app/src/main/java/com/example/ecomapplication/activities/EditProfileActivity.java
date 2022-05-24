@@ -136,7 +136,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     public void updateProfile(){
         if (!isFirstNameChanged() && !isCityChanged() && !isEmailChanged() && !isPhoneChanged()){
-            Toast.makeText(this, "Update Failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Nothing changed", Toast.LENGTH_SHORT).show();
         }
         else {
             db.collection("UserInfo").document(auth.getUid())
