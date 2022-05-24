@@ -77,14 +77,11 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
 //                    cartAdapter.notifyDataSetChanged();
 //                    listener.refreshActivity();
             }
-            int totalCart = 0;
-            for(int i = 0 ; i< list.size() ; i++){
-                totalCart = Integer.parseInt(String.valueOf(list.get(i).getPrice())) * list.get(i).getQuantity();
-            }
-            int totalPrice = Integer.parseInt(String.valueOf(list.get(position).getPrice())) * list.get(position).getQuantity();
+            int totalPrice = list.get(position).getPrice() * list.get(position).getQuantity();
+            totalAmount = totalAmount - list.get(position).getPrice();
             holder.price.setText(String.valueOf(totalPrice));
             Intent intent = new Intent("MyTotalAmount");
-            intent.putExtra("totalAmount", totalCart);
+            intent.putExtra("totalAmount", totalAmount);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         });
 
@@ -94,16 +91,11 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
                     .update("quantity", cartModel.getQuantity() + 1);
             list.get(position).setQuantity(cartModel.getQuantity() + 1);
             holder.quantity.setText(String.valueOf(list.get(position).getQuantity()) );
-
-//                reload?
-            int totalCart = 0;
-            for(int i = 0 ; i< list.size() ; i++){
-                totalCart = list.get(i).getPrice() * list.get(i).getQuantity();
-            }
             int totalPrice = list.get(position).getPrice() * list.get(position).getQuantity();
+            totalAmount = totalAmount + list.get(position).getPrice();
             holder.price.setText(String.valueOf(totalPrice));
             Intent intent = new Intent("MyTotalAmount");
-            intent.putExtra("totalAmount", totalCart);
+            intent.putExtra("totalAmount", totalAmount);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         });
 

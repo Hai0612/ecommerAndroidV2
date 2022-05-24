@@ -13,9 +13,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.39"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_cart_toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent=".9"
         tools:listitem="@layout/cart_item_test" />
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        android:text="Giỏ hàng trống"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:id="@+id/gioHangTrong"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/button_buy_now"

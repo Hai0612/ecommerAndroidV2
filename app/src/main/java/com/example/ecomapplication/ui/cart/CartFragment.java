@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
@@ -42,11 +43,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.internal.Util;
+
 public class CartFragment extends Fragment {
 
     Button buttonMinus, buttonPlus, button_buy_now;
     int overAllTotalAmount;
     TextView overAllAmount;
+    TextView gioHangTrong;
     Toolbar toolbar;
     RecyclerView recyclerView;
     List<Product> cartModelList;
@@ -77,23 +81,15 @@ public class CartFragment extends Fragment {
         buttonMinus = root.findViewById(R.id.button_minus);
         buttonPlus = root.findViewById(R.id.button_plus);
         overAllAmount = root.findViewById(R.id.total_amount);
+        gioHangTrong = root.findViewById(R.id.gioHangTrong);
         recyclerView = root.findViewById(R.id.cart_rec);
         button_buy_now = root.findViewById(R.id.button_buy_now);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         cartModelList = new ArrayList<>();
         cartAdapter = new MyCartAdapter(getContext(), cartModelList);
         recyclerView.setAdapter(cartAdapter);
-        button_buy_now.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), CheckoutActitvity.class);
-                intent.putExtra("totalOrder",overAllTotalAmount);
-                startActivity(intent);
-            }
-        });
 
         firestore.collection("Cart").document(auth.getUid())
-//        firestore.collection("Cart").document(auth.getCurrentUser().getUid())
                 .collection("Products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -102,15 +98,29 @@ public class CartFragment extends Fragment {
 //                        Log.v("Test", auth.getCurrentUser().getUid());
                         Product myCartModel = doc.toObject(Product.class);
                         myCartModel.setDocumentId(doc.getId());
-                        if(!myCartModel.getName().equals("init")){
-                            cartModelList.add(myCartModel);
-                            cartAdapter.notifyDataSetChanged();
-                        }
-
+                        cartModelList.add(myCartModel);
+                        cartAdapter.notifyDataSetChanged();
+                        gioHangTrong.setVisibility(View.GONE);
+                        button_buy_now.setEnabled(true);
                     }
                 }
             }
         });
+        if (cartModelList.size() == 0) {
+            gioHangTrong.setVisibility(View.VISIBLE);
+            button_buy_now.setEnabled(false);
+        }
+
+        button_buy_now.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent intent = new Intent(getContext(), CheckoutActitvity.class);
+//                intent.putExtra("totalOrder",overAllTotalAmount);
+//                startActivity(intent);
+                Toast.makeText(getContext(), " " + cartModelList.size(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return root;
     }
 

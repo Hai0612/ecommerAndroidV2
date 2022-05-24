@@ -23,9 +23,11 @@ import com.example.ecomapplication.models.Comment;
 import com.example.ecomapplication.models.Order;
 import com.example.ecomapplication.models.Product;
 import com.example.ecomapplication.models.UserInfo;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -59,7 +61,7 @@ public class DetailActivity extends AppCompatActivity {
     List<Comment> list;
     CommentAdapter commentAdapter;
     private  String productIdIntent;
-    int quantity;
+    int quantity = 1;
     String productId, emailUser;
 
     private void binding() {
