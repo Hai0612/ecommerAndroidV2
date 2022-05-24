@@ -35,7 +35,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-    TextInputLayout firstName, lastName, userName, city, email, phone;
+    TextInputLayout firstName, lastName, userName, cityEt, emailEt, phoneEt;
     TextView saveProfile;
 
     String _firstName, _lastName, _userName, _city, _email, _phone;
@@ -44,11 +44,7 @@ public class EditProfileActivity extends AppCompatActivity {
     FirebaseFirestore db;
     UserInfo userInfo;
     FirebaseAuth auth;
-    @Override
-    public void onBackPressed()
-    {
-        super.onBackPressed();
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +55,9 @@ public class EditProfileActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         firstName = findViewById(R.id.first_name_update);
-        city = findViewById(R.id.city_update);
-        email = findViewById(R.id.email_update);
-        phone = findViewById(R.id.phone_update);
+        cityEt = findViewById(R.id.city_update);
+        emailEt = findViewById(R.id.email_update);
+        phoneEt = findViewById(R.id.phone_update);
 
         saveProfile = findViewById(R.id.update_profile);
 
@@ -69,8 +65,18 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                updateProfile();
-                startActivity(intent);
+                String nameCheck = firstName.getEditText().getText().toString();
+                String cityCheck = cityEt.getEditText().getText().toString();
+                String emailCheck = emailEt.getEditText().getText().toString();
+                String phoneCheck = phoneEt.getEditText().getText().toString();
+                boolean check = validateUserInfo(nameCheck, cityCheck, emailCheck, phoneCheck);
+                if(check == true){
+                    updateProfile();
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Dữ liệu không hợp lệ", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -81,9 +87,50 @@ public class EditProfileActivity extends AppCompatActivity {
 
         // Get data from user activity
         firstName.getEditText().setText(_firstName);
-        city.getEditText().setText(_city);
-        email.getEditText().setText(_email);
-        phone.getEditText().setText(_phone);
+        cityEt.getEditText().setText(_city);
+        emailEt.getEditText().setText(_email);
+        phoneEt.getEditText().setText(_phone);
+    }
+
+    public Boolean validateUserInfo(String name, String city, String email, String phone){
+        if(name.length() == 0){
+            firstName.requestFocus();
+            firstName.setError("Không được để trống!");
+            return false;
+        } else if (!name.matches("^[A-Z][a-zA-Z]{3,}(?: [A-Z][a-zA-Z]*){0,2}$")){
+            firstName.requestFocus();
+            firstName.setError("Họ tên không hợp lệ");
+            return false;
+        }
+        else if (city.length() == 0){
+            cityEt.requestFocus();
+            cityEt.setError("Không được để trống!");
+            return false;
+        } else if (!city.matches("^([a-zA-Z\\u0080-\\u024F]+(?:. |-| |'))*[a-zA-Z\\u0080-\\u024F]*$")){
+            cityEt.requestFocus();
+            cityEt.setError("Tên thành phố không hợp lệ!");
+            return false;
+        }
+        else if (email.length() == 0){
+            emailEt.requestFocus();
+            emailEt.setError("Không được để trống!");
+            return false;
+        } else if (!email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")){
+            emailEt.requestFocus();
+            emailEt.setError("Email không hợp lệ!");
+            return false;
+        }else if (phone.length() == 0){
+            phoneEt.requestFocus();
+            phoneEt.setError("Không được để trống!");
+            return false;
+        } else if (!phone.matches("^[+]?[0-9]{10,11}$")){
+            phoneEt.requestFocus();
+            phoneEt.setError("Số điện thoại không hợp lệ!");
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
 
@@ -94,9 +141,9 @@ public class EditProfileActivity extends AppCompatActivity {
         else {
             db.collection("UserInfo").document(auth.getUid())
                     .update("firstName", firstName.getEditText().getText().toString(),
-                            "city", city.getEditText().getText().toString(),
-                            "email", email.getEditText().getText().toString(),
-                            "phone", phone.getEditText().getText().toString());
+                            "city", cityEt.getEditText().getText().toString(),
+                            "email", emailEt.getEditText().getText().toString(),
+                            "phone", phoneEt.getEditText().getText().toString());
             Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
         }
     }
@@ -109,21 +156,21 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public boolean isCityChanged(){
-        if (!_city.equals(city.getEditText().getText().toString())){
+        if (!_city.equals(cityEt.getEditText().getText().toString())){
             return true;
         }
         return false;
     }
 
     public boolean isEmailChanged(){
-        if (!_email.equals(email.getEditText().getText().toString())){
+        if (!_email.equals(emailEt.getEditText().getText().toString())){
             return true;
         }
         return false;
     }
 
     public boolean isPhoneChanged(){
-        if (!_phone.equals(phone.getEditText().getText().toString())){
+        if (!_phone.equals(phoneEt.getEditText().getText().toString())){
             return true;
         }
         return false;
