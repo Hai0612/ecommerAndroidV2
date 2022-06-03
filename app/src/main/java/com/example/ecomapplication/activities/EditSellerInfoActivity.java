@@ -40,8 +40,18 @@ public class EditSellerInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), SellerActivity.class);
-                updateSellerInfo();
-                startActivity(intent);
+                String nameShopCheck = shopName.getEditText().getText().toString();
+                String cityShopCheck = shopAddress.getEditText().getText().toString();
+                String emailShopCheck = shopEmail.getEditText().getText().toString();
+                String phoneShopCheck = shopPhone.getEditText().getText().toString();
+                boolean check = validateSellerInfo(nameShopCheck, cityShopCheck, emailShopCheck, phoneShopCheck);
+                if(check == true){
+                    updateSellerInfo();
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Dữ liệu không hợp lệ", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -55,6 +65,47 @@ public class EditSellerInfoActivity extends AppCompatActivity {
         shopPhone.getEditText().setText(shop_phone);
         shopAddress.getEditText().setText(shop_address);
         shopEmail.getEditText().setText(shop_email);
+    }
+
+    public Boolean validateSellerInfo(String _shopName, String _shopAddress, String _shopEmail, String _shopPhone){
+        if(_shopName.length() == 0){
+            shopName.requestFocus();
+            shopName.setError("Không được để trống!");
+            return false;
+        } else if (!_shopName.matches("^[A-Z][a-zA-Z]{3,}(?: [A-Z][a-zA-Z]*){0,2}$")){
+            shopName.requestFocus();
+            shopName.setError("Tên shop không hợp lệ");
+            return false;
+        }
+        else if (_shopAddress.length() == 0){
+            shopAddress.requestFocus();
+            shopAddress.setError("Không được để trống!");
+            return false;
+        } else if (!_shopAddress.matches("^([a-zA-Z\\u0080-\\u024F]+(?:. |-| |'))*[a-zA-Z\\u0080-\\u024F]*$")){
+            shopAddress.requestFocus();
+            shopAddress.setError("Tên thành phố không hợp lệ!");
+            return false;
+        }
+        else if (_shopEmail.length() == 0){
+            shopEmail.requestFocus();
+            shopEmail.setError("Không được để trống!");
+            return false;
+        } else if (!_shopEmail.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")){
+            shopEmail.requestFocus();
+            shopEmail.setError("Email không hợp lệ!");
+            return false;
+        }else if (_shopPhone.length() == 0){
+            shopPhone.requestFocus();
+            shopPhone.setError("Không được để trống!");
+            return false;
+        } else if (!_shopPhone.matches("^[+]?[0-9]{10,11}$")){
+            shopPhone.requestFocus();
+            shopPhone.setError("Số điện thoại không hợp lệ!");
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
     public void updateSellerInfo(){
