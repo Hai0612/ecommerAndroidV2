@@ -97,7 +97,8 @@ public class EditProfileActivity extends AppCompatActivity {
             firstName.requestFocus();
             firstName.setError("Không được để trống!");
             return false;
-        } else if (!name.matches("^[A-Z][a-zA-Z]{3,}(?: [A-Z][a-zA-Z]*){0,2}$")){
+        }
+        else if (!name.matches("\\D+")){
             firstName.requestFocus();
             firstName.setError("Họ tên không hợp lệ");
             return false;
@@ -123,7 +124,8 @@ public class EditProfileActivity extends AppCompatActivity {
             phoneEt.requestFocus();
             phoneEt.setError("Không được để trống!");
             return false;
-        } else if (!phone.matches("^[+]?[0-9]{10,11}$")){
+        }
+        else if (!phone.matches("^[+]?[0-9]{10,11}$")){
             phoneEt.requestFocus();
             phoneEt.setError("Số điện thoại không hợp lệ!");
             return false;

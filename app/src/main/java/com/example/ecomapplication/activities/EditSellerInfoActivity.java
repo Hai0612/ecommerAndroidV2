@@ -72,7 +72,7 @@ public class EditSellerInfoActivity extends AppCompatActivity {
             shopName.requestFocus();
             shopName.setError("Không được để trống!");
             return false;
-        } else if (!_shopName.matches("^[A-Z][a-zA-Z]{3,}(?: [A-Z][a-zA-Z]*){0,2}$")){
+        } else if (!_shopName.matches("\\D+")){
             shopName.requestFocus();
             shopName.setError("Tên shop không hợp lệ");
             return false;
@@ -80,10 +80,6 @@ public class EditSellerInfoActivity extends AppCompatActivity {
         else if (_shopAddress.length() == 0){
             shopAddress.requestFocus();
             shopAddress.setError("Không được để trống!");
-            return false;
-        } else if (!_shopAddress.matches("^([a-zA-Z\\u0080-\\u024F]+(?:. |-| |'))*[a-zA-Z\\u0080-\\u024F]*$")){
-            shopAddress.requestFocus();
-            shopAddress.setError("Tên thành phố không hợp lệ!");
             return false;
         }
         else if (_shopEmail.length() == 0){
