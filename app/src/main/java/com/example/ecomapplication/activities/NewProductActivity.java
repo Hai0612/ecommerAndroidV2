@@ -86,6 +86,15 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
                 startActivity(new Intent(NewProductActivity.this , SellerActivity.class));
             }
         });
+        productImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImg();
+            }
+        });
+     }
+     public void selectImg(){
+        
      }
 
     public void AddProductToFireBase(String description, String id, String id_category, String img_url, String name,

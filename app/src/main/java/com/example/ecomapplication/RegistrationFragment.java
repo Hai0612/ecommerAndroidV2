@@ -93,6 +93,8 @@ public class RegistrationFragment extends Fragment {
                     .addOnCompleteListener( getActivity(), task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(getContext(), "Sign Up Successfully", Toast.LENGTH_SHORT).show();
+                            NavHostFragment.findNavController(RegistrationFragment.this)
+                                    .navigate(R.id.action_nav_signup_to_nav_login);
                             addUserInfo();
                         } else {
                             Toast.makeText(getContext(), "Sign Up Failed " + task.getException(), Toast.LENGTH_SHORT).show();
@@ -126,7 +128,7 @@ public class RegistrationFragment extends Fragment {
             doc.put("id", "");
             doc.put("lastName", "");
             doc.put("phone", "");
-
+            doc.put("is_seller", false);
             db.collection("UserInfo").document(auth.getUid()).set(doc)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override

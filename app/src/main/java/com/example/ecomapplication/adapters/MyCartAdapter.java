@@ -44,6 +44,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
         this.context = context;
         this.list = list;
         this.storage = FirebaseStorage.getInstance();
+
     }
 
     @NonNull
@@ -53,7 +54,12 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
     }
 
     private void updateTotal() {
-
+        totalAmount = 0 ;
+        int temp_total = 0;
+        for(int i = 0 ; i < list.size(); i++){
+            temp_total += list.get(i).getPrice() * list.get(i).getQuantity();
+        }
+        totalAmount = temp_total;
     }
 
     @Override
@@ -62,7 +68,9 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
         firestore = FirebaseFirestore.getInstance();
         Product cartModel = list.get(position);
         String id_document = list.get(position).getDocumentId();
-
+        Log.v("fsdfdsf", String.valueOf(totalAmount));
+        Intent intent = new Intent("MyTotalAmount");
+        updateTotal();
         holder.buttonMinus.setOnClickListener(view -> {
             if (cartModel.getQuantity() <= 1) {
                 return;
@@ -77,10 +85,8 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
 //                    cartAdapter.notifyDataSetChanged();
 //                    listener.refreshActivity();
             }
-            int totalPrice = list.get(position).getPrice() * list.get(position).getQuantity();
             totalAmount = totalAmount - list.get(position).getPrice();
-            holder.price.setText(String.valueOf(totalPrice));
-            Intent intent = new Intent("MyTotalAmount");
+            holder.price.setText(String.valueOf(list.get(position).getPrice()));
             intent.putExtra("totalAmount", totalAmount);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         });
@@ -91,10 +97,8 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
                     .update("quantity", cartModel.getQuantity() + 1);
             list.get(position).setQuantity(cartModel.getQuantity() + 1);
             holder.quantity.setText(String.valueOf(list.get(position).getQuantity()) );
-            int totalPrice = list.get(position).getPrice() * list.get(position).getQuantity();
             totalAmount = totalAmount + list.get(position).getPrice();
-            holder.price.setText(String.valueOf(totalPrice));
-            Intent intent = new Intent("MyTotalAmount");
+            holder.price.setText(String.valueOf(list.get(position).getPrice()));
             intent.putExtra("totalAmount", totalAmount);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         });
@@ -104,21 +108,21 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
                     .collection("Products")
                     .document(id_document).delete().addOnSuccessListener(task -> {
                         list.remove(list.get(position));
+                        updateTotal();
+                        intent.putExtra("totalAmount", totalAmount);
                         notifyDataSetChanged();
-            });
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                    });
 
         });
-
-        int totalPrice = list.get(position).getPrice() * list.get(position).getQuantity();
-        totalAmount = totalAmount + totalPrice;
-        Intent intent = new Intent("MyTotalAmount");
         intent.putExtra("totalAmount", totalAmount);
+
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
 
         holder.name.setText(list.get(position).getName());
         holder.quantity.setText(String.valueOf(list.get(position).getQuantity()));
-//        holder.price.setText(String.valueOf(list.get(position).getPrice()));
-        holder.price.setText(String.valueOf(totalPrice));
+        holder.price.setText(String.valueOf(list.get(position).getPrice()));
 
 //        Load IMG
         final long ONE_MEGABYTE = 1024 * 1024;

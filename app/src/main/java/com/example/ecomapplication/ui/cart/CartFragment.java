@@ -132,41 +132,14 @@ public class CartFragment extends Fragment {
         }
     }
 
-    public void getProductData(){
-        final List<CartModel> productModelList = new ArrayList<>();
-//        db.collection("Cart").get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                                           @Override
-//                                           public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                               if (task.isSuccessful()) {
-//                                                   for (final DocumentSnapshot document : task.getResult()) {
-//
-//
-//                                                       DocumentReference docRef = db.collection("Product").document("2");
-//                                                       docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                                                           @Override
-//                                                           public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                                                               final CartModel cartModel = document.toObject(CartModel.class);
-//                                                               final String id_product = cartModel.getId_product();
-//                                                               Log.v("TAG", id_product);
-//                                                               cartModel.setProduct(documentSnapshot.toObject(Product.class));
-//                                                               cartModelList.add(cartModel);
-//                                                           }
-//                                                       });
-////                                productModelList.add(feedModel);
-////                                fireCallback.onProduct(productModelList);
-//                                                   }
-//                                               }
-//                                           }
-//                                       }
-//                );
-//        Log.v(TAG, String.valueOf(cartModelList.size()));
-    }
     public BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             overAllTotalAmount = intent.getIntExtra("totalAmount", 0);
             overAllAmount.setText(overAllTotalAmount + "VND");
+            if(overAllTotalAmount == 0){
+                button_buy_now.setEnabled(false);
+            }
         }
     };
 
