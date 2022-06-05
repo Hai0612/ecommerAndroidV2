@@ -17,12 +17,15 @@
         android:theme="@style/Theme.EcomApplication"
         tools:replace="android:theme">
         <activity
+            android:name=".activities.Map"
+            android:exported="false" />
+        <activity
             android:name=".activities.EditSellerInfoActivity"
             android:exported="false" />
 
         <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDNI_ZWPqvdS6r6gPVO50I4TlYkfkZdXh8" />
+                android:name="com.google.android.geo.API_KEY"
+            android:value="" />
 
         <activity
             android:name=".activities.MapsActivity"

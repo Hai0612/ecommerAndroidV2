@@ -1,8 +1,10 @@
 package com.example.ecomapplication.activities;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -18,24 +21,33 @@ import com.example.ecomapplication.R;
 import com.example.ecomapplication.models.Product;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
 
 public class NewProductActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    Button productImg, addProduct;
+    Button productImg, addProduct, save_image;
     EditText productName, productDesc, productPrice, productQuantity, productCategory, productSize, productRating;
     FirebaseFirestore db;
     Spinner category_;
     String text;
     Product product;
+    ImageView thumbnail ;
+    StorageReference storageReference;
     private FirebaseAuth auth;
-
+    Uri imageUri;
     String id = UUID.randomUUID().toString();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +59,9 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
 
         productName = findViewById(R.id.product_name);
         productDesc = findViewById(R.id.product_desc);
+        save_image = findViewById(R.id.save_image);
         productPrice = findViewById(R.id.product_price);
+        thumbnail = findViewById(R.id.thumbnail);
         productQuantity = findViewById(R.id.product_quantity);
         //productCategory = findViewById(R.id.product_category);
         category_ = findViewById(R.id.product_category);
@@ -92,10 +106,44 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
                 selectImg();
             }
         });
+        save_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadToFirebase();
+            }
+        });
      }
      public void selectImg(){
-        
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 100);
      }
+    public void uploadToFirebase(){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss" , Locale.CHINESE);
+        Date now = new Date();
+        String fileName = formatter.format(now);
+        storageReference = FirebaseStorage.getInstance().getReference("images/" + fileName);
+
+
+        storageReference.putFile(imageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        thumbnail.setImageURI(imageUri);
+                        Toast.makeText(NewProductActivity.this,"thanfh coong" ,  Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 100 && data != null && data.getData() != null){
+            imageUri = data.getData();
+            thumbnail.setImageURI(imageUri);
+        }
+    }
 
     public void AddProductToFireBase(String description, String id, String id_category, String img_url, String name,
                                      int price, int quantity, String rating, String size){

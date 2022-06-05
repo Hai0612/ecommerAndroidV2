@@ -114,10 +114,9 @@ public class CartFragment extends Fragment {
         button_buy_now.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(getContext(), CheckoutActitvity.class);
-//                intent.putExtra("totalOrder",overAllTotalAmount);
-//                startActivity(intent);
-                Toast.makeText(getContext(), " " + cartModelList.size(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), CheckoutActitvity.class);
+                intent.putExtra("totalOrder",overAllTotalAmount);
+                startActivity(intent);
             }
         });
 

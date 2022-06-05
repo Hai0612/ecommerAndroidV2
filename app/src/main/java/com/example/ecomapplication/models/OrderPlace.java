@@ -22,6 +22,8 @@ import com.example.ecomapplication.R;
 import com.example.ecomapplication.activities.RegistrationActivity;
 import com.example.ecomapplication.adapters.CheckoutAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -101,21 +103,37 @@ public class OrderPlace extends Dialog implements
                 .add(payment)
                 .addOnSuccessListener(documentReference -> {
                     Log.v(TAG, "ADD order detail thanh cong");
-                    deleteProductsInCartOfUser();
                 })
                 .addOnFailureListener(e -> Log.w(TAG, "Them order detail that bai", e));
     }
     public void orderPlace(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date d  = Calendar.getInstance().getTime();
-        Map<String, Object> order = new HashMap<>();
-        id = getAlphaNumericString(5);
-        order.put("orderAddress", orderAddress);
-        order.put("orderDate", orderDate);
-        order.put("shippedDate", shippedDate);
-        order.put("status", "pending");
-        order.put("total", total);
 
+
+        for(int i = 0 ; i < cartModelList.size(); i++ ){
+            Product product = cartModelList.get(i);
+            Map<String, Object> order = new HashMap<>();
+            id = getAlphaNumericString(5);
+            order.put("orderAddress", orderAddress);
+            order.put("orderDate", orderDate);
+            order.put("shippedDate", shippedDate);
+            order.put("status", "pending");
+            order.put("total", cartModelList.get(i).getQuantity() * cartModelList.get(i).getPrice());
+            // Add a new document with a generated ID
+            db.collection("Order")
+                    .document(auth.getUid())
+                    .collection("Orders")
+                    .add(order).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            String id_order = task.getResult().getId();
+                            AddProductListToOrderDetail(id_order, product);
+                            addPaymentOfOrder(id_order);
+                        } else {
+                            Log.w(TAG, "Them order that bai");
+                        }
+                    });
+        }
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setTitle("Đang thanh toán");
         progressDialog.setMessage("Vui lòng chờ...");
@@ -130,19 +148,7 @@ public class OrderPlace extends Dialog implements
                 progressDialog.dismiss();
             }
         }, 1500);
-// Add a new document with a generated ID
-        db.collection("Order")
-                .document(auth.getUid())
-                .collection("Orders")
-                .add(order).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                String id_order = task.getResult().getId();
-                AddProductListToOrderDetail(id_order);
-                addPaymentOfOrder(id_order);
-            } else {
-                Log.w(TAG, "Them order that bai");
-            }
-        });
+
 
     }
     public void getProductToPayment(){
@@ -159,60 +165,51 @@ public class OrderPlace extends Dialog implements
                     }
                 });
     }
-    public void AddProductListToOrderDetail(String id_order){
+    public void AddProductListToOrderDetail(String id_order, Product product){
          boolean[] check = {false};
-        for(int i  = 0 ; i < cartModelList.size(); i ++){
             db.collection("OrderDetail").document(id_order)
-                    .collection("Products").document(cartModelList.get(i).getDocumentId())
-                    .set(cartModelList.get(i))
+                    .collection("Products").document(product.getDocumentId())
+                    .set(product)
                     .addOnSuccessListener(documentReference -> {
                         check[0] = true;
                         Log.v("Result", "ADD order detail thanh cong");
                     })
                     .addOnFailureListener(e -> Log.v("Result", "Them order detail that bai", e));
-        }
-            FireOrderToSeller(id_order);
+            FireOrderToSeller(id_order, product);
 
 
 
 // Add a new document with a generated ID
 
     }
-    public void FireOrderToSeller(String id_order){
-        for(int i  = 0 ; i < cartModelList.size(); i ++){
-            Log.v("dfsfd", String.valueOf(cartModelList.size()));
-            Log.v("dfsfd", String.valueOf(cartModelList.get(i).getId_seller()));
-            SellerOrder sellerOrder = new SellerOrder(id_order,cartModelList.get(i).getDocumentId(),auth.getUid(),new Date(), new Date(), cartModelList.get(i).getQuantity(), "pending", cartModelList.get(i).getId_seller());
-            db.collection("SellerOrder").document(cartModelList.get(i).getId_seller())
+    public void FireOrderToSeller(String id_order, Product product){
+            SellerOrder sellerOrder = new SellerOrder(id_order,product.getName(),auth.getUid(),new Date(), new Date(), product.getQuantity(), "pending", product.getId_seller());
+            db.collection("SellerOrder").document(product.getId_seller())
                     .collection("Orders")
                     .add(sellerOrder)
                     .addOnSuccessListener(documentReference -> {
                         Log.v("Result", "ADD order seller thanh cong");
                     })
                     .addOnFailureListener(e -> Log.v("Result", "Them order detail that bai", e));
-        }
-        deleteProductsInCartOfUser();
-
-
-
+        deleteProductsInCartOfUser(product);
 
 // Add a new document with a generated ID
 
     }
-    public void deleteProductsInCartOfUser() {
+    public void deleteProductsInCartOfUser(Product product) {
         Log.v("ID_user" , auth.getUid());
-        db.collection("Cart").document(auth.getUid()).collection("Products")
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("Cart").document(auth.getUid()).collection("Products").document(product.getDocumentId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                db.collection("Cart").document(auth.getUid()).
-                                        collection("Products").document(document.getId()).delete();
-                            }
-                            getContext().startActivity(new Intent(getContext(), MainActivity.class));
-                        } else {
-                        }
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
                     }
                 });
     }
