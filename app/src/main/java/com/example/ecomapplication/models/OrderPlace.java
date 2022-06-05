@@ -32,6 +32,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -57,8 +59,8 @@ public class OrderPlace extends Dialog implements
      private int number;
      private String id;
     ProgressDialog progressDialog;
-
     private FirebaseAuth auth;
+    UserInfo user ;
     private  Payment selectedPayment;
     private int total;
     public OrderPlace(Activity activity , String orderAddress, int total ,String id_user  , Date orderDate , Date shippedDate , Payment selectedPayment) {
@@ -88,7 +90,24 @@ public class OrderPlace extends Dialog implements
         yes.setOnClickListener(this);
         no.setOnClickListener(this);
         getProductToPayment();
+        getInfoUser(auth.getUid());
 
+    }
+    public void getInfoUser(String id_user){
+        db.collection("UserInfo").document(auth.getUid())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        try {
+                            user = task.getResult().toObject(UserInfo.class);
+                        }
+                        catch (Exception e ) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Log.w(TAG, "Error getting documents.", task.getException());
+                    }
+                });
     }
     public void addPaymentOfOrder(String id_order){
 
@@ -183,7 +202,12 @@ public class OrderPlace extends Dialog implements
 
     }
     public void FireOrderToSeller(String id_order, Product product){
-            SellerOrder sellerOrder = new SellerOrder(id_order,product.getName(),auth.getUid(),new Date(), new Date(), product.getQuantity(), "pending", product.getId_seller());
+
+        String user_name = "";
+            if (user != null){
+                user_name = user.getFirstName() + user.getLastName();
+            }
+            SellerOrder sellerOrder = new SellerOrder(id_order,product.getName(),user_name,new Date(), new Date(), product.getQuantity(), "pending", product.getId_seller());
             db.collection("SellerOrder").document(product.getId_seller())
                     .collection("Orders")
                     .add(sellerOrder)

@@ -29,7 +29,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 //public class MyCartAdapter extends FirestoreRecyclerAdapter.Adapter<MyCartAdapter.ViewHolder> {
 public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder> {
@@ -86,7 +88,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
 //                    listener.refreshActivity();
             }
             totalAmount = totalAmount - list.get(position).getPrice();
-            holder.price.setText(String.valueOf(list.get(position).getPrice()));
+            holder.price.setText(NumberFormat.getNumberInstance(new Locale("vi", "VN")).format(list.get(position).getPrice()));
             intent.putExtra("totalAmount", totalAmount);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         });
@@ -98,7 +100,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
             list.get(position).setQuantity(cartModel.getQuantity() + 1);
             holder.quantity.setText(String.valueOf(list.get(position).getQuantity()) );
             totalAmount = totalAmount + list.get(position).getPrice();
-            holder.price.setText(String.valueOf(list.get(position).getPrice()));
+            holder.price.setText(NumberFormat.getNumberInstance(new Locale("vi", "VN")).format(list.get(position).getPrice()));
             intent.putExtra("totalAmount", totalAmount);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         });
@@ -122,7 +124,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
 
         holder.name.setText(list.get(position).getName());
         holder.quantity.setText(String.valueOf(list.get(position).getQuantity()));
-        holder.price.setText(String.valueOf(list.get(position).getPrice()));
+        holder.price.setText(NumberFormat.getNumberInstance(new Locale("vi", "VN")).format(list.get(position).getPrice()));
 
 //        Load IMG
         final long ONE_MEGABYTE = 1024 * 1024;

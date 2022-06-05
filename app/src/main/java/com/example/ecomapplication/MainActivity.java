@@ -1,10 +1,15 @@
 package com.example.ecomapplication;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +24,6 @@ import com.example.ecomapplication.activities.SellerActivity;
 import com.example.ecomapplication.activities.ShowAllCategoryActivity;
 import com.example.ecomapplication.activities.ShowAllProductsActivity;
 import com.example.ecomapplication.databinding.ActivityMainBinding;
-import com.example.ecomapplication.models.UserInfo;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,17 +34,17 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private FirebaseAuth auth;
-    FirebaseFirestore db;
-    UserInfo userInfo;
+    private FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createNotificationChannel();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         auth = FirebaseAuth.getInstance();
-        //Log.v("tag" , auth.getUid());
+        firestore = FirebaseFirestore.getInstance();
         setSupportActionBar(binding.appBarMain.toolbar);
         binding.appBarMain.fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
@@ -60,6 +64,16 @@ public class MainActivity extends AppCompatActivity {
         if (auth.getCurrentUser() != null) {
             navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_signup).setVisible(false);
+            navigationView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+                    navigationView.removeOnLayoutChangeListener(this);
+                    TextView headerEmail = navigationView.findViewById(R.id.nav_header_email);
+                    TextView headerName = navigationView.findViewById(R.id.nav_header_name);
+                    headerEmail.setText(auth.getCurrentUser().getEmail());
+                    headerName.setText(auth.getCurrentUser().getDisplayName());
+                }
+            });
         } else {
             navigationView.getMenu().findItem(R.id.nav_cart).setVisible(false);
             navigationView.getMenu().findItem(R.id.nav_order).setVisible(false);
@@ -68,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         navigationView.getMenu().findItem(R.id.nav_signout).setOnMenuItemClickListener(menuItem -> {
+            firestore.collection("UserInfo").document(auth.getUid())
+                            .update("deviceToken", null);
             FirebaseAuth.getInstance().signOut();
             Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
             finish();
@@ -123,5 +139,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void setActionBarTitle(String title) {
         binding.appBarMain.toolbar.setTitle(title);
+    }
+
+    public void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("channel_01", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+            Log.v("Test", "Created a notification channel");
+        }
     }
 }

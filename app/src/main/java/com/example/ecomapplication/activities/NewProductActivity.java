@@ -59,7 +59,6 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
 
         productName = findViewById(R.id.product_name);
         productDesc = findViewById(R.id.product_desc);
-        save_image = findViewById(R.id.save_image);
         productPrice = findViewById(R.id.product_price);
         thumbnail = findViewById(R.id.thumbnail);
         productQuantity = findViewById(R.id.product_quantity);
@@ -89,13 +88,11 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
                 String _productSize = productSize.getText().toString().trim();
                 String _productRating = productRating.getText().toString().trim();
                 String _id = id.trim();
-                String _imgUrl = "https://firebasestorage.googleapis.com/v0/b/ecommerce-de4aa.appspot.com/o/277813743_1349786442170861_4234593667266222737_n.jpg?alt=media&token=c92e92bc-0802-499a-b08e-73265d2433c1".trim();
-
-                Log.v("Aloha", _productName);
+                String _imgUrl = "gs://ecommerce-de4aa.appspot.com/images/" + uploadToFirebase();
+                Log.v("tagg", _imgUrl);
 
                 AddProductToFireBase(_productDesc, _id, _productCategory, _imgUrl, _productName,
                         Integer.valueOf(_productPrice), Integer.valueOf(_productQuantity), _productRating, _productSize);
-                Toast.makeText(view.getContext(), "Add Successed!", Toast.LENGTH_SHORT).show();
 
                 startActivity(new Intent(NewProductActivity.this , SellerActivity.class));
             }
@@ -106,12 +103,7 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
                 selectImg();
             }
         });
-        save_image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                uploadToFirebase();
-            }
-        });
+
      }
      public void selectImg(){
         Intent intent = new Intent();
@@ -119,21 +111,22 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, 100);
      }
-    public void uploadToFirebase(){
+    public String uploadToFirebase(){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss" , Locale.CHINESE);
         Date now = new Date();
         String fileName = formatter.format(now);
         storageReference = FirebaseStorage.getInstance().getReference("images/" + fileName);
 
 
-        storageReference.putFile(imageUri)
+            storageReference.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         thumbnail.setImageURI(imageUri);
-                        Toast.makeText(NewProductActivity.this,"thanfh coong" ,  Toast.LENGTH_SHORT).show();
                     }
+
                 });
+        return fileName;
     }
 
     @Override
@@ -165,6 +158,8 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(getApplicationContext(), "Thêm sản phẩm thành công!", Toast.LENGTH_SHORT).show();
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
