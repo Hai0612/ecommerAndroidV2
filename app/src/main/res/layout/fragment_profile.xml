@@ -54,10 +54,10 @@
             android:src="@drawable/ic_baseline_person_24"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="Tên"
-            android:textSize="18dp"
+            android:textSize="15dp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_marginLeft="5dp"/>
@@ -67,8 +67,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/first_name"
             android:text="Mickey"
-            android:layout_marginLeft="120dp"
-            android:textSize="18dp"
+            android:layout_marginLeft="15dp"
+            android:textSize="15dp"
             android:textColor="@color/gray"/>
 
     </LinearLayout>
@@ -96,10 +96,10 @@
             android:src="@drawable/ic_baseline_email_24"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="Email"
-            android:textSize="18dp"
+            android:textSize="15dp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_marginLeft="5dp"/>
@@ -109,8 +109,8 @@
             android:layout_height="wrap_content"
             android:text="mickey@gmail.com"
             android:id="@+id/email"
-            android:layout_marginLeft="106dp"
-            android:textSize="18dp"
+            android:layout_marginLeft="15dp"
+            android:textSize="15dp"
             android:textColor="@color/gray"/>
 
     </LinearLayout>
@@ -138,10 +138,10 @@
             android:src="@drawable/ic_baseline_phone_24"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="Điện thoại"
-            android:textSize="18dp"
+            android:textSize="15dp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_marginLeft="5dp"/>
@@ -149,11 +149,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="69dp"
+            android:layout_marginLeft="15dp"
             android:text="1900 1901"
             android:id="@+id/phone"
             android:textColor="@color/gray"
-            android:textSize="18dp" />
+            android:textSize="15dp" />
 
     </LinearLayout>
 
@@ -180,22 +180,22 @@
             android:src="@drawable/ic_baseline_location_on_24"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="Thành phố"
-            android:textSize="18dp"
+            android:textSize="15dp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_marginLeft="5dp"/>
 
         <TextView
+            android:id="@+id/city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/city"
+            android:layout_marginLeft="15dp"
             android:text="Chicago"
-            android:layout_marginLeft="65dp"
-            android:textSize="18dp"
-            android:textColor="@color/gray"/>
+            android:textColor="@color/gray"
+            android:textSize="15dp" />
 
     </LinearLayout>
 

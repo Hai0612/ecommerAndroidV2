@@ -8,13 +8,14 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cart_rec"
-        android:layout_width="365dp"
+        android:layout_width="match_parent"
         android:layout_height="518dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.39"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent=".9"
+        android:layout_margin="10dp"
         tools:listitem="@layout/cart_item_test" />
     <TextView
         app:layout_constraintTop_toTopOf="parent"
@@ -27,6 +28,17 @@
         android:id="@+id/gioHangTrong"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Test PUSH NOTI"
+        app:layout_constraintTop_toBottomOf="@+id/cart_rec"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:id="@+id/testnoti"/>
 
     <Button
         android:id="@+id/button_buy_now"

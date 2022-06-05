@@ -20,14 +20,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.adapters.CommentAdapter;
 import com.example.ecomapplication.models.Comment;
-import com.example.ecomapplication.models.Order;
 import com.example.ecomapplication.models.Product;
 import com.example.ecomapplication.models.UserInfo;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -35,10 +32,11 @@ import com.google.firebase.storage.StorageReference;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -97,7 +95,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         binding();
 
-        final Object productIdIntent = getIntent().getSerializableExtra("id_prodcut");
+        final Object productIdIntent = getIntent().getSerializableExtra("id_product");
         productId = (String) productIdIntent;
         if(productIdIntent != null){
              getProductInfo((String) productIdIntent);
@@ -152,7 +150,7 @@ public class DetailActivity extends AppCompatActivity {
                    product = res;
                     detailedName.setText(product.getName());
                     detailedDesc.setText(product.getDescription());
-                    detailedPrice.setText(String.valueOf(product.getPrice()));
+                    detailedPrice.setText(NumberFormat.getNumberInstance(new Locale("vi", "VN")).format(product.getPrice()));
                     ratingValue.setText(product.getRating());
                     detailedRating.setRating(Float.parseFloat(product.getRating()));
 

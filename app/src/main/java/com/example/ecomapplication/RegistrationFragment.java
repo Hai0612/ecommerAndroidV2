@@ -4,11 +4,6 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,20 +14,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.concurrent.Executor;
 
 public class RegistrationFragment extends Fragment {
 
@@ -92,6 +89,10 @@ public class RegistrationFragment extends Fragment {
             auth.createUserWithEmailAndPassword(emailSignUp.getText().toString(), passwordSignUp.getText().toString())
                     .addOnCompleteListener( getActivity(), task -> {
                         if (task.isSuccessful()) {
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(nameSignUp.getText().toString()).build();
+                            user.updateProfile(profileChangeRequest);
+
                             Toast.makeText(getContext(), "Sign Up Successfully", Toast.LENGTH_SHORT).show();
                             NavHostFragment.findNavController(RegistrationFragment.this)
                                     .navigate(R.id.action_nav_signup_to_nav_login);
@@ -122,7 +123,7 @@ public class RegistrationFragment extends Fragment {
             Map<String, Object> doc = new HashMap<>();
             doc.put("city", "");
             doc.put("date", new Date());
-             doc.put("address", Arrays.asList("120 Nguyễn Trãi, Thanh Xuân, Hà Nội"));
+            doc.put("address", Arrays.asList("120 Nguyễn Trãi, Thanh Xuân, Hà Nội"));
             doc.put("email", emailSignUp.getText().toString());
             doc.put("firstName", nameSignUp.getText().toString());
             doc.put("id", "");

@@ -8,7 +8,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/productList"
-            android:layout_width="400dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
             android:layout_marginTop="7dp"
@@ -16,8 +16,5 @@
             android:layout_marginBottom="7dp"
             android:padding="5dp"
             tools:ignore="MissingConstraints" />
-
-
-
 
 </LinearLayout>

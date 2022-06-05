@@ -22,7 +22,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class PopularProductAdapter extends RecyclerView.Adapter<PopularProductAdapter.ViewHolder> implements ListAdapter {
 
@@ -47,7 +49,8 @@ public class PopularProductAdapter extends RecyclerView.Adapter<PopularProductAd
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.productId = products.get(position).getId();
         holder.name.setText(products.get(position).getName());
-        holder.price.setText(String.valueOf(products.get(position).getPrice()));
+
+        holder.price.setText(NumberFormat.getNumberInstance(new Locale("vi", "VN")).format(products.get(position).getPrice()));
 
         StorageReference storageReference = storage.getReferenceFromUrl(products.get(position).getImg_url());
 
@@ -61,7 +64,7 @@ public class PopularProductAdapter extends RecyclerView.Adapter<PopularProductAd
                 Toast.makeText(context, "Long click on product ID: " + holder.productId, Toast.LENGTH_SHORT).show();
             } else {
                 Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra("id_prodcut",  products.get(position).getDocumentId());
+                intent.putExtra("id_product",  products.get(position).getDocumentId());
 
                 context.startActivity(intent);
             }
