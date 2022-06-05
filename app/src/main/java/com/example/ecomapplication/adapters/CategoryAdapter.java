@@ -54,7 +54,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
             // Dat anh lay tu Firebase cho item
             storageReference.getDownloadUrl()
                     .addOnSuccessListener(uri -> Picasso.with(context).load(uri.toString()).into(imageView))
-                    .addOnFailureListener(e -> Log.v("Error", "Error when get the images: " + e));
+                    .addOnFailureListener(e -> Log.v("Error", "Error when get   the images: " + e));
         }
         textView.setText(category.getName());
 

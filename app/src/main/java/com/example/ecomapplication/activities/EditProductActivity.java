@@ -47,16 +47,14 @@ public class EditProductActivity extends AppCompatActivity {
         product_size = findViewById(R.id.size_update);
         product_rating = findViewById(R.id.rating_update);
         update_product = findViewById(R.id.update_product);
+
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
         });
-
-
-
-
 
         final Object obj = getIntent().getSerializableExtra("ProductToEdit");
         if (obj instanceof Product) {
@@ -80,22 +78,25 @@ public class EditProductActivity extends AppCompatActivity {
             product_size_ = product.getSize();
         }
 
-
-
         update_product.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), SellerActivity.class);
-                updateProduct();
-                startActivity(intent);
+                String nameProdCheck = product_name.getEditText().getText().toString();
+                String descProdCheck = product_desc.getEditText().getText().toString();
+                String priceProdCheck = product_price.getEditText().getText().toString();
+                String quantityProdCheck = product_quantity.getEditText().getText().toString();
+                String ratingProdCheck = product_rating.getEditText().getText().toString();
+                boolean check = validateProductInfo(nameProdCheck, descProdCheck, priceProdCheck, quantityProdCheck, ratingProdCheck);
+                if(check == true){
+                    updateProduct();
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Dữ liệu không hợp lệ", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
-
-
-//        Log.v("Ajinomoto", document_);
-
-
     }
 
     public void updateProduct(){
@@ -116,6 +117,54 @@ public class EditProductActivity extends AppCompatActivity {
                             "rating", product_rating.getEditText().getText().toString(),
                             "size", product_size.getEditText().getText().toString());
             Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public Boolean validateProductInfo(String _prodName, String _prodDesc, String _prodPrice, String _prodQuantity, String _prodRating){
+        if(_prodName.length() == 0){
+            product_name.requestFocus();
+            product_name.setError("Không được để trống!");
+            return false;
+        } else if (!_prodName.matches("\\D+")){
+            product_name.requestFocus();
+            product_name.setError("Tên sản phẩm không hợp lệ");
+            return false;
+        }
+        else if (_prodDesc.length() == 0){
+            product_desc.requestFocus();
+            product_desc.setError("Không được để trống!");
+            return false;
+        }
+        else if (_prodPrice.length() == 0){
+            product_price.requestFocus();
+            product_price.setError("Không được để trống!");
+            return false;
+        }
+        else if (!_prodPrice.matches("^[1-9]+[0-9]+")){
+            product_price.requestFocus();
+            product_price.setError("Giá sản phẩm không hợp lệ!");
+            return false;
+        }
+        else if (_prodQuantity.length() == 0){
+            product_quantity.requestFocus();
+            product_quantity.setError("Không được để trống!");
+            return false;
+        } else if (!_prodQuantity.matches("^[1-9]+[0-9]+")){
+            product_quantity.requestFocus();
+            product_quantity.setError("Số lượng kho hàng không hợp lệ!");
+            return false;
+        }
+        else if (_prodRating.length() == 0){
+            product_rating.requestFocus();
+            product_rating.setError("Không được để trống!");
+            return false;
+        } else if (Double.valueOf(_prodRating) > 5){
+            product_rating.requestFocus();
+            product_rating.setError("Dữ liệu đánh giá không hợp lệ!");
+            return false;
+        }
+        else{
+            return true;
         }
     }
 
