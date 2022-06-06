@@ -32,7 +32,7 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
     EditText productName, productDesc, productPrice, productQuantity, productCategory, productSize, productRating;
     FirebaseFirestore db;
     Spinner category_;
-    String text;
+    String text, cate_gory;
     Product product;
     private FirebaseAuth auth;
 
@@ -79,7 +79,7 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
 
                 Log.v("Aloha", _productName);
 
-                AddProductToFireBase(_productDesc, _id, _productCategory, _imgUrl, _productName,
+                AddProductToFireBase(_productDesc, _id, cate_gory, _imgUrl, _productName,
                         Integer.valueOf(_productPrice), Integer.valueOf(_productQuantity), _productRating, _productSize);
                 Toast.makeText(view.getContext(), "Add Successed!", Toast.LENGTH_SHORT).show();
 
@@ -120,6 +120,9 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         text = adapterView.getItemAtPosition(i).toString();
+        String he = String.valueOf(i);
+        cate_gory = String.valueOf(i + 1);
+        Log.v("tiengAnh", he);
     }
 
     @Override
