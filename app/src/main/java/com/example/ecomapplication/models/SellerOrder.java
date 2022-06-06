@@ -6,6 +6,7 @@ public class SellerOrder {
     private String id_order;
     private String id_product;
     private String id_user;
+    private String user_name;
     private Date orderAccept;
     private String status;
     private Date orderDate;
@@ -13,15 +14,24 @@ public class SellerOrder {
     private  String id_seller;
     private String idDocument;
     public SellerOrder(){};
-    public SellerOrder(String id_order, String id_product, String id_user, Date orderAccept, Date orderDate, int quantity, String status,  String id_seller) {
+    public SellerOrder(String id_order, String id_product, String id_user, String user_name, Date orderAccept, Date orderDate, int quantity, String status,  String id_seller) {
         this.id_order = id_order;
         this.id_product = id_product;
+        this.user_name = user_name;
         this.id_user = id_user;
         this.orderAccept = orderAccept;
         this.orderDate = orderDate;
         this.quantity = quantity;
         this.status = status;
         this.id_seller= id_seller;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 
     public String getIdDocument() {

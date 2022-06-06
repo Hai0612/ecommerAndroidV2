@@ -71,81 +71,106 @@ public class OrderAdapterSeller extends RecyclerView.Adapter<OrderAdapterSeller.
         Date ordered = list.get(position).getOrderDate();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
         String orderDate = dateFormat.format(ordered);
+        Log.v("Date", String.valueOf(orderDate));
 
         holder.productName.setText(list.get(position).getId_product());
-        holder.orderDate.setText(orderDate);
+        holder.orderDate.setText(String.valueOf(ordered));
         holder.quantity.setText(String.valueOf(list.get(position).getQuantity()));
-        holder.userInfo.setText(String.valueOf(list.get(position).getId_user()));
-        Log.v("confirm" ,list.get(position).getStatus());
+        holder.userInfo.setText(String.valueOf(list.get(position).getUser_name()));
         if (list.get(position).getStatus().equals("confirm")) {
             holder.buttonConfirm.setText("Đã xác nhận");
             holder.buttonConfirm.setEnabled(false);
             holder.buttonCancel.setEnabled(false);
+            holder.buttonCancel.setVisibility(View.INVISIBLE);
+        }else if (list.get(position).getStatus().equals("cancelled")) {
+            holder.buttonConfirm.setEnabled(false);
+            holder.buttonCancel.setEnabled(false);
+            holder.buttonCancel.setText("Đã hủy bỏ");
+            holder.buttonConfirm.setVisibility(View.INVISIBLE);
 
         } else {
             holder.buttonConfirm.setText("Xác nhận");
         }
+        int i = position;
         holder.buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.v("tagggggg", "huy");
+                Toast.makeText(context, "Đã hủy đơn đặt hàng!", Toast.LENGTH_SHORT).show();
                 holder.buttonCancel.setEnabled(false);
+                holder.buttonCancel.setText("Đã hủy bỏ");
+                holder.buttonConfirm.setVisibility(View.INVISIBLE);
+
+                cancelOrder(i);
             }
         });
-        int i = position;
+
         holder.buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, "Đã xác nhận đơn đặt hàng!", Toast.LENGTH_SHORT).show();
                 ConfirmOrder(i);
                 holder.buttonConfirm.setEnabled(false);
+                holder.buttonCancel.setVisibility(View.INVISIBLE);
                 holder.buttonConfirm.setText("Đã xác nhận");
                 holder.buttonCancel.setEnabled(false);
             }
         });
     }
-    public void checkOrderStatus(String id_order){
-        final String[] id_user = new String[1];
-        ArrayList<Product> listProductOfOrder = new ArrayList<>();
-        Log.v("fsdf", id_order);
-        db.collection("OrderDetail").document(id_order).collection("Products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot doc :task.getResult().getDocuments()) {
-//                        Log.v("Test", auth.getCurrentUser().getUid());
-                        Product product = doc.toObject(Product.class);
-                        product.setDocumentId(doc.getId());
-                        listProductOfOrder.add(product);
+    public void cancelOrder(int position ){
+        db.collection("SellerOrder").document(list.get(position).getId_seller()).collection("Orders").document(list.get(position).getIdDocument()).update(
+                "status", "cancelled");
+        checkOrderStatus("cancelled",list.get(position).getId_order(), list.get(position).getId_user());
+    }
+//    public void checkOrderStatus(String id_order){
+//        final String[] id_user = new String[1];
+//        ArrayList<Product> listProductOfOrder = new ArrayList<>();
+//        Log.v("fsdf", id_order);
+//        db.collection("OrderDetail").document(id_order).collection("Products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    for (DocumentSnapshot doc :task.getResult().getDocuments()) {
+////                        Log.v("Test", auth.getCurrentUser().getUid());
+//                        Product product = doc.toObject(Product.class);
+//                        product.setDocumentId(doc.getId());
+//                        listProductOfOrder.add(product);
+//
+//                    }
+//                    int[] check = {0};
+//                    for(int i = 0 ; i <listProductOfOrder.size(); i++){
+//                        Log.v("sellerOrder", listProductOfOrder.get(i).getId_seller());
+//                        db.collection("SellerOrder").document(listProductOfOrder.get(i).getId_seller()).collection("Orders").whereEqualTo("id_order", id_order).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                if (task.isSuccessful()) {
+//                                    for (DocumentSnapshot doc :task.getResult().getDocuments()) {
+////                        Log.v("Test", auth.getCurrentUser().getUid());
+//                                        SellerOrder order = doc.toObject(SellerOrder.class);
+//                                        id_user[0] = order.getId_user();
+//                                        if(order.getStatus().equals("confirm")){
+//                                            check[0]++;
+//                                            if(check[0] == listProductOfOrder.size()){
+//                                                db.collection("Order").document(id_user[0]).collection("Orders").document(id_order).update(
+//                                                        "status", "processed");
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        });
+//                    }
+//                }
+//            }
+//        });
+//
+//
+//    }
 
-                    }
-                    int[] check = {0};
-                    for(int i = 0 ; i <listProductOfOrder.size(); i++){
-                        Log.v("sellerOrder", listProductOfOrder.get(i).getId_seller());
-                        db.collection("SellerOrder").document(listProductOfOrder.get(i).getId_seller()).collection("Orders").whereEqualTo("id_order", id_order).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (DocumentSnapshot doc :task.getResult().getDocuments()) {
-//                        Log.v("Test", auth.getCurrentUser().getUid());
-                                        SellerOrder order = doc.toObject(SellerOrder.class);
-                                        id_user[0] = order.getId_user();
-                                        if(order.getStatus().equals("confirm")){
-                                            check[0]++;
-                                            if(check[0] == listProductOfOrder.size()){
-                                                db.collection("Order").document(id_user[0]).collection("Orders").document(id_order).update(
-                                                        "status", "processed");
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-        });
-
-
+    public void checkOrderStatus(String status, String id_order, String id_user){
+        String newOderStatus = status.equals("confirm") ? "processed" : "cancelled";
+        db.collection("Order").document(id_user).collection("Orders").document(id_order).update(
+                "status", newOderStatus);
     }
     private void onClickGoToDetail(SellerOrder orderModel) {
 //        Intent intent = new Intent(context, OrderDetailActivity.class);
@@ -155,10 +180,9 @@ public class OrderAdapterSeller extends RecyclerView.Adapter<OrderAdapterSeller.
 //        context.startActivity(intent);
     }
     public void ConfirmOrder(int position){
-        Log.v("comfim" , list.get(position).getIdDocument());
         db.collection("SellerOrder").document(list.get(position).getId_seller()).collection("Orders").document(list.get(position).getIdDocument()).update(
                 "status", "confirm");
-        checkOrderStatus(list.get(position).getId_order());
+        checkOrderStatus("confirm",list.get(position).getId_order(), list.get(position).getId_user());
 
     }
 

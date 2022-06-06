@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.ecomapplication.Helper.BackAction;
 import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.adapters.CheckoutAdapter;
@@ -143,7 +144,32 @@ public class PaymentActivity extends AppCompatActivity {
 //            }
 //        });
     }
+    public void back(){
+        super.onBackPressed();
+    }
+    @Override
+    public void onBackPressed()
+    {
+        BackAction appdialog = new BackAction();
+        appdialog.Confirm(this, "Xác nhận hủy bỏ", "Bạn có muốn thanh toán trong lần tới không",
+                "Cancel", "OK", aproc(), bproc());
 
+    }
+    public Runnable aproc(){
+        return new Runnable() {
+            public void run() {
+                startActivity(new Intent(PaymentActivity.this, MainActivity.class));
+            }
+        };
+    }
+
+    public Runnable bproc(){
+        return new Runnable() {
+            public void run() {
+                startActivity(new Intent(PaymentActivity.this, MainActivity.class));
+            }
+        };
+    }
     public void newPaymentMethod(String payment_type){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

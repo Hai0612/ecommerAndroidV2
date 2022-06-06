@@ -3,6 +3,7 @@ package com.example.ecomapplication.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -76,9 +77,17 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             holder.buttonReceived.setEnabled(true);
             holder.status_order.setText("Đã xử lí đơn hàng");
             holder.buttonReceived.setText("Nhận đơn hàng");
+
+        }else if(list.get(position).getStatus().equals("cancelled")){
+            holder.buttonReceived.setEnabled(false);
+            holder.status_order.setText("Đơn hàng bị hủy bỏ");
+            holder.buttonReceived.setText("Đặt hàng không thành công");
+            holder.buttonReceived.setBackgroundColor(0xFFF38E99);
+
         }else if(list.get(position).getStatus().equals("received")){
             holder.buttonReceived.setEnabled(false);
             holder.status_order.setText("Đã nhận đơn hàng");
+            holder.buttonReceived.setBackgroundColor(0xFF9EE639);
             holder.buttonReceived.setText("Đã nhận hàng");
         }
         int id = position;
@@ -87,6 +96,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             public void onClick(View view) {
                 holder.buttonReceived.setText("Đã nhận hàng");
                 holder.status_order.setText("Đã nhận đơn hàng");
+                holder.buttonReceived.setBackgroundColor(0xFF9EE639);
                 holder.buttonReceived.setEnabled(false);
                 ReceiveOrder(id);
                 Toast.makeText(context, "Bạn đã xác nhận hàng thành công!", Toast.LENGTH_SHORT).show();

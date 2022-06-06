@@ -128,8 +128,11 @@ public class OrderPlace extends Dialog implements
     public void orderPlace(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date d  = Calendar.getInstance().getTime();
-
-
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle("Đang thanh toán");
+        progressDialog.setMessage("Vui lòng chờ...");
+        progressDialog.setCanceledOnTouchOutside(true);
+        progressDialog.show();
         for(int i = 0 ; i < cartModelList.size(); i++ ){
             Product product = cartModelList.get(i);
             Map<String, Object> order = new HashMap<>();
@@ -153,20 +156,16 @@ public class OrderPlace extends Dialog implements
                         }
                     });
         }
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setTitle("Đang thanh toán");
-        progressDialog.setMessage("Vui lòng chờ...");
-        progressDialog.setCanceledOnTouchOutside(true);
-        progressDialog.show();
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                //Do something here
-                progressDialog.dismiss();
-            }
-        }, 1500);
+//
+//        new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                //Do something here
+//                progressDialog.dismiss();
+//            }
+//        }, 1500);
 
 
     }
@@ -207,7 +206,7 @@ public class OrderPlace extends Dialog implements
             if (user != null){
                 user_name = user.getFirstName() + user.getLastName();
             }
-            SellerOrder sellerOrder = new SellerOrder(id_order,product.getName(),user_name,new Date(), new Date(), product.getQuantity(), "pending", product.getId_seller());
+            SellerOrder sellerOrder = new SellerOrder(id_order,product.getName(),auth.getUid(),user_name,new Date(), new Date(), product.getQuantity(), "pending", product.getId_seller());
             db.collection("SellerOrder").document(product.getId_seller())
                     .collection("Orders")
                     .add(sellerOrder)
@@ -227,7 +226,8 @@ public class OrderPlace extends Dialog implements
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        progressDialog.dismiss();
+                        activity.startActivity(new Intent(getContext(), MainActivity.class));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
