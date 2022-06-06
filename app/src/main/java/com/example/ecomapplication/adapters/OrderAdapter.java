@@ -25,8 +25,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
     Context context;
@@ -59,14 +61,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             }
         });
         Date ordered = list.get(position).getOrderDate();
-        Date shipped = list.get(position).getShippedDate();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        String orderDate = dateFormat.format(ordered);
-        String shippedDate = dateFormat.format(shipped);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(ordered);
+        SimpleDateFormat sdf = new SimpleDateFormat("E yyyy-MM-dd hh:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
+        String order_date = sdf.format(calendar.getTime());
 
+//Will print in UTC
         holder.orderAddress.setText(list.get(position).getOrderAddress());
-        holder.orderDate.setText(orderDate);
-        holder.shippedDate.setText(shippedDate);
+        holder.orderDate.setText(order_date);
         holder.status_order.setText(list.get(position).getStatus());
         holder.total.setText(String.valueOf(list.get(position).getTotal()));
         if(list.get(position).getStatus().equals("pending")){
@@ -130,7 +133,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             super(itemView);
             orderAddress = itemView.findViewById(R.id.order_address);
             orderDate = itemView.findViewById(R.id.order_date);
-            shippedDate = itemView.findViewById(R.id.shipped_date);
             total = itemView.findViewById(R.id.total);
             status_order = itemView.findViewById(R.id.status_order);
             layoutItem = itemView.findViewById(R.id.order_item);

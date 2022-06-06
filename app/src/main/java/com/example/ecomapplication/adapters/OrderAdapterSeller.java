@@ -35,8 +35,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class OrderAdapterSeller extends RecyclerView.Adapter<OrderAdapterSeller.ViewHolder> {
     Context context;
@@ -69,12 +71,14 @@ public class OrderAdapterSeller extends RecyclerView.Adapter<OrderAdapterSeller.
 //            }
 //        });
         Date ordered = list.get(position).getOrderDate();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-        String orderDate = dateFormat.format(ordered);
-        Log.v("Date", String.valueOf(orderDate));
-
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(ordered);
+        SimpleDateFormat sdf = new SimpleDateFormat("E yyyy-MM-dd hh:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
+        String order_date = sdf.format(calendar.getTime());
+        Log.v("datea" , order_date);
         holder.productName.setText(list.get(position).getId_product());
-        holder.orderDate.setText(String.valueOf(ordered));
+        holder.orderDate.setText(String.valueOf(order_date));
         holder.quantity.setText(String.valueOf(list.get(position).getQuantity()));
         holder.userInfo.setText(String.valueOf(list.get(position).getUser_name()));
         if (list.get(position).getStatus().equals("confirm")) {
