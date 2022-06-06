@@ -34,6 +34,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -138,7 +139,8 @@ public class DetailActivity extends AppCompatActivity {
             String _comment = postDetailComment.getText().toString().trim();
   //          String _user = "dfdfsfdsf".trim();
             Object date = ServerValue.TIMESTAMP;
-            AddCommentToFireBase(_comment, date, _id, emailUser, _imgUrl);
+
+            AddCommentToFireBase(_comment, new Date(), _id, emailUser, _imgUrl);
         });
     }
 
@@ -172,12 +174,12 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
     }
-    public void AddCommentToFireBase(String content, Object date, String id_product, String id_user, String user_img){
+    public void AddCommentToFireBase(String content, Date date, String id_product, String id_user, String user_img){
         String docId = UUID.randomUUID().toString();
 
         Map<String, Object> doc = new HashMap<>();
         doc.put("content", content);
-        doc.put("date", ServerValue.TIMESTAMP);
+        doc.put("date", date);
         doc.put("id_product", id_product);
         doc.put("id_user", id_user);
         doc.put("user_img", user_img);
@@ -230,9 +232,7 @@ public class DetailActivity extends AppCompatActivity {
                 try {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Comment comment = document.toObject(Comment.class);
-                        Log.v("name", comment.getContent());
                         if(comment.getId_product().equals(prod_id)){
-
                             list.add(comment);
                             commentAdapter.notifyDataSetChanged();
                         }
@@ -273,7 +273,8 @@ public class DetailActivity extends AppCompatActivity {
 
                                             if (product.getDocumentId() != null
                                                     && product.getDocumentId().equals(productId)) {
-
+                                                Log.v("fdsfs____",product.getDocumentId());
+                                                Log.v("fdsfs____order",order);
                                                 userCommentImg.setVisibility(View.VISIBLE);
                                                 postDetailComment.setVisibility(View.VISIBLE);
                                                 addComment.setVisibility(View.VISIBLE);

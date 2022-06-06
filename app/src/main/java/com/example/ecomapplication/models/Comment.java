@@ -3,10 +3,11 @@ package com.example.ecomapplication.models;
 import com.google.firebase.database.ServerValue;
 
 import java.util.Date;
+import java.util.List;
 
 public class Comment {
     private String content;
-    private Object date;
+    private Date date;
     String id_product;
     String id_user;
     String user_img;
@@ -27,11 +28,11 @@ public class Comment {
         this.content = content;
         this.id_product = id_product;
         this.id_user = id_user;
-        this.date = ServerValue.TIMESTAMP;
+        this.date = new Date();
         this.user_img = user_img;
     }
 
-    public Comment(String content, Object date, String id_product, String id_user, String user_img) {
+    public Comment(String content, Date date, String id_product, String id_user, String user_img) {
         this.content = content;
         this.date = date;
         this.id_product = id_product;
@@ -47,11 +48,11 @@ public class Comment {
         this.content = content;
     }
 
-    public Object getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Object date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

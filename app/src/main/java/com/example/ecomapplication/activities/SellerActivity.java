@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ecomapplication.Helper.BackAction;
+import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.adapters.AddressAdapter;
 import com.example.ecomapplication.adapters.OrderAdapter;
@@ -197,11 +199,17 @@ public class SellerActivity extends AppCompatActivity {
             }
         });
     }
+    public void back(){
+        super.onBackPressed();
+    }
     @Override
     public void onBackPressed()
     {
-        super.onBackPressed();
+        Log.v("dsfdsf", "fdfsd");
+        startActivity(new Intent(SellerActivity.this, MainActivity.class));
+
     }
+
     public  void getMyOrder(){
         myOrder = new ArrayList<>();
         db.collection("SellerOrder").document(auth.getUid())

@@ -151,11 +151,7 @@ public class HomeFragment extends Fragment {
                 try {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Product product = document.toObject(Product.class);
-//                        SliderData sliderData = new SliderData(product.getImg_url());
-//                        sliderData.setProductId(document.getId());
-                        Log.v("TAGG", String.valueOf(sliderDataArrayList.size()));
-                        Log.v("TAGG", product.getImg_url());
-
+                        product.setDocumentId(document.getId());
                         sliderDataArrayList.add(product);
                         SlideraAapter.notifyDataSetChanged();
 

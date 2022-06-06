@@ -181,10 +181,8 @@ public class SellerOrderDetailActivity extends AppCompatActivity {
                                 db.collection("Product").get().addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
                                         for (QueryDocumentSnapshot document : task.getResult()) {
-                                            Product prod = document.toObject(Product.class);
-                                            if(prod.getId().equals(product.getId())){
-                                                product.setDocumentId(document.getId());
-                                                Log.v("Chupachup", product.getDocumentId());
+                                            if(document.getId().equals(product.getDocumentId())){
+                                                Log.v("id_product", product.getDocumentId());
                                                 db.collection("Product").document(product.getDocumentId()).delete();
                                                 startActivity(new Intent(SellerOrderDetailActivity.this, SellerActivity.class));
                                             }

@@ -15,9 +15,12 @@ import com.bumptech.glide.Glide;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.models.Comment;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
 
@@ -38,10 +41,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     @Override
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
+        Date ordered = mData.get(position).getDate();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(ordered);
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd hh:mm");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+7"));
+        String order_date = sdf.format(calendar.getTime());
         Glide.with(mContext).load(mData.get(position).getUser_img()).into(holder.img_user);
         holder.tv_name.setText(mData.get(position).getId_user());
         holder.tv_content.setText(mData.get(position).getContent());
-//        holder.tv_date.setText(timestampToString((Long)mData.get(position).getDate()));
+        holder.tv_date.setText(order_date);
     }
 
     @Override

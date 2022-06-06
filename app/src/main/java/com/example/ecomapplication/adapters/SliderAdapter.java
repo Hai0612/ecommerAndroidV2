@@ -53,7 +53,8 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra("productDetail", mSliderItems.get(position));
+                Log.v("fdfsd", mSliderItems.get(position).getName());
+                intent.putExtra("id_product",  mSliderItems.get(position).getDocumentId());
                 context.startActivity(intent);
             }
         });
