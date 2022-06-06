@@ -82,7 +82,7 @@
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/activity_category.xml" value="0.16621376811594202" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/activity_checkout_actitvity.xml" value="0.16621376811594202" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/activity_detail.xml" value="0.16621376811594202" />
-        <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/activity_edit_product.xml" value="0.16621376811594202" />
+        <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/activity_edit_product.xml" value="0.22" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/activity_edit_profile.xml" value="0.16621376811594202" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/activity_edit_seller_info.xml" value="0.14130434782608695" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/activity_main.xml" value="0.16621376811594202" />
@@ -102,6 +102,7 @@
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/popular_items.xml" value="0.16621376811594202" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/row_comment.xml" value="0.16621376811594202" />
         <entry key="..\:/Users/lehuyen130901/AndroidStudioProjects/ecommerAndroidV2/app/src/main/res/layout/toolbar.xml" value="0.1" />
+        <entry key="..\:/Users/lehuyen130901/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/simple_spinner_dropdown_item.xml" value="0.14130434782608695" />
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/drawable/custom_add_button.xml" value="0.1855" />
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/drawable/custom_btn_remove.xml" value="0.1" />
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/drawable/ic_add_circle_full.xml" value="0.1" />

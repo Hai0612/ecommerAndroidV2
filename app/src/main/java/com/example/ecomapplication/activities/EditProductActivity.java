@@ -7,7 +7,10 @@ import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,13 +20,15 @@ import com.example.ecomapplication.models.Product;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class EditProductActivity extends AppCompatActivity {
+public class EditProductActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     TextInputLayout product_name, product_desc, product_category, product_price, product_quantity, product_size, product_rating;
     String product_name_, product_desc_, product_category_, product_price_, product_quantity_, product_size_, product_rating_, document_;
     TextView update_product;
     String id_product;
+    String cate_gory, text;
     FirebaseFirestore db;
+    Spinner product_gate_gory;
     Product product;
     ImageView back;
     @Override
@@ -40,14 +45,13 @@ public class EditProductActivity extends AppCompatActivity {
 
         product_name = findViewById(R.id.product_name_update);
         product_desc = findViewById(R.id.product_desc_update);
-        product_category = findViewById(R.id.product_category_update);
+        product_gate_gory = findViewById(R.id.product_category_update);
         back = findViewById(R.id.back_action);
         product_price = findViewById(R.id.price_update);
         product_quantity = findViewById(R.id.quantity_update);
         product_size = findViewById(R.id.size_update);
         product_rating = findViewById(R.id.rating_update);
         update_product = findViewById(R.id.update_product);
-
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +67,7 @@ public class EditProductActivity extends AppCompatActivity {
 
             product_name.getEditText().setText(product.getName());
             product_desc.getEditText().setText(product.getDescription());
-            product_category.getEditText().setText(product.getId_category());
+         //   product_category.getEditText().setText(product.getId_category());
             product_price.getEditText().setText(String.valueOf(product.getPrice()));
             product_quantity.getEditText().setText(String.valueOf(product.getQuantity()));
             product_size.getEditText().setText(product.getSize());
@@ -77,6 +81,18 @@ public class EditProductActivity extends AppCompatActivity {
             product_rating_ = product.getRating();
             product_size_ = product.getSize();
         }
+
+        //product_gate_gory.setSelection(Integer.valueOf(product_category_) - 1);
+
+
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.category, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        product_gate_gory.setAdapter(adapter);
+
+        product_gate_gory.setSelection(Integer.valueOf(product_category_) - 1);
+
+        product_gate_gory.setOnItemSelectedListener(this);
 
         update_product.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,10 +124,11 @@ public class EditProductActivity extends AppCompatActivity {
         }
         else {
             Log.v("Cat1", product_name.getEditText().getText().toString());
+            Log.v("Cat2", cate_gory);
             db.collection("Product").document(product.getDocumentId())
                     .update("name", product_name.getEditText().getText().toString(),
                             "description", product_desc.getEditText().getText().toString(),
-                            "id_category", product_category.getEditText().getText().toString(),
+                            "id_category", cate_gory,
                             "price",  Integer.valueOf(product_price.getEditText().getText().toString()),
                             "quantity",  Integer.valueOf(product_quantity.getEditText().getText().toString()),
                             "rating", product_rating.getEditText().getText().toString(),
@@ -183,7 +200,7 @@ public class EditProductActivity extends AppCompatActivity {
     }
 
     public boolean isProductCateChanged(){
-        if (!product_category_.equals(product_category.getEditText().getText().toString())){
+        if (!product_category_.equals(cate_gory)){
             return true;
         }
         return false;
@@ -215,5 +232,18 @@ public class EditProductActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        text = adapterView.getItemAtPosition(i).toString();
+        String he = String.valueOf(i);
+        cate_gory = String.valueOf(i + 1);
+        Log.v("tiengAnh", he);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

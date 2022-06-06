@@ -42,7 +42,7 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
     EditText productName, productDesc, productPrice, productQuantity, productCategory, productSize, productRating;
     FirebaseFirestore db;
     Spinner category_;
-    String text;
+    String text, cate_gory;
     Product product;
     ImageView thumbnail ;
     StorageReference storageReference;
@@ -91,7 +91,7 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
                 String _imgUrl = "gs://ecommerce-de4aa.appspot.com/images/" + uploadToFirebase();
                 Log.v("tagg", _imgUrl);
 
-                AddProductToFireBase(_productDesc, _id, _productCategory, _imgUrl, _productName,
+                AddProductToFireBase(_productDesc, _id, cate_gory, _imgUrl, _productName,
                         Integer.valueOf(_productPrice), Integer.valueOf(_productQuantity), _productRating, _productSize);
 
                 startActivity(new Intent(NewProductActivity.this , SellerActivity.class));
@@ -172,6 +172,9 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         text = adapterView.getItemAtPosition(i).toString();
+        String he = String.valueOf(i);
+        cate_gory = String.valueOf(i + 1);
+        Log.v("tiengAnh", he);
     }
 
     @Override
