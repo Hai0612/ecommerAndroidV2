@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:background="@color/purple_200"
             android:fontFamily="@font/amethysta"
-            android:text="OrderDetail"
+            android:text="Chi tiết đơn hàng"
             android:textColor="@color/blue"
             android:textSize="24sp" />
 
@@ -65,7 +65,7 @@
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:fontFamily="@font/amethysta"
-            android:text="Price"
+            android:text="0 VND"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
