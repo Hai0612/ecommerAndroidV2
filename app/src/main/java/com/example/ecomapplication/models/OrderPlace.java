@@ -5,10 +5,10 @@ import static android.content.ContentValues.TAG;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -17,23 +17,18 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.example.ecomapplication.Helper.NotificationApi;
 import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
-import com.example.ecomapplication.activities.RegistrationActivity;
 import com.example.ecomapplication.adapters.CheckoutAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.example.ecomapplication.adapters.OrderAdapterSeller;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,13 +51,14 @@ public class OrderPlace extends Dialog implements
     CheckoutAdapter cartAdapter;
     List<Product> cartModelList;
     private Date shippedDate;
-     private int number;
-     private String id;
+    private int number;
+    private String id;
     ProgressDialog progressDialog;
     private FirebaseAuth auth;
     UserInfo user ;
     private  Payment selectedPayment;
     private int total;
+
     public OrderPlace(Activity activity , String orderAddress, int total ,String id_user  , Date orderDate , Date shippedDate , Payment selectedPayment) {
         super(activity);
         this.activity = activity;
@@ -93,6 +89,7 @@ public class OrderPlace extends Dialog implements
         getInfoUser(auth.getUid());
 
     }
+
     public void getInfoUser(String id_user){
         db.collection("UserInfo").document(auth.getUid())
                 .get()
@@ -109,6 +106,7 @@ public class OrderPlace extends Dialog implements
                     }
                 });
     }
+
     public void addPaymentOfOrder(String id_order){
 
         Map<String, Object> payment = new HashMap<>();
@@ -125,7 +123,8 @@ public class OrderPlace extends Dialog implements
                 })
                 .addOnFailureListener(e -> Log.w(TAG, "Them order detail that bai", e));
     }
-    public void orderPlace(){
+
+    public void orderPlace() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date d  = Calendar.getInstance().getTime();
         progressDialog = new ProgressDialog(getContext());
@@ -166,9 +165,8 @@ public class OrderPlace extends Dialog implements
 //                progressDialog.dismiss();
 //            }
 //        }, 1500);
-
-
     }
+
     public void getProductToPayment(){
         cartModelList = new ArrayList<>();
         db.collection("Cart").document(auth.getUid())
@@ -183,6 +181,7 @@ public class OrderPlace extends Dialog implements
                     }
                 });
     }
+
     public void AddProductListToOrderDetail(String id_order, Product product){
          boolean[] check = {false};
             db.collection("OrderDetail").document(id_order)
@@ -190,53 +189,62 @@ public class OrderPlace extends Dialog implements
                     .set(product)
                     .addOnSuccessListener(documentReference -> {
                         check[0] = true;
-                        Log.v("Result", "ADD order detail thanh cong");
+                        Log.v("Test", "ADD order detail thanh cong");
                     })
                     .addOnFailureListener(e -> Log.v("Result", "Them order detail that bai", e));
             FireOrderToSeller(id_order, product);
-
-
-
-// Add a new document with a generated ID
-
     }
-    public void FireOrderToSeller(String id_order, Product product){
 
+    public void FireOrderToSeller(String id_order, Product product){
         String user_name = "";
-            if (user != null){
-                user_name = user.getFirstName() + user.getLastName();
-            }
-            SellerOrder sellerOrder = new SellerOrder(id_order,product.getName(),auth.getUid(),user_name,new Date(), new Date(), product.getQuantity(), "pending", product.getId_seller());
-            db.collection("SellerOrder").document(product.getId_seller())
-                    .collection("Orders")
-                    .add(sellerOrder)
-                    .addOnSuccessListener(documentReference -> {
-                        Log.v("Result", "ADD order seller thanh cong");
-                    })
-                    .addOnFailureListener(e -> Log.v("Result", "Them order detail that bai", e));
+        if (user != null){
+            user_name = user.getFirstName() + user.getLastName();
+        }
+
+        SellerOrder sellerOrder = new SellerOrder(id_order, product.getName(), auth.getUid(), user_name, new Date(), new Date(), product.getQuantity(), "pending", product.getId_seller());
+        db.collection("SellerOrder").document(product.getId_seller())
+                .collection("Orders")
+                .add(sellerOrder)
+                .addOnSuccessListener(documentReference -> Log.v("Test", "Add order seller thanh cong"))
+                .addOnFailureListener(e -> Log.v("Test", "Them order detail that bai", e));
         deleteProductsInCartOfUser(product);
 
-// Add a new document with a generated ID
+        db.collection("UserInfo").document(product.getId_seller())
+                .get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<String> registrationIds = new ArrayList<>();
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        String deviceToken = documentSnapshot.getString("deviceToken");
+                        Log.v("Test", "Receiver device token: " + deviceToken);
+                        registrationIds.add(deviceToken);
 
+                        FCMNotification.Notification notification = FCMNotification.createNotification(
+                                FCMNotification.getOrderTitle(),
+                                FCMNotification.getOrderBody(auth.getUid())
+                        );
+
+                        FCMNotification.Data data = FCMNotification.createData(
+                                FCMNotification.getOrderTitle(),
+                                FCMNotification.getOrderBody(auth.getUid())
+                        );
+
+                        FCMNotification FcmNotification = new FCMNotification(notification, data, registrationIds);
+                        new PushNotification(getContext()).execute(FcmNotification);
+                    }
+                });
     }
+
     public void deleteProductsInCartOfUser(Product product) {
         Log.v("ID_user" , auth.getUid());
         db.collection("Cart").document(auth.getUid()).collection("Products").document(product.getDocumentId())
                 .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        progressDialog.dismiss();
-                        activity.startActivity(new Intent(getContext(), MainActivity.class));
-                    }
+                .addOnSuccessListener(aVoid -> {
+                    progressDialog.dismiss();
+                    activity.startActivity(new Intent(getContext(), MainActivity.class));
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error deleting document", e);
-                    }
-                });
+                .addOnFailureListener(e -> Log.w(TAG, "Error deleting document", e));
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -251,6 +259,7 @@ public class OrderPlace extends Dialog implements
         }
         dismiss();
     }
+
     public String getAlphaNumericString(int n)
     {
 
@@ -276,5 +285,44 @@ public class OrderPlace extends Dialog implements
         }
 
         return sb.toString();
+    }
+
+    public static class PushNotification extends AsyncTask<Object, Void, String> {
+        protected ProgressDialog progressDialog;
+        protected Context context;
+
+        public PushNotification(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.progressDialog = new ProgressDialog(context, 1);
+            this.progressDialog.setMessage("Creating Order...");
+            this.progressDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(Object... objects) {
+            String response = null;
+
+            try {
+                Log.v("Test", "Sending notification...");
+                response = NotificationApi.pushNotification((FCMNotification) objects[0]);
+            } catch (Exception e) {
+                Log.v("Test", "POST Error: " + e.getMessage());
+            }
+
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        }
     }
 }

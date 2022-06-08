@@ -39,7 +39,7 @@ import java.util.Locale;
 
 public class CartFragment extends Fragment {
 
-    Button buttonMinus, buttonPlus, button_buy_now, test_noti;
+    Button buttonMinus, buttonPlus, button_buy_now;
     int overAllTotalAmount;
     TextView overAllAmount;
     TextView gioHangTrong;
@@ -81,7 +81,6 @@ public class CartFragment extends Fragment {
         cartModelList = new ArrayList<>();
         cartAdapter = new MyCartAdapter(getContext(), cartModelList);
         recyclerView.setAdapter(cartAdapter);
-        test_noti = root.findViewById(R.id.testnoti);
 
         firestore.collection("Cart").document(auth.getUid())
                 .collection("Products").get().addOnCompleteListener(task -> {
@@ -109,25 +108,6 @@ public class CartFragment extends Fragment {
             Toast.makeText(getContext(), " " + cartModelList.size(), Toast.LENGTH_SHORT).show();
         });
 
-        test_noti.setOnClickListener(view -> {
-            FCMNotification.Notification noti = FCMNotification.createNotification(
-                    "Thông báo đơn hàng",
-                    "Khách hàng X254QH71 đã đặt hàng của bạn. Hãy xác nhận."
-            );
-
-            FCMNotification.Data data = FCMNotification.createData(
-                    "Thông báo đơn hàng",
-                    "Khách hàng X254QH71 đã đặt hàng của bạn. Hãy xác nhận."
-            );
-
-            List<String> registrationIds = new ArrayList<>();
-            registrationIds.add("cVzXNXUxQwWyBnzurmnMlP:APA91bGifIKqvsmLnSleqs3ca6aouU9gmx09TvE7euAVQOJ_ysUCmVuH7rDXxw7TQU58I1k46wGIfixev2jHWSGg0dym_s8vvKWhl6FA6G13zAegYcB5uYwTsULqQ7Uf_Ol2PnZTCh3M");
-
-            FCMNotification notification = new FCMNotification(noti, data, registrationIds);
-
-            new PushNotification(getContext()).execute(notification);
-        });
-
         return root;
     }
 
@@ -152,46 +132,5 @@ public class CartFragment extends Fragment {
 
     public void refreshActivtiy() {
 //        recreate();
-    }
-
-    private static class PushNotification extends AsyncTask<Object, Void, String> {
-        protected ProgressDialog progressDialog;
-        protected Context context;
-
-        public PushNotification(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            this.progressDialog = new ProgressDialog(context, 1);
-            this.progressDialog.setMessage("Creating Order...");
-            this.progressDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(Object... objects) {
-            String response = null;
-
-            try {
-                Log.v("Test", "Sending notification...");
-                response = NotificationApi.pushNotification((FCMNotification) objects[0]);
-            } catch (Exception e) {
-                Log.v("Test", "POST Error: " + e.getMessage());
-            }
-
-            return response;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
-        }
-
-
     }
 }

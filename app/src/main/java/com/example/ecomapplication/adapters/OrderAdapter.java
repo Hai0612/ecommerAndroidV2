@@ -1,9 +1,10 @@
 package com.example.ecomapplication.adapters;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,14 +18,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ecomapplication.Helper.NotificationApi;
 import com.example.ecomapplication.R;
 import com.example.ecomapplication.activities.OrderDetailActivity;
+import com.example.ecomapplication.models.FCMNotification;
 import com.example.ecomapplication.models.OrderModel;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,15 +57,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         OrderModel orderModel = list.get(position);
-        holder.layoutItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickGoToDetail(orderModel);
-            }
-        });
+        holder.layoutItem.setOnClickListener(view -> onClickGoToDetail(orderModel));
         Date ordered = list.get(position).getOrderDate();
         Date shipped = list.get(position).getShippedDate();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String orderDate = dateFormat.format(ordered);
         String shippedDate = dateFormat.format(shipped);
 
@@ -69,26 +69,29 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         holder.shippedDate.setText(shippedDate);
         holder.status_order.setText(list.get(position).getStatus());
         holder.total.setText(String.valueOf(list.get(position).getTotal()));
-        if(list.get(position).getStatus().equals("pending")){
-            holder.buttonReceived.setEnabled(false);
-            holder.status_order.setText("Đang chờ xử lí đơn hàng");
-            holder.buttonReceived.setText("Đang chờ xử lí đơn hàng");
-        }else if(list.get(position).getStatus().equals("processed")){
-            holder.buttonReceived.setEnabled(true);
-            holder.status_order.setText("Đã xử lí đơn hàng");
-            holder.buttonReceived.setText("Nhận đơn hàng");
-
-        }else if(list.get(position).getStatus().equals("cancelled")){
-            holder.buttonReceived.setEnabled(false);
-            holder.status_order.setText("Đơn hàng bị hủy bỏ");
-            holder.buttonReceived.setText("Đặt hàng không thành công");
-            holder.buttonReceived.setBackgroundColor(0xFFF38E99);
-
-        }else if(list.get(position).getStatus().equals("received")){
-            holder.buttonReceived.setEnabled(false);
-            holder.status_order.setText("Đã nhận đơn hàng");
-            holder.buttonReceived.setBackgroundColor(0xFF9EE639);
-            holder.buttonReceived.setText("Đã nhận hàng");
+        switch (list.get(position).getStatus()) {
+            case "pending":
+                holder.buttonReceived.setEnabled(false);
+                holder.status_order.setText("Đang chờ xử lí đơn hàng");
+                holder.buttonReceived.setText("Đang chờ xử lí đơn hàng");
+                break;
+            case "processed":
+                holder.buttonReceived.setEnabled(true);
+                holder.status_order.setText("Đã xử lí đơn hàng");
+                holder.buttonReceived.setText("Nhận đơn hàng");
+                break;
+            case "cancelled":
+                holder.buttonReceived.setEnabled(false);
+                holder.status_order.setText("Đơn hàng bị hủy bỏ");
+                holder.buttonReceived.setText("Đặt hàng không thành công");
+                holder.buttonReceived.setBackgroundColor(0xFFF38E99);
+                break;
+            case "received":
+                holder.buttonReceived.setEnabled(false);
+                holder.status_order.setText("Đã nhận đơn hàng");
+                holder.buttonReceived.setBackgroundColor(0xFF9EE639);
+                holder.buttonReceived.setText("Đã nhận hàng");
+                break;
         }
         int id = position;
         holder.buttonReceived.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +110,30 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     public void ReceiveOrder(int position){
         db.collection("Order").document(auth.getUid()).collection("Orders").document(list.get(position).getId()).update(
                 "status", "received");
+
+        db.collection("UserInfo").document(list.get(position).getId_user())
+                .get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<String> registrationIds = new ArrayList<>();
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        String deviceToken = documentSnapshot.getString("deviceToken");
+                        Log.v("Test", "Receiver device token: " + deviceToken);
+                        registrationIds.add(deviceToken);
+
+                        FCMNotification.Notification notification = FCMNotification.createNotification(
+                                FCMNotification.getReceivedOrderTitle(),
+                                FCMNotification.getReceivedOrderBody(list.get(position).getId_user())
+                        );
+
+                        FCMNotification.Data data = FCMNotification.createData(
+                                FCMNotification.getReceivedOrderTitle(),
+                                FCMNotification.getReceivedOrderBody(list.get(position).getId_user())
+                        );
+
+                        FCMNotification FcmNotification = new FCMNotification(notification, data, registrationIds);
+                        new PushNotification(context).execute(FcmNotification);
+                    }
+                });
     }
     private void onClickGoToDetail(OrderModel orderModel) {
         Intent intent = new Intent(context, OrderDetailActivity.class);
@@ -119,6 +146,45 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public class PushNotification extends AsyncTask<Object, Void, String> {
+        protected ProgressDialog progressDialog;
+        protected Context context;
+
+        public PushNotification(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.progressDialog = new ProgressDialog(context, 1);
+            this.progressDialog.setMessage("Creating Order...");
+            this.progressDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(Object... objects) {
+            String response = null;
+
+            try {
+                Log.v("Test", "Sending notification...");
+                response = NotificationApi.pushNotification((FCMNotification) objects[0]);
+            } catch (Exception e) {
+                Log.v("Test", "POST Error: " + e.getMessage());
+            }
+
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
