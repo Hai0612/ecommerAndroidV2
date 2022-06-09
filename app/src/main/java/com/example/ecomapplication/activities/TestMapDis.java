@@ -31,12 +31,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.ecomapplication.databinding.ActivityMapsBinding;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestMapDis extends FragmentActivity implements OnMapReadyCallback {
@@ -78,11 +80,55 @@ public class TestMapDis extends FragmentActivity implements OnMapReadyCallback {
 
                 mp.position(new LatLng(location.getLatitude(), location.getLongitude()));
 
-                mp.title("my position");
+                mp.title("Vị trí của tôi");
 
                 mMap.addMarker(mp);
                 mMap.moveCamera(center);
                 mMap.animateCamera(zoom);
 
             }
-        });}}
+        });
+        ArrayList<LatLng> markerPoints = new ArrayList<LatLng>();
+
+        // Getting reference to SupportMapFragment of the activity_main
+        SupportMapFragment sfm = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+
+        // Getting Map for the SupportMapFragment
+        // Setting onclick event listener for the map
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng point) {
+
+                // Already two locations
+                if (markerPoints.size() > 0) {
+                    markerPoints.clear();
+                    googleMap.clear();
+                }
+
+                // Adding new item to the ArrayList
+                markerPoints.add(point);
+
+                // Creating MarkerOptions
+                MarkerOptions options = new MarkerOptions();
+                // Setting the position of the marker
+                options.position(point);
+                if (markerPoints.size() == 1) {
+                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                }
+
+                // Add new marker to the Google Map Android API V2
+                googleMap.addMarker(options);
+
+                // Checks, whether start and end locations are captured
+                if (markerPoints.size() >= 1) {
+                    LatLng origin = markerPoints.get(0);
+                    RegistrationSellerActivity.longtitude = origin.longitude;
+                    RegistrationSellerActivity.latitude = origin.latitude;
+                    //Do what ever you want with origin and dest
+                }
+            }
+        });
+    }
+}
+

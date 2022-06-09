@@ -9,6 +9,7 @@
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/drawable/ic_baseline_email_24.xml" value="0.1995" />
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.1995" />
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/drawable/ic_baseline_list_24.xml" value="0.1995" />
+        <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/drawable/ic_baseline_store_gray.xml" value="0.2985" />
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/drawable/markera.xml" value="0.202" />
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/drawable/markerb.xml" value="0.202" />
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/layout/activity_add_product.xml" value="0.358695652173913" />
@@ -29,6 +30,7 @@
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/layout/activity_orderdetail.xml" value="0.358695652173913" />
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/layout/activity_payment.xml" value="0.358695652173913" />
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/layout/activity_products.xml" value="0.25104166666666666" />
+        <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/layout/activity_registration_seller.xml" value="0.35688405797101447" />
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/layout/activity_seller_oder_detail.xml" value="0.2328125" />
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/layout/activity_show_product_cate.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/Hai/AndroidStudioProjects/EcomApplication/app/src/main/res/layout/app_bar_main.xml" value="0.25" />
