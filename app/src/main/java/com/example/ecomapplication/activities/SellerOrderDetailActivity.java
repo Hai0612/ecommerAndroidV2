@@ -36,6 +36,8 @@ import com.example.ecomapplication.adapters.ProductSellerAdapter;
 import com.example.ecomapplication.models.Category;
 import com.example.ecomapplication.models.Comment;
 import com.example.ecomapplication.models.Product;
+import com.example.ecomapplication.models.SellerInfo;
+import com.example.ecomapplication.models.UserInfo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -52,6 +54,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +94,7 @@ public class SellerOrderDetailActivity extends AppCompatActivity {
     List<Product> productList;
     ProductSellerAdapter productSellerAdapter;
 
-    String productId, product_category, product_size, documentId = "";
+    String productId, product_category, product_size, emailSeller;
 
     private void binding() {
         storage = FirebaseStorage.getInstance();
@@ -151,8 +154,23 @@ public class SellerOrderDetailActivity extends AppCompatActivity {
                             .into(detailedImg))
                     .addOnFailureListener(e -> Log.v("Error", "Error when get the images: " + e));
         }
-        iniRvComment();
-
+        iniRvComment(productId);
+        db.collection("SellerInfo").document(auth.getUid())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        try {
+                            SellerInfo sellerInfo = task.getResult().toObject(SellerInfo.class);
+                            Log.v("Le Thanh Huyen", sellerInfo.getEmail());
+                            emailSeller = sellerInfo.getEmail();
+                        }
+                        catch (Exception e ) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Log.w(TAG, "Error getting documents.", task.getException());
+                    }
+                });
 
         RvComment.setLayoutManager(new LinearLayoutManager(this));
         commentAdapter = new CommentAdapter(getApplicationContext(), list);
@@ -204,28 +222,25 @@ public class SellerOrderDetailActivity extends AppCompatActivity {
         addComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                iniRvComment();
+                iniRvComment(productId);
                 commentAdapter = new CommentAdapter(getApplicationContext(), list);
                 RvComment.setAdapter(commentAdapter);
                 addComment.setVisibility(View.INVISIBLE);
                 String _imgUrl = "https://firebasestorage.googleapis.com/v0/b/ecommerce-de4aa.appspot.com/o/274736835_677983293549819_1786662699780048436_n.jpg?alt=media&token=23b9dcff-f1ce-436b-af77-101af401075f".trim();
-                String _id = "1".trim();
+                String _id = productId.trim();
                 String _comment = postDetailComment.getText().toString().trim();
-                String _user = "dfdfsfdsf".trim();
+                //String _user = "dfdfsfdsf".trim();
                 Object date = ServerValue.TIMESTAMP;
-                AddCommentToFireBase(_comment, date, _id, _user, _imgUrl);
+                AddCommentToFireBase(_comment, new Date(), _id, emailSeller, _imgUrl);
             }
         });
-
-
-
     }
     public void AddCommentToFireBase(String content, Object date, String id_product, String id_user, String user_img){
         String docId = UUID.randomUUID().toString();
 
         Map<String, Object> doc = new HashMap<>();
         doc.put("content", content);
-        doc.put("date", ServerValue.TIMESTAMP);
+        doc.put("date", date);
         doc.put("id_product", id_product);
         doc.put("id_user", id_user);
         doc.put("user_img", user_img);
@@ -247,9 +262,8 @@ public class SellerOrderDetailActivity extends AppCompatActivity {
                 });
     }
 
-    public void iniRvComment(){
+    public void iniRvComment(String prod_id){
         list = new ArrayList<>();
-
 
         db.collection("Comment").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -259,8 +273,10 @@ public class SellerOrderDetailActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Comment comment = document.toObject(Comment.class);
                         Log.v("name", comment.getContent());
-                        list.add(comment);
-                        commentAdapter.notifyDataSetChanged();
+                        if(comment.getId_product().equals(prod_id)){
+                            list.add(comment);
+                            commentAdapter.notifyDataSetChanged();
+                        }
                     }
 
                 }
