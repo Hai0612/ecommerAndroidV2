@@ -113,6 +113,8 @@
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/drawable/ic_remove_circle_outline.xml" value="0.1" />
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/activity_category.xml" value="0.20416666666666666" />
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/activity_detail.xml" value="0.18" />
+        <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/activity_payment.xml" value="0.20416666666666666" />
+        <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/activity_payment_test.xml" value="0.20416666666666666" />
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/activity_products.xml" value="0.20416666666666666" />
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/cart_item_test.xml" value="0.20416666666666666" />
         <entry key="..\:/ecommerAndroidV2/app/src/main/res/layout/category_item.xml" value="0.20416666666666666" />

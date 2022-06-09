@@ -30,17 +30,6 @@
         android:layout_height="wrap_content"/>
 
     <Button
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Test PUSH NOTI"
-        app:layout_constraintTop_toBottomOf="@+id/cart_rec"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:id="@+id/testnoti"/>
-
-    <Button
         android:id="@+id/button_buy_now"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

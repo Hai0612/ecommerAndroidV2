@@ -123,8 +123,8 @@ public class TestMapDis extends FragmentActivity implements OnMapReadyCallback {
                 // Checks, whether start and end locations are captured
                 if (markerPoints.size() >= 1) {
                     LatLng origin = markerPoints.get(0);
-                    RegistrationSellerActivity.longtitude = origin.longitude;
-                    RegistrationSellerActivity.latitude = origin.latitude;
+//                    RegistrationSellerActivity.longtitude = origin.longitude;
+//                    RegistrationSellerActivity.latitude = origin.latitude;
                     //Do what ever you want with origin and dest
                 }
             }

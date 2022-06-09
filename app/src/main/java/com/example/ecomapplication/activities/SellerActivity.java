@@ -6,38 +6,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecomapplication.Helper.BackAction;
 import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
-import com.example.ecomapplication.adapters.AddressAdapter;
-import com.example.ecomapplication.adapters.OrderAdapter;
 import com.example.ecomapplication.adapters.OrderAdapterSeller;
-import com.example.ecomapplication.adapters.PopularProductAdapter;
 import com.example.ecomapplication.adapters.ProductSellerAdapter;
-import com.example.ecomapplication.models.MyCartModel;
-import com.example.ecomapplication.models.OrderModel;
 import com.example.ecomapplication.models.Product;
 import com.example.ecomapplication.models.SellerInfo;
 import com.example.ecomapplication.models.SellerOrder;
-import com.example.ecomapplication.models.UserInfo;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +42,6 @@ public class SellerActivity extends AppCompatActivity {
     List<SellerOrder> myOrder;
     private RecyclerView  myOrderRecyclerview ;
     private OrderAdapterSeller myOrderAdapterSeller;
-    private OrderAdapter myOrderAdapter;
     String shopAddress;
     private FirebaseAuth auth;
 
@@ -82,43 +68,25 @@ public class SellerActivity extends AppCompatActivity {
 
         showProductUi();
         getSellerInfo();
-        addProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(SellerActivity.this , NewProductActivity.class));
-            }
-        });
-        productTab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showProductUi();
-            }
-        });
+        addProduct.setOnClickListener(view -> startActivity(new Intent(SellerActivity.this , NewProductActivity.class)));
+        productTab.setOnClickListener(view -> showProductUi());
 
-        orderTab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showOrderUi();
-            }
-        });
+        orderTab.setOnClickListener(view -> showOrderUi());
 
-        editProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SellerActivity.this, EditSellerInfoActivity.class);
+        editProfile.setOnClickListener(view -> {
+            Intent intent = new Intent(SellerActivity.this, EditSellerInfoActivity.class);
 
-                String shop_name_up = shopName.getText().toString();
-                String shop_phone_up = shopPhone.getText().toString();
-                String shop_email_up = email.getText().toString();
+            String shop_name_up = shopName.getText().toString();
+            String shop_phone_up = shopPhone.getText().toString();
+            String shop_email_up = email.getText().toString();
 
-                intent.putExtra("Shop Name", shop_name_up);
-                intent.putExtra("Shop Phone", shop_phone_up);
-                intent.putExtra("Shop Email", shop_email_up);
-                intent.putExtra("Shop Address", shopAddress);
+            intent.putExtra("Shop Name", shop_name_up);
+            intent.putExtra("Shop Phone", shop_phone_up);
+            intent.putExtra("Shop Email", shop_email_up);
+            intent.putExtra("Shop Address", shopAddress);
 
-                // start the Intent
-                startActivity(intent);
-            }
+            // start the Intent
+            startActivity(intent);
         });
     }
 
@@ -182,19 +150,17 @@ public class SellerActivity extends AppCompatActivity {
         orderTab.setTextColor(getResources().getColor(R.color.black));
         orderTab.setBackgroundResource(R.drawable.shape_rect02);
     }
+
     public  void getMyProduct(){
         myProduct = new ArrayList<>();
-        db.collection("Product").whereEqualTo("id_seller", auth.getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot doc :task.getResult().getDocuments()) {
+        db.collection("Product").whereEqualTo("id_seller", auth.getUid()).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (DocumentSnapshot doc :task.getResult().getDocuments()) {
 //                        Log.v("Test", auth.getCurrentUser().getUid());
-                        Product product = doc.toObject(Product.class);
-                        product.setDocumentId(doc.getId());
-                        myProduct.add(product);
-                        myProductAdapter.notifyDataSetChanged();
-                    }
+                    Product product = doc.toObject(Product.class);
+                    product.setDocumentId(doc.getId());
+                    myProduct.add(product);
+                    myProductAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -213,19 +179,15 @@ public class SellerActivity extends AppCompatActivity {
     public  void getMyOrder(){
         myOrder = new ArrayList<>();
         db.collection("SellerOrder").document(auth.getUid())
-                .collection("Orders").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (DocumentSnapshot doc :task.getResult().getDocuments()) {
-                        SellerOrder sellerOrder = doc.toObject(SellerOrder.class);
-                        sellerOrder.setIdDocument(doc.getId());
-                        myOrder.add(sellerOrder);
-                        myOrderAdapterSeller.notifyDataSetChanged();
+                .collection("Orders").get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot doc :task.getResult().getDocuments()) {
+                            SellerOrder sellerOrder = doc.toObject(SellerOrder.class);
+                            sellerOrder.setIdDocument(doc.getId());
+                            myOrder.add(sellerOrder);
+                            myOrderAdapterSeller.notifyDataSetChanged();
+                        }
                     }
-                }
-            }
-        });
+                });
     }
-
 }

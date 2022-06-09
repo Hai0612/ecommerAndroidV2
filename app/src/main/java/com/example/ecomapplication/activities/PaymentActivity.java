@@ -1,23 +1,20 @@
 package com.example.ecomapplication.activities;
+
 import static android.content.ContentValues.TAG;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ecomapplication.Helper.BackAction;
 import com.example.ecomapplication.MainActivity;
@@ -27,17 +24,9 @@ import com.example.ecomapplication.adapters.PaymentAdapter;
 import com.example.ecomapplication.models.MyCartModel;
 import com.example.ecomapplication.models.OrderPlace;
 import com.example.ecomapplication.models.Payment;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.model.Values;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -83,60 +72,32 @@ public class PaymentActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         getPaymentFireBase();
 
-        makePayment.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-
-                Payment selectedPayment = paymentList.get(paymentAdapter.getSelected_position());
-
-                OrderPlace cdd = new OrderPlace(PaymentActivity.this, orderAddress, Integer.valueOf(total), auth.getUid(),new Date() , new Date(), selectedPayment);
-                cdd.show();
-            }
-        });
-        zaloPay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.v("processs" , "fsfdsfs");
-                Intent intent = new Intent(PaymentActivity.this, ZaloPayActivity.class);
-                startActivity(intent);
-            }
-        });
-        momo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.v("processs" , "fsfdsfs");
-
-                Intent intent = new Intent(PaymentActivity.this, MomoActivity.class);
-                startActivity(intent);
-            }
+        makePayment.setOnClickListener(view -> {
+            Payment selectedPayment = paymentList.get(paymentAdapter.getSelected_position());
+            OrderPlace cdd = new OrderPlace(PaymentActivity.this, orderAddress, Integer.valueOf(total), auth.getUid(),new Date() , new Date(), selectedPayment);
+            cdd.show();
         });
 
-        cancelOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(PaymentActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
+        zaloPay.setOnClickListener(view -> {
+            Log.v("processs" , "fsfdsfs");
+            Intent intent12 = new Intent(PaymentActivity.this, ZaloPayActivity.class);
+            startActivity(intent12);
         });
-        newPaypalText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                newPaymentMethod("Paypal");
-            }
+
+        momo.setOnClickListener(view -> {
+            Log.v("processs" , "fsfdsfs");
+
+            Intent intent1 = new Intent(PaymentActivity.this, MomoActivity.class);
+            startActivity(intent1);
         });
-        newMasterCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                newPaymentMethod("Master Card");
-            }
+
+        cancelOrder.setOnClickListener(view -> {
+            Intent intent13 = new Intent(PaymentActivity.this, MainActivity.class);
+            startActivity(intent13);
         });
-        newGooglePay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                newPaymentMethod("Google Play");
-            }
-        });
+        newPaypalText.setOnClickListener(view -> newPaymentMethod("Paypal"));
+        newMasterCard.setOnClickListener(view -> newPaymentMethod("Master Card"));
+        newGooglePay.setOnClickListener(view -> newPaymentMethod("Google Play"));
 //        newGoogle.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -147,6 +108,7 @@ public class PaymentActivity extends AppCompatActivity {
     public void back(){
         super.onBackPressed();
     }
+
     @Override
     public void onBackPressed()
     {
@@ -156,19 +118,11 @@ public class PaymentActivity extends AppCompatActivity {
 
     }
     public Runnable aproc(){
-        return new Runnable() {
-            public void run() {
-                startActivity(new Intent(PaymentActivity.this, MainActivity.class));
-            }
-        };
+        return () -> startActivity(new Intent(PaymentActivity.this, MainActivity.class));
     }
 
     public Runnable bproc(){
-        return new Runnable() {
-            public void run() {
-                startActivity(new Intent(PaymentActivity.this, MainActivity.class));
-            }
-        };
+        return () -> startActivity(new Intent(PaymentActivity.this, MainActivity.class));
     }
     public void newPaymentMethod(String payment_type){
 
@@ -196,31 +150,26 @@ public class PaymentActivity extends AppCompatActivity {
         builder.setView(lay);
 
         // Set up the buttons
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                //get the two inputs
-                String number = one.getText().toString();
-                Log.v("payment", String.valueOf(two.getText()));
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                Date d  = Calendar.getInstance().getTime();
-                try {
-                     d = dateFormat.parse(String.valueOf(two.getText()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                String provider = three.getText().toString();
-                addDataToFireBase(number, d, provider, payment_type);
-
+        builder.setPositiveButton("Ok", (dialog, whichButton) -> {
+            //get the two inputs
+            String number = one.getText().toString();
+            Log.v("payment", String.valueOf(two.getText()));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            Date d  = Calendar.getInstance().getTime();
+            try {
+                 d = dateFormat.parse(String.valueOf(two.getText()));
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
+            String provider = three.getText().toString();
+            addDataToFireBase(number, d, provider, payment_type);
+
         });
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.cancel();
-            }
-        });
+        builder.setNegativeButton("Cancel", (dialog, whichButton) -> dialog.cancel());
         builder.show();
     }
+
     public void mapping(){
         newPaypalText = findViewById(R.id.paypal);
         makePayment = findViewById(R.id.makePayment);
@@ -231,6 +180,7 @@ public class PaymentActivity extends AppCompatActivity {
         newGooglePay = findViewById(R.id.googlepay);
         newMasterCard = findViewById(R.id.master_card);
     }
+
     public void addDataToFireBase (String number, Date date, String provider, String payment_type){
         // Create a new user with a first and last name
         Map<String, Object> payment = new HashMap<>();
@@ -245,44 +195,32 @@ public class PaymentActivity extends AppCompatActivity {
 // Add a new document with a generated ID
         db.collection("Payment")
                 .add(payment)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
+                .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId()))
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
+
     public void getPaymentFireBase(){
         db.collection("Payment")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                .addOnCompleteListener(task -> {
 
-                        if (task.isSuccessful()) {
-                            try{
-                                for (QueryDocumentSnapshot document : task.getResult()) {
+                    if (task.isSuccessful()) {
+                        try{
+                            for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                    Payment payment = document.toObject(Payment.class);
-                                    if(payment.getId_user().trim().equals("1")){
-                                        Log.v("user_id_if" , payment.getId_user());
-                                        paymentList.add(payment);
-                                    }
-                                    paymentAdapter.notifyDataSetChanged();
+                                Payment payment = document.toObject(Payment.class);
+                                if(payment.getId_user().trim().equals("1")){
+                                    Log.v("user_id_if" , payment.getId_user());
+                                    paymentList.add(payment);
                                 }
+                                paymentAdapter.notifyDataSetChanged();
                             }
-                            catch (Exception e ){
-                                e.printStackTrace();
-                            }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
                         }
+                        catch (Exception e ){
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Log.w(TAG, "Error getting documents.", task.getException());
                     }
                 });
     }

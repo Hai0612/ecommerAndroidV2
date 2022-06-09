@@ -1,5 +1,7 @@
 package com.example.ecomapplication.models;
 
+import android.util.Log;
+
 import java.util.List;
 
 public class FCMNotification {
@@ -15,6 +17,33 @@ public class FCMNotification {
 
     public static Notification createNotification(String title, String body) {
         return new Notification(title, body);
+    }
+
+    public static String getConfirmOrderTitle() {
+        return "Thông báo xác nhận đơn hàng";
+    }
+
+    public static String getConfirmOrderBody(String orderId) {
+        String message = "Đơn hàng " + orderId + " của bạn đã được chủ shop xác nhận có hàng" +
+                " và đang được chuẩn bị để giao tới bạn. Hãy vào app để kiểm tra tình trạng của đơn hàng.";
+        return message;
+    }
+
+    public static String getOrderTitle() {
+        return "Thông báo đơn đặt hàng mới";
+    }
+
+    public static String getOrderBody(String userId) {
+        return "Khách hàng " + userId + " đã đặt hàng của bạn. Hãy vào app để kiểm tra và xác nhận đơn hàng.";
+    }
+
+    public static String getReceivedOrderTitle() {
+        return "Thông báo đơn hàng thành công";
+    }
+
+    public static String getReceivedOrderBody(String userId) {
+        return "Khách hàng " + userId + " đã nhận được hàng. "
+                + "Số tiền thanh toán của đơn hàng sẽ được gửi cho bạn trong vòng 24 giờ.";
     }
 
     public static Data createData(String title, String body) {
