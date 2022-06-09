@@ -102,6 +102,30 @@ public class OrderAdapterSeller extends RecyclerView.Adapter<OrderAdapterSeller.
         db.collection("SellerOrder").document(list.get(position).getId_seller()).collection("Orders").document(list.get(position).getIdDocument()).update(
                 "status", "cancelled");
         checkOrderStatus("cancelled",list.get(position).getId_order(), list.get(position).getId_user());
+
+        db.collection("UserInfo").document(list.get(position).getId_user())
+                .get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<String> registrationIds = new ArrayList<>();
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        String deviceToken = documentSnapshot.getString("deviceToken");
+                        Log.v("Test", "Receiver device token: " + deviceToken);
+                        registrationIds.add(deviceToken);
+
+                        FCMNotification.Notification notification = FCMNotification.createNotification(
+                                FCMNotification.getCancelOrderTitle(),
+                                FCMNotification.getCancelOrderBody(list.get(position).getIdDocument())
+                        );
+
+                        FCMNotification.Data data = FCMNotification.createData(
+                                FCMNotification.getCancelOrderTitle(),
+                                FCMNotification.getCancelOrderBody(list.get(position).getIdDocument())
+                        );
+
+                        FCMNotification FcmNotification = new FCMNotification(notification, data, registrationIds);
+                        new PushNotification(context).execute(FcmNotification);
+                    }
+                });
     }
 
     public void checkOrderStatus(String status, String id_order, String id_user){

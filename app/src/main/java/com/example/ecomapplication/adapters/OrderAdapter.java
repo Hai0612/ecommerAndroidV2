@@ -23,17 +23,21 @@ import com.example.ecomapplication.R;
 import com.example.ecomapplication.activities.OrderDetailActivity;
 import com.example.ecomapplication.models.FCMNotification;
 import com.example.ecomapplication.models.OrderModel;
+import com.example.ecomapplication.models.Product;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
     Context context;
@@ -105,38 +109,60 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                 holder.buttonReceived.setBackgroundColor(0xFF9EE639);
                 holder.buttonReceived.setEnabled(false);
                 ReceiveOrder(id);
-                Toast.makeText(context, "Bạn đã xác nhận hàng thành công!", Toast.LENGTH_SHORT).show();
             }
         });
     }
+    public void sendReceiveNotification ( String id_order, String id_user){
+        Log.v("tag_seller___order_", id_order);
+        Log.v("tag_seller___user_", id_user);
+        db.collection("OrderDetail").document(id_order).collection("Products")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.v("tag_seller", "tassk");
+                            for (DocumentSnapshot doc :task.getResult().getDocuments()) {
+                                Product product = doc.toObject(Product.class);
+                                String idSeller = product.getId_seller();
+                                Log.v("id_sed", idSeller);
+                                db.collection("UserInfo").document(idSeller)
+                                        .get().addOnCompleteListener(tasks -> {
+                                            if (tasks.isSuccessful()) {
+                                                List<String> registrationIds = new ArrayList<>();
+                                                DocumentSnapshot documentSnapshot = tasks.getResult();
+                                                String deviceToken = documentSnapshot.getString("deviceToken");
+                                                Log.v("Test", "Receiver device token: " + deviceToken);
+                                                Toast.makeText(context.getApplicationContext(), "Bạn đã xác nhận hàng thành công!", Toast.LENGTH_SHORT).show();
+                                                registrationIds.add(deviceToken);
 
+                                                FCMNotification.Notification notification = FCMNotification.createNotification(
+                                                        FCMNotification.getReceivedOrderTitle(),
+                                                        FCMNotification.getReceivedOrderBody(id_user)
+                                                );
+
+                                                FCMNotification.Data data = FCMNotification.createData(
+                                                        FCMNotification.getReceivedOrderTitle(),
+                                                        FCMNotification.getReceivedOrderBody(id_user)
+                                                );
+
+                                                FCMNotification FcmNotification = new FCMNotification(notification, data, registrationIds);
+                                                new PushNotification(context).execute(FcmNotification);
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.w("Error", "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+    }
     public void ReceiveOrder(int position){
         db.collection("Order").document(auth.getUid()).collection("Orders").document(list.get(position).getId()).update(
                 "status", "received");
+        Log.v("fdsfdsf", auth.getUid());
+        sendReceiveNotification(list.get(position).getId(),auth.getUid());
 
-        db.collection("UserInfo").document(list.get(position).getId_user())
-                .get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        List<String> registrationIds = new ArrayList<>();
-                        DocumentSnapshot documentSnapshot = task.getResult();
-                        String deviceToken = documentSnapshot.getString("deviceToken");
-                        Log.v("Test", "Receiver device token: " + deviceToken);
-                        registrationIds.add(deviceToken);
-
-                        FCMNotification.Notification notification = FCMNotification.createNotification(
-                                FCMNotification.getReceivedOrderTitle(),
-                                FCMNotification.getReceivedOrderBody(list.get(position).getId_user())
-                        );
-
-                        FCMNotification.Data data = FCMNotification.createData(
-                                FCMNotification.getReceivedOrderTitle(),
-                                FCMNotification.getReceivedOrderBody(list.get(position).getId_user())
-                        );
-
-                        FCMNotification FcmNotification = new FCMNotification(notification, data, registrationIds);
-                        new PushNotification(context).execute(FcmNotification);
-                    }
-                });
     }
     private void onClickGoToDetail(OrderModel orderModel) {
         Intent intent = new Intent(context, OrderDetailActivity.class);

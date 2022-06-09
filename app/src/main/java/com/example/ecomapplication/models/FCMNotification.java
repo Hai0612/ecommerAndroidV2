@@ -19,6 +19,13 @@ public class FCMNotification {
         return new Notification(title, body);
     }
 
+    public static String getCancelOrderTitle(){
+        return "Thông báo hủy đơn hàng " ;
+    }
+    public static String getCancelOrderBody(String orderId){
+        return "Đơn hàng " + orderId + "đã bị hủy bởi người bán" ;
+    }
+
     public static String getConfirmOrderTitle() {
         return "Thông báo xác nhận đơn hàng";
     }
