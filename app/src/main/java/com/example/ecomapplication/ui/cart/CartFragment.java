@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ public class CartFragment extends Fragment {
     Button buttonMinus, buttonPlus, button_buy_now, test_noti;
     int overAllTotalAmount;
     TextView overAllAmount;
+    LinearLayout priceBar;
     TextView gioHangTrong;
     Toolbar toolbar;
     RecyclerView recyclerView;
@@ -77,6 +79,7 @@ public class CartFragment extends Fragment {
         gioHangTrong = root.findViewById(R.id.gioHangTrong);
         recyclerView = root.findViewById(R.id.cart_rec);
         button_buy_now = root.findViewById(R.id.button_buy_now);
+        priceBar = root.findViewById(R.id.price_bar);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         cartModelList = new ArrayList<>();
         cartAdapter = new MyCartAdapter(getContext(), cartModelList);
@@ -92,12 +95,14 @@ public class CartFragment extends Fragment {
                             myCartModel.setDocumentId(doc.getId());
                             cartModelList.add(myCartModel);
                             cartAdapter.notifyDataSetChanged();
+                            priceBar.setVisibility(View.VISIBLE);
                             gioHangTrong.setVisibility(View.GONE);
                             button_buy_now.setEnabled(true);
                         }
                     }
                 });
         if (cartModelList.size() == 0) {
+            priceBar.setVisibility(View.GONE);
             gioHangTrong.setVisibility(View.VISIBLE);
             button_buy_now.setEnabled(false);
         }
@@ -145,6 +150,8 @@ public class CartFragment extends Fragment {
             overAllTotalAmount = intent.getIntExtra("totalAmount", 0);
             overAllAmount.setText(NumberFormat.getNumberInstance(new Locale("vi", "VN")).format(overAllTotalAmount) + "VND");
             if(overAllTotalAmount == 0){
+                priceBar.setVisibility(View.GONE);
+                gioHangTrong.setVisibility(View.VISIBLE);
                 button_buy_now.setEnabled(false);
             }
         }

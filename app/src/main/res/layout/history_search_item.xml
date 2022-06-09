@@ -16,7 +16,7 @@
         android:minHeight="40dp"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
-        android:text="@string/nameHint"
+        android:text="Tên sản phẩm, cửa hàng"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

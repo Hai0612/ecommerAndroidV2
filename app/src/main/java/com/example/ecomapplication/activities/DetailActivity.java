@@ -208,11 +208,12 @@ public class DetailActivity extends AppCompatActivity {
                 .collection("Products").document(productId)
                 .set(product_to_add).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(
-                                view.getContext(),
-                                "Added product ID " + newProduct.getDocumentId()
-                                        + " of " + newProduct.getQuantity() + " products to cart",
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(
+//                                view.getContext(),
+//                                "Added product ID " + newProduct.getDocumentId()
+//                                        + " of " + newProduct.getQuantity() + " products to cart",
+//                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Sản phẩm đã được thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(
                                 view.getContext(),

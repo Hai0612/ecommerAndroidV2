@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/amethysta"
-                android:text="Category"
+                android:text="Danh mục"
                 android:textSize="21sp"
                 android:textStyle="bold" />
 
@@ -77,7 +77,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="10dp"
                 android:background="?android:selectableItemBackground"
-                android:text="See all"
+                android:text="Xem tất cả"
+                android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
                 android:textAllCaps="false"
                 android:textColor="@color/purple_500" />
         </LinearLayout>
@@ -115,7 +116,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="9dp"
                         android:fontFamily="@font/amethysta"
-                        android:text="New Products"
+                        android:text="Sản phẩm mới"
                         android:textSize="21sp"
                         android:textStyle="bold" />
 
@@ -124,7 +125,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/new_product_name"
                         android:layout_marginLeft="9dp"
-                        android:text="We provide best products." />
+                        android:text="Chúng tôi mang đến những sản phẩm tốt nhất." />
 
                     <Button
                         android:id="@+id/button_see_all_product"
@@ -135,7 +136,8 @@
                         android:background="?android:selectableItemBackground"
                         android:clickable="true"
                         android:onClick="showAllProduct"
-                        android:text="See all"
+                        android:text="Xem tất cả"
+                        android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
                         android:textAllCaps="false"
                         android:textColor="@color/purple_500" />
                 </RelativeLayout>
