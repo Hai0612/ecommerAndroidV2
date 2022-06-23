@@ -46,7 +46,7 @@ public class PaymentActivity extends AppCompatActivity {
     List<MyCartModel> cartModelList;
     CheckoutAdapter cartAdapter;
 
-    Button makePayment,cancelOrder, zaloPay, momo, cod;
+    Button makePayment,cancelOrder, zaloPay, momo, cod, paypal;
     TextView newPaypalText, newGooglePay, newMasterCard ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +83,11 @@ public class PaymentActivity extends AppCompatActivity {
             Intent intent12 = new Intent(PaymentActivity.this, ZaloPayActivity.class);
             startActivity(intent12);
         });
-
+        paypal.setOnClickListener(view -> {
+            Log.v("processs" , "fsfdsfs");
+            Intent intent12 = new Intent(PaymentActivity.this, Paypal.class);
+            startActivity(intent12);
+        });
         momo.setOnClickListener(view -> {
             Log.v("processs" , "fsfdsfs");
 
@@ -174,6 +178,7 @@ public class PaymentActivity extends AppCompatActivity {
         newPaypalText = findViewById(R.id.paypal);
         makePayment = findViewById(R.id.makePayment);
         cancelOrder = findViewById(R.id.cancel_order);
+        paypal = findViewById(R.id.paypalpay);
         zaloPay = findViewById(R.id.zalopay_payment);
         momo = findViewById(R.id.momo_payment);
         cod = findViewById(R.id.cos_payment);

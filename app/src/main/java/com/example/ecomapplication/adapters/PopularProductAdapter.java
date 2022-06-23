@@ -56,7 +56,7 @@ public class PopularProductAdapter extends RecyclerView.Adapter<PopularProductAd
 
         // Dat anh lay tu Firebase cho item
         storageReference.getDownloadUrl()
-                .addOnSuccessListener(uri -> Picasso.with(context).load(uri.toString()).into(holder.imageView))
+                .addOnSuccessListener(uri -> Picasso.get().load(uri.toString()).into(holder.imageView))
                 .addOnFailureListener(e -> Log.v("Error", "Error when get the images: " + e));
 
         holder.setItemClickListener((view, clickPosition, isLongClick) -> {

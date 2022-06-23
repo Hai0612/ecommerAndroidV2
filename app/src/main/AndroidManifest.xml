@@ -17,6 +17,15 @@
         android:theme="@style/Theme.EcomApplication"
         tools:replace="android:theme">
         <activity
+            android:name=".activities.Paypal"
+            android:exported="false" />
+        <activity
+            android:name="com.paypal.openid.RedirectUriReceiverActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.paypal.pyplcheckout.home.view.activities.PYPLInitiateCheckoutActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.Map"
             android:exported="false" />
         <activity
@@ -24,7 +33,7 @@
             android:exported="false" />
 
         <meta-data
-                android:name="com.google.android.geo.API_KEY"
+            android:name="com.google.android.geo.API_KEY"
             android:value="" />
 
         <activity

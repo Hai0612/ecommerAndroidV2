@@ -61,7 +61,7 @@ public class ProductOrderAdapter extends ArrayAdapter<Product> {
 
             // Dat anh lay tu Firebase cho item
             storageReference.getDownloadUrl()
-                    .addOnSuccessListener(uri -> Picasso.with(context).load(uri.toString()).into(imageView))
+                    .addOnSuccessListener(uri -> Picasso.get().load(uri.toString()).into(imageView))
                     .addOnFailureListener(e -> Log.v("Error", "Error when get the images: " + e));
         }
         int pri = product.getPrice() * product.getQuantity();

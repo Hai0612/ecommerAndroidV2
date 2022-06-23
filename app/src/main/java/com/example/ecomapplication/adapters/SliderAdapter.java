@@ -66,7 +66,7 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
 
         // Dat anh lay tu Firebase cho item
         storageReference.getDownloadUrl()
-                .addOnSuccessListener(uri -> Picasso.with(context).load(uri.toString()).into(viewHolder.imageViewBackground))
+                .addOnSuccessListener(uri -> Picasso.get().load(uri.toString()).into(viewHolder.imageViewBackground))
                 .addOnFailureListener(e -> Log.v("Error", "Error when get the images: " + e));
 //        Glide.with(viewHolder.itemView)
 //                .load(sliderItem.getImg_url())

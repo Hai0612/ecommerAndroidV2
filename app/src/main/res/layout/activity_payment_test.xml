@@ -122,10 +122,10 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
         <Button
-            android:id="@+id/cos_payment"
+            android:id="@+id/paypalpay"
             android:layout_width="315dp"
             android:layout_height="54dp"
-            android:text="Thanh toán khi nhận hàng"
+            android:text="Paypal"
             android:gravity="center"
             android:textAllCaps="false"
             android:textStyle="bold"
@@ -143,7 +143,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cos_payment" />
+            app:layout_constraintTop_toBottomOf="@+id/paypalpay" />
 
         <Button
             android:id="@+id/zalopay_payment"

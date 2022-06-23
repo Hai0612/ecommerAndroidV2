@@ -147,12 +147,12 @@ public class SellerOrderDetailActivity extends AppCompatActivity {
             StorageReference storageReference = storage.getReferenceFromUrl(product.getImg_url());
 
             // Dat anh lay tu Firebase cho item
-            storageReference.getDownloadUrl()
-                    .addOnSuccessListener(uri -> Picasso.with(SellerOrderDetailActivity.this)
-                            .load(uri.toString())
-                            .fit().centerInside()
-                            .into(detailedImg))
-                    .addOnFailureListener(e -> Log.v("Error", "Error when get the images: " + e));
+//            storageReference.getDownloadUrl()
+//                    .addOnSuccessListener(uri -> Picasso.with(SellerOrderDetailActivity.this)
+//                            .load(uri.toString())
+//                            .fit().centerInside()
+//                            .into(detailedImg))
+//                    .addOnFailureListener(e -> Log.v("Error", "Error when get the images: " + e));
         }
         iniRvComment(productId);
         db.collection("SellerInfo").document(auth.getUid())
