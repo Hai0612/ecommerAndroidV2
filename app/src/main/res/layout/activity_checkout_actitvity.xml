@@ -62,7 +62,7 @@
             android:id="@+id/textView11"
             android:layout_width="167dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="36dp"
+            android:layout_marginBottom="28dp"
             android:drawableStart="@drawable/ic_baseline_location_on_24"
             android:text=" Địa chỉ nhận hàng"
             android:textColor="@color/black"
@@ -70,7 +70,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/list_drop_address"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.066"
+            app:layout_constraintHorizontal_bias="0.065"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
@@ -98,7 +98,7 @@
             android:layout_width="0dp"
             android:layout_height="43dp"
             android:layout_margin="20dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="200dp"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dropdown"
             android:textColor="@color/blue"

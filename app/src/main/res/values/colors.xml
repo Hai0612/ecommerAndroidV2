@@ -16,5 +16,7 @@
     <color name="blur">#F5F5F5</color>
     <color name="blue_gray">#7092BE</color>
     <color name="turquoise">#99D9EA</color>
+    <color name="dark_blue">#00427A</color>
+    <color name="light_blue">#005FAF</color>
 
 </resources>
