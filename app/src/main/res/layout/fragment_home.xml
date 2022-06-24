@@ -57,18 +57,6 @@
                 android:textSize="21sp"
                 android:textStyle="bold" />
 
-            <!--            <TextView-->
-            <!--                android:id="@+id/category_see_all"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginRight="8dp"-->
-            <!--                android:layout_weight="1"-->
-            <!--                android:fontFamily="@font/amethysta"-->
-            <!--                android:gravity="end"-->
-            <!--                android:text="See All"-->
-            <!--                android:textColor="@color/pink"-->
-            <!--                android:textSize="18sp"-->
-            <!--                android:textStyle="bold" />-->
             <Button
                 android:id="@+id/button_see_all_category"
                 android:onClick="showAllCategory"
@@ -106,41 +94,78 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+<!--                <RelativeLayout-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content">-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/new_product_name"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="9dp"-->
+<!--                        android:fontFamily="@font/amethysta"-->
+<!--                        android:text="Sản phẩm mới"-->
+<!--                        android:textSize="21sp"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--&lt;!&ndash;                    <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_below="@+id/new_product_name"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_marginLeft="9dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:text="Chúng tôi mang đến những sản phẩm tốt nhất." />&ndash;&gt;-->
+
+<!--                    <Button-->
+<!--                        android:id="@+id/button_see_all_product"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_alignParentRight="true"-->
+<!--                        android:layout_marginLeft="10dp"-->
+<!--                        android:background="?android:selectableItemBackground"-->
+<!--                        android:clickable="true"-->
+<!--                        android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"-->
+<!--                        android:onClick="showAllProduct"-->
+<!--                        android:text="Xem tất cả"-->
+<!--                        android:textAllCaps="false"-->
+<!--                        android:textColor="@color/purple_500" />-->
+<!--                </RelativeLayout>-->
+                <LinearLayout
+                    android:id="@+id/new_product_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="9dp"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/new_product_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="9dp"
+                        android:layout_weight="1"
                         android:fontFamily="@font/amethysta"
                         android:text="Sản phẩm mới"
                         android:textSize="21sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/new_product_name"
-                        android:layout_marginLeft="9dp"
-                        android:text="Chúng tôi mang đến những sản phẩm tốt nhất." />
-
                     <Button
                         android:id="@+id/button_see_all_product"
+                        android:onClick="showAllCategory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_marginLeft="10dp"
                         android:background="?android:selectableItemBackground"
-                        android:clickable="true"
-                        android:onClick="showAllProduct"
                         android:text="Xem tất cả"
                         android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
                         android:textAllCaps="false"
                         android:textColor="@color/purple_500" />
-                </RelativeLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="9dp"
+                    android:text="Chúng tôi mang đến những sản phẩm tốt nhất." />
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/new_product_rec"
@@ -151,9 +176,6 @@
                     android:padding="5dp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
-
-
-
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
