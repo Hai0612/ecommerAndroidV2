@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.ecomapplication.BuildConfig;
 import com.example.ecomapplication.R;
 import com.google.firebase.database.annotations.NotNull;
 import com.paypal.checkout.PayPalCheckout;
@@ -101,7 +100,7 @@ public class Paypal extends AppCompatActivity {
                 new OnError() {
                     @Override
                     public void onError(@NotNull ErrorInfo errorInfo) {
-                        Log.d("OnError", String.format("Error: %s", errorInfo))
+                        Log.d("OnError", String.format("Error: %s", errorInfo));
                     }
                 }
         );
