@@ -11,6 +11,7 @@ import com.google.firebase.database.annotations.NotNull;
 import com.paypal.checkout.PayPalCheckout;
 import com.paypal.checkout.approve.Approval;
 import com.paypal.checkout.approve.OnApprove;
+import com.paypal.checkout.cancel.OnCancel;
 import com.paypal.checkout.config.CheckoutConfig;
 import com.paypal.checkout.config.Environment;
 import com.paypal.checkout.config.SettingsConfig;
@@ -19,6 +20,8 @@ import com.paypal.checkout.createorder.CreateOrderActions;
 import com.paypal.checkout.createorder.CurrencyCode;
 import com.paypal.checkout.createorder.OrderIntent;
 import com.paypal.checkout.createorder.UserAction;
+import com.paypal.checkout.error.ErrorInfo;
+import com.paypal.checkout.error.OnError;
 import com.paypal.checkout.order.Amount;
 import com.paypal.checkout.order.AppContext;
 import com.paypal.checkout.order.CaptureOrderResult;
@@ -56,6 +59,7 @@ public class Paypal extends AppCompatActivity {
                 new CreateOrder() {
                     @Override
                     public void create(@NotNull CreateOrderActions createOrderActions) {
+                        Log.v("taggg", "fdsfdsf");
                         ArrayList<PurchaseUnit> purchaseUnits = new ArrayList<>();
                         purchaseUnits.add(
                                 new PurchaseUnit.Builder()
@@ -86,6 +90,18 @@ public class Paypal extends AppCompatActivity {
                                 Log.i("CaptureOrder", String.format("CaptureOrderResult: %s", result));
                             }
                         });
+                    }
+                },
+                new OnCancel() {
+                    @Override
+                    public void onCancel() {
+                        Log.d("OnCancel", "Buyer cancelled the PayPal experience.");
+                    }
+                },
+                new OnError() {
+                    @Override
+                    public void onError(@NotNull ErrorInfo errorInfo) {
+                        Log.d("OnError", String.format("Error: %s", errorInfo))
                     }
                 }
         );

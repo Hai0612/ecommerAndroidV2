@@ -159,12 +159,12 @@ public class DetailActivity extends AppCompatActivity {
                     StorageReference storageReference = storage.getReferenceFromUrl(product.getImg_url());
 
                     // Dat anh lay tu Firebase cho item
-//                    storageReference.getDownloadUrl()
-//                            .addOnSuccessListener(uri -> Picasso.with(DetailActivity.this)
-//                                    .load(uri.toString())
-//                                    .fit().centerInside()
-//                                    .into(detailedImg))
-//                            .addOnFailureListener(e -> Log.v("Result", "Error when get the images: " + e));
+                    storageReference.getDownloadUrl()
+                            .addOnSuccessListener(uri -> Picasso.get()
+                                    .load(uri.toString())
+                                    .fit().centerInside()
+                                    .into(detailedImg))
+                            .addOnFailureListener(e -> Log.v("Result", "Error when get the images: " + e));
                 }
                 catch (Exception e ) {
                     e.printStackTrace();
