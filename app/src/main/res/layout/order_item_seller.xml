@@ -137,6 +137,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Hủy bỏ"
+                android:background="@drawable/shape_rect01"
                 android:layout_marginRight="5dp"
                 android:textAllCaps="false"
                 android:layout_weight="1"/>
@@ -146,6 +147,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Xác nhận"
+                android:background="@drawable/shape_rect01"
                 android:layout_marginLeft="5dp"
                 android:textAllCaps="false"
                 android:layout_weight="1"/>

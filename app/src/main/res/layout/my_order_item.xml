@@ -132,6 +132,7 @@
                 android:id="@+id/btn_received"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/shape_rect01"
                 android:layout_gravity="right"
                 android:textAllCaps="false"
                 android:text="Đã nhận hàng"/>

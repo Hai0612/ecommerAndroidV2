@@ -133,11 +133,14 @@ public class PaymentActivity extends AppCompatActivity {
         builder.setTitle("Double Edit Text");
 
         final EditText one = new EditText(this);
-        one.setHint("Account Number");//optional
+//        one.setHint("Account Number");//optional
+        one.setHint("Số thẻ(Card number");
         final EditText two = new EditText(this);
-        two.setHint("Expiry Date");//optional
+//        two.setHint("Expiry Date");//optional
+        two.setHint("Ngày hết hạn(Expiry Date)");
         final EditText three = new EditText(this);
-        three.setHint("Provider");//optional
+//        three.setHint("Name");//optional
+        three.setHint("CVV/CVC2(mã số bảo mật)");
         //in my example i use TYPE_CLASS_NUMBER for input only numbers
         one.setInputType(InputType.TYPE_CLASS_TEXT);
         two.setInputType(InputType.TYPE_CLASS_DATETIME);
