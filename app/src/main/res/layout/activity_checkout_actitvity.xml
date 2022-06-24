@@ -23,78 +23,91 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/orderList"
         android:layout_width="match_parent"
-        android:layout_height="354dp"
+        android:layout_height="398dp"
+        android:layout_margin="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/address"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/address"
         tools:listitem="@layout/cart_item_test" />
 
     <Button
         android:id="@+id/click_to_payment"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginBottom="16dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
         android:text="Thanh toán"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.609"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent=".9"  />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/address"
         android:layout_width="match_parent"
-        android:layout_height="174dp"
-        android:background="#C3F3EB"
+        android:layout_height="160dp"
+        android:background="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_checkout_toolbar">
 
         <TextView
             android:id="@+id/textView11"
-            android:layout_width="250dp"
-            android:layout_height="27dp"
-            android:drawableStart="@drawable/ic_baseline_vpn_key_24"
-            android:text="Địa chỉ nhận hàng"
-            android:textStyle="bold"
+            android:layout_width="167dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="36dp"
+            android:drawableStart="@drawable/ic_baseline_location_on_24"
+            android:text=" Địa chỉ nhận hàng"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/list_drop_address"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.124" />
+            app:layout_constraintHorizontal_bias="0.066"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/new_address_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
             android:background="#56BCCA"
-            android:text="Thêm địa chỉ"
             android:drawableLeft="@drawable/ic_add_circle_outline"
             android:drawableTint="@color/white"
+            android:text="Thêm địa chỉ"
             android:textAllCaps="false"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/list_drop_address"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.926"
+            app:layout_constraintHorizontal_bias="0.963"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.942" />
+            app:layout_constraintVertical_bias="1.0"
+            tools:ignore="TextContrastCheck" />
 
         <Spinner
             android:id="@+id/list_drop_address"
-            android:layout_width="311dp"
-            android:layout_height="52dp"
+            android:layout_width="0dp"
+            android:layout_height="43dp"
+            android:layout_margin="20dp"
+            android:layout_marginEnd="10dp"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dropdown"
             android:textColor="@color/blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.525"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.503" />
+            app:layout_constraintVertical_bias="0.867"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -117,22 +130,22 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="left|center">
+                android:layout_weight="0.5"
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/orderLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tổng thanh toán: "
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:text="Tổng tiền : "
+                    android:textColor="#f20"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 android:gravity="right|center">
 
                 <TextView
@@ -140,8 +153,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Giá trị"
-                    android:textColor="@color/purple_700"
-                    android:textSize="20sp" />
+                    android:textColor="#f20"
+                    android:textSize="18sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
