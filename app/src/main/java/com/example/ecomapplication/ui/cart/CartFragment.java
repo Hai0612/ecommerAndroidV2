@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -110,7 +109,6 @@ public class CartFragment extends Fragment {
             Intent intent = new Intent(getContext(), CheckoutActitvity.class);
             intent.putExtra("totalOrder",overAllTotalAmount);
             startActivity(intent);
-            Toast.makeText(getContext(), " " + cartModelList.size(), Toast.LENGTH_SHORT).show();
         });
 
         return root;

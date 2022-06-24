@@ -6,11 +6,16 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.example.ecomapplication.BuildConfig;
+import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
 import com.google.firebase.database.annotations.NotNull;
 import com.paypal.checkout.PayPalCheckout;
@@ -40,14 +45,16 @@ import java.util.ArrayList;
 public class Paypal extends AppCompatActivity {
     PayPalButton payPalButton ;
     private static  final String YOUR_CLIENT_ID = "Af5lN3Np_V4Fh7PHES8kwfm6s07CzqyT8HgRLasT5GHMZB7ZN7g7__r0EPzCg9UZo2IkBJ0YjLC7RemE";
-
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paypal);
         payPalButton = findViewById(R.id.payPalButton);
-
-
+        Intent intent = getIntent();
+        String amount = intent.getExtras().getString("amount");
+        int total = Integer.valueOf(amount) / 20000;
+        Log.v("TAGGG", String.valueOf(total));
         CheckoutConfig config = new CheckoutConfig(
                 getApplication(),
                 YOUR_CLIENT_ID,
@@ -60,6 +67,7 @@ public class Paypal extends AppCompatActivity {
                 )
         );
         PayPalCheckout.setConfig(config);
+        String finalAmount = String.valueOf(total);
         payPalButton.setup(
                 new CreateOrder() {
                     @Override
@@ -71,7 +79,7 @@ public class Paypal extends AppCompatActivity {
                                         .amount(
                                                 new Amount.Builder()
                                                         .currencyCode(CurrencyCode.USD)
-                                                        .value("1.00")
+                                                        .value(finalAmount)
                                                         .build()
                                         )
                                         .build()
@@ -92,6 +100,20 @@ public class Paypal extends AppCompatActivity {
                         approval.getOrderActions().capture(new OnCaptureComplete() {
                             @Override
                             public void onCaptureComplete(@NotNull CaptureOrderResult result) {
+                                progressDialog = new ProgressDialog(getApplication());
+                                progressDialog.setTitle("Đang thanh toán");
+                                progressDialog.setMessage("Vui lòng chờ...");
+                                progressDialog.setCanceledOnTouchOutside(true);
+                                progressDialog.show();
+                                new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
+                                {
+                                    @Override
+                                    public void run()
+                                    {
+                                        //Do something here
+                                        progressDialog.dismiss();
+                                    }
+                                }, 2000);
                                 showSuccessDialog();
                             }
                         });
@@ -116,22 +138,26 @@ public class Paypal extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Thanh toán thành công")
                 .setMessage("Xem đơn hàng ngay bây giờ.")
-                .setPositiveButton("Yes", (dialog, which) -> {
+                .setPositiveButton("Ok", (dialog, which) -> {
                     Log.v("taggggg", "fdsfdsf");
+                    Intent intent = new Intent(this, MainActivity.class);
+                    startActivity(intent);
                     dialog.dismiss();
                 })
-                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .show();
     }
     public void showFailDialog(){
         new AlertDialog.Builder(this)
                 .setTitle("Thanh toán không thành công")
-                .setMessage("Bạn có muốn thử lại thanh toán.")
-                .setPositiveButton("Yes", (dialog, which) -> {
-                    Log.v("taggggg", "fdsfdsf");
+                .setMessage("Bạn có muốn thử lại không ?")
+                .setPositiveButton("Có", (dialog, which) -> {
                     dialog.dismiss();
                 })
-                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton("Không", (dialog, which) -> {
+                    Intent intent = new Intent(this, MainActivity.class);
+                    startActivity(intent);
+                    dialog.dismiss();
+                })
                 .show();
     }
 }

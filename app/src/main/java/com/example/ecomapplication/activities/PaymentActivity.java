@@ -63,6 +63,9 @@ public class PaymentActivity extends AppCompatActivity {
         String total = intent.getExtras().getString("total") != null ? intent.getStringExtra("total") : "120500";
         Log.v("address" , total);
 
+
+
+
         paymentList = new ArrayList<>();
         mapping();
         recyclerListPayment = findViewById(R.id.list_payment_rec);
@@ -84,8 +87,11 @@ public class PaymentActivity extends AppCompatActivity {
             startActivity(intent12);
         });
         paypal.setOnClickListener(view -> {
-            Log.v("processs" , "fsfdsfs");
             Intent intent12 = new Intent(PaymentActivity.this, Paypal.class);
+            Payment selectedPayment = paymentList.get(paymentAdapter.getSelected_position());
+            OrderPlace cdd = new OrderPlace(PaymentActivity.this, orderAddress, Integer.valueOf(total), auth.getUid(),new Date() , new Date(), selectedPayment);
+            cdd.show();
+            intent12.putExtra("amount" , total);
             startActivity(intent12);
         });
         momo.setOnClickListener(view -> {
