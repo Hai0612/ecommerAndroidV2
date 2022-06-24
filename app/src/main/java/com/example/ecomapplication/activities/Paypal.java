@@ -14,11 +14,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-<<<<<<< HEAD
 import com.example.ecomapplication.BuildConfig;
 import com.example.ecomapplication.MainActivity;
-=======
->>>>>>> origin/datnt-fix
 import com.example.ecomapplication.R;
 import com.google.firebase.database.annotations.NotNull;
 import com.paypal.checkout.PayPalCheckout;
