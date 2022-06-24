@@ -178,34 +178,6 @@
             app:layout_constraintVertical_bias="0.143" />
 
         <TextView
-            android:id="@+id/googlepay"
-            android:layout_width="315dp"
-            android:layout_height="54dp"
-            android:background="#EFECEC"
-            android:drawableStart="@drawable/ic_baseline_vpn_key_24"
-            android:gravity="center_vertical"
-            android:text="Google Pay"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/label3" />
-
-        <TextView
-            android:id="@+id/paypal"
-            android:layout_width="315dp"
-            android:layout_height="54dp"
-            android:background="#EFECEC"
-            android:drawableStart="@drawable/ic_baseline_vpn_key_24"
-            android:gravity="center_vertical"
-            android:text="Paypal Card"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/googlepay" />
-
-        <TextView
             android:id="@+id/master_card"
             android:layout_width="315dp"
             android:layout_height="54dp"
@@ -217,7 +189,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/paypal" />
+            tools:layout_editor_absoluteY="72dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

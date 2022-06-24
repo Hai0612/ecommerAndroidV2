@@ -1,7 +1,12 @@
 package com.example.ecomapplication.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -87,7 +92,7 @@ public class Paypal extends AppCompatActivity {
                         approval.getOrderActions().capture(new OnCaptureComplete() {
                             @Override
                             public void onCaptureComplete(@NotNull CaptureOrderResult result) {
-                                Log.i("CaptureOrder", String.format("CaptureOrderResult: %s", result));
+                                showSuccessDialog();
                             }
                         });
                     }
@@ -101,10 +106,32 @@ public class Paypal extends AppCompatActivity {
                 new OnError() {
                     @Override
                     public void onError(@NotNull ErrorInfo errorInfo) {
-                        Log.d("OnError", String.format("Error: %s", errorInfo))
+                        Log.d("OnError", String.format("Error: %s", errorInfo));
                     }
                 }
         );
 
+    }
+    public void showSuccessDialog(){
+        new AlertDialog.Builder(this)
+                .setTitle("Thanh toán thành công")
+                .setMessage("Xem đơn hàng ngay bây giờ.")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    Log.v("taggggg", "fdsfdsf");
+                    dialog.dismiss();
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+    public void showFailDialog(){
+        new AlertDialog.Builder(this)
+                .setTitle("Thanh toán không thành công")
+                .setMessage("Bạn có muốn thử lại thanh toán.")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    Log.v("taggggg", "fdsfdsf");
+                    dialog.dismiss();
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 }

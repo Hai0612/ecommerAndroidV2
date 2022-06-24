@@ -99,9 +99,7 @@ public class PaymentActivity extends AppCompatActivity {
             Intent intent13 = new Intent(PaymentActivity.this, MainActivity.class);
             startActivity(intent13);
         });
-        newPaypalText.setOnClickListener(view -> newPaymentMethod("Paypal"));
         newMasterCard.setOnClickListener(view -> newPaymentMethod("Master Card"));
-        newGooglePay.setOnClickListener(view -> newPaymentMethod("Google Play"));
 //        newGoogle.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -192,7 +190,7 @@ public class PaymentActivity extends AppCompatActivity {
         payment.put("account_nb", number);
         payment.put("expired", date);
         payment.put("id", "1815");
-        payment.put("id_user", "1");
+        payment.put("id_user", auth.getUid());
         payment.put("payment_type", payment_type);
         payment.put("provider", provider);
 
@@ -202,9 +200,11 @@ public class PaymentActivity extends AppCompatActivity {
                 .add(payment)
                 .addOnSuccessListener(documentReference -> Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId()))
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+        getPaymentFireBase();
     }
 
     public void getPaymentFireBase(){
+        paymentList.removeAll(paymentList);
         db.collection("Payment")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -214,7 +214,7 @@ public class PaymentActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
                                 Payment payment = document.toObject(Payment.class);
-                                if(payment.getId_user().trim().equals("1")){
+                                if(payment.getId_user().trim().equals(auth.getUid())){
                                     Log.v("user_id_if" , payment.getId_user());
                                     paymentList.add(payment);
                                 }

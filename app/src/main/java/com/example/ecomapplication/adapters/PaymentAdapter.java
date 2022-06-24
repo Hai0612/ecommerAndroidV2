@@ -29,6 +29,7 @@ public class PaymentAdapter  extends RecyclerView.Adapter<PaymentAdapter.ViewHol
     public PaymentAdapter(Context context, List<Payment> payments) {
         this.context = context;
         this.payments = payments;
+        Log.v("taggg", String.valueOf(payments.size()));
     }
     public int getSelected_position(){
         return  selected_position;
