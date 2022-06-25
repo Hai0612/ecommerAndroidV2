@@ -25,7 +25,12 @@ public class FCMNotification {
     public static String getCancelOrderBody(String orderId){
         return "Đơn hàng " + orderId + "đã bị hủy bởi người bán" ;
     }
-
+    public static String getPaymentSuccessTitle(){
+        return "Thông báo thanh toán " ;
+    }
+    public static String getPaymentSuccessBody(String amount){
+        return "Bạn đã thanh toán số  " + amount + " cho đơn hàng " ;
+    }
     public static String getConfirmOrderTitle() {
         return "Thông báo xác nhận đơn hàng";
     }

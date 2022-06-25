@@ -7,19 +7,26 @@ import androidx.fragment.app.FragmentTransaction;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
 import com.example.ecomapplication.BuildConfig;
+import com.example.ecomapplication.Helper.NotificationApi;
 import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
+import com.example.ecomapplication.adapters.OrderAdapterSeller;
+import com.example.ecomapplication.models.FCMNotification;
 import com.example.ecomapplication.models.OrderPlace;
 import com.example.ecomapplication.models.Payment;
 import com.google.firebase.database.annotations.NotNull;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.paypal.checkout.PayPalCheckout;
 import com.paypal.checkout.approve.Approval;
 import com.paypal.checkout.approve.OnApprove;
@@ -44,17 +51,21 @@ import com.paypal.checkout.paymentbutton.PayPalButton;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Paypal extends AppCompatActivity {
     PayPalButton payPalButton ;
     private static  final String YOUR_CLIENT_ID = "Af5lN3Np_V4Fh7PHES8kwfm6s07CzqyT8HgRLasT5GHMZB7ZN7g7__r0EPzCg9UZo2IkBJ0YjLC7RemE";
     ProgressDialog progressDialog;
+    FirebaseFirestore db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paypal);
         payPalButton = findViewById(R.id.payPalButton);
         Intent intent = getIntent();
+        db = FirebaseFirestore.getInstance();
         String amount = intent.getExtras().getString("amount");
         String auth = intent.getExtras().getString("auth");
         String orderAddress = intent.getExtras().getString("orderAddress");
@@ -105,14 +116,10 @@ public class Paypal extends AppCompatActivity {
                         approval.getOrderActions().capture(new OnCaptureComplete() {
                             @Override
                             public void onCaptureComplete(@NotNull CaptureOrderResult result) {
-                                progressDialog = new ProgressDialog(getApplication());
-                                progressDialog.setTitle("Đang thanh toán");
-                                progressDialog.setMessage("Vui lòng chờ...");
-                                progressDialog.setCanceledOnTouchOutside(true);
+
                                 OrderWithPaypal orderWithPaypal = new OrderWithPaypal( orderAddress, Integer.valueOf(total), auth, new Date() , new Date());
-                                Log.v("aaaaa", auth);
-                                Log.v("aaaaa", orderAddress);
 //                                orderWithPaypal.order();
+                                pushNotiPayment(auth , amount);
                                 showSuccessDialog();
                             }
                         });
@@ -132,6 +139,65 @@ public class Paypal extends AppCompatActivity {
                 }
         );
 
+    }
+
+    public void pushNotiPayment(String auth, String amount){
+        db.collection("UserInfo").document(auth)
+                .get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<String> registrationIds = new ArrayList<>();
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        String deviceToken = documentSnapshot.getString("deviceToken");
+                        Log.v("Test", "Receiver device token: " + deviceToken);
+                        registrationIds.add(deviceToken);
+
+                        FCMNotification.Notification notification = FCMNotification.createNotification(
+                                FCMNotification.getPaymentSuccessTitle(),
+                                FCMNotification.getPaymentSuccessBody(amount)
+                        );
+
+                        FCMNotification.Data data = FCMNotification.createData(
+                                FCMNotification.getPaymentSuccessTitle(),
+                                FCMNotification.getPaymentSuccessBody(amount)
+                        );
+
+                        FCMNotification FcmNotification = new FCMNotification(notification, data, registrationIds);
+                        new PushNotification(getApplicationContext()).execute(FcmNotification);
+                    }
+                });
+    }
+
+    public static class PushNotification extends AsyncTask<Object, Void, String> {
+        protected Context context;
+
+        public PushNotification(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Object... objects) {
+            String response = null;
+
+            try {
+                Log.v("Test", "Sending notification...");
+                response = NotificationApi.pushNotification((FCMNotification) objects[0]);
+            } catch (Exception e) {
+                Log.v("Test", "POST Error: " + e.getMessage());
+            }
+
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+        }
     }
     public void showSuccessDialog(){
         new AlertDialog.Builder(this)
