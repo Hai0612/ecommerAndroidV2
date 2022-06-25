@@ -57,6 +57,7 @@
             android:backgroundTint="@color/purple_700"
             android:drawableLeft="@drawable/ic_baseline_add_photo"
             android:drawableTint="@color/white"
+            android:background="@drawable/shape_rect01"
             android:padding="6dp"
             android:text="Thêm ảnh"
             android:textSize="10sp"
@@ -233,6 +234,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Lưu"
+            android:background="@drawable/shape_rect01"
             android:id="@+id/add_product"
             />
 

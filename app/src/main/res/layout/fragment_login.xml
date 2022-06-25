@@ -61,6 +61,7 @@
         android:layout_height="wrap_content"
         android:padding="15dp"
         android:text="Đăng nhập"
+        android:background="@drawable/shape_rect01"
         android:textAllCaps="false"
         android:textSize="17sp"
         android:textStyle="bold"

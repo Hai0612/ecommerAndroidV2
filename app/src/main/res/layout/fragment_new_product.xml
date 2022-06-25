@@ -74,6 +74,7 @@
                 android:drawableTint="@color/white"
                 android:padding="6dp"
                 android:text="Thêm ảnh"
+                android:background="@drawable/shape_rect01"
                 android:textSize="10sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
