@@ -187,10 +187,10 @@ public class DetailActivity extends AppCompatActivity {
         db.collection("Comment").document(docId).set(doc)
                 .addOnCompleteListener(task -> {
                     postDetailComment.setText("");
-                    showMessage("Comment Succeeded");
+                    showMessage("Đã thêm bình luận");
                     addComment.setVisibility(View.VISIBLE);
                 })
-                .addOnFailureListener(e -> showMessage("Comment Failed"));
+                .addOnFailureListener(e -> showMessage("Thêm bình luận thất bại"));
     }
 
     private void addProductToFirebaseCart(View view, Product newProduct, String productId) {

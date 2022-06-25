@@ -123,8 +123,8 @@ public class PaymentActivity extends AppCompatActivity {
     public void onBackPressed()
     {
         BackAction appdialog = new BackAction();
-        appdialog.Confirm(this, "Xác nhận hủy bỏ", "Bạn có muốn thanh toán trong lần tới không",
-                "Cancel", "OK", aproc(), bproc());
+        appdialog.Confirm(this, "Xác nhận hủy bỏ", "Bạn có muốn hủy thanh toán không ?",
+                "Không", "Có", aproc(), bproc());
 
     }
     public Runnable aproc(){
@@ -133,12 +133,13 @@ public class PaymentActivity extends AppCompatActivity {
 
     public Runnable bproc(){
         return () -> startActivity(new Intent(PaymentActivity.this, MainActivity.class));
+
     }
     public void newPaymentMethod(String payment_type){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //you should edit this to fit your needs
-        builder.setTitle("Double Edit Text");
+        builder.setTitle("Nhập thông tin thẻ");
 
         final EditText one = new EditText(this);
 //        one.setHint("Account Number");//optional

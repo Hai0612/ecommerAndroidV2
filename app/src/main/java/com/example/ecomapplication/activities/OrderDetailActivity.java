@@ -2,10 +2,14 @@ package com.example.ecomapplication.activities;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,7 +30,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     GridView productView;
     ProductOrderAdapter productAdapter;
     TextView total;
-
+    Button feedback;
     List<Product> productList;
     String id;
     int totalPr = 0;
@@ -35,7 +39,15 @@ public class OrderDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
-
+        feedback = findViewById(R.id.button_feedback);
+        feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                        Intent intent = new Intent(OrderDetailActivity.this, DetailActivity.class);
+                        intent.putExtra("id_product",  productList.get(0).getDocumentId());
+                        startActivity(intent);
+                    }
+                });
         Bundle bundle = getIntent().getExtras();
         if (bundle == null) {
             return;

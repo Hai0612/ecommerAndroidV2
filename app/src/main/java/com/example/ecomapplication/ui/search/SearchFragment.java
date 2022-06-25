@@ -150,7 +150,7 @@ public class SearchFragment extends Fragment {
             Product product = (Product) adapterView.getItemAtPosition(i);
 
             Intent intent = new Intent (view.getContext(), DetailActivity.class);
-            intent.putExtra("productDetail", product);
+            intent.putExtra("id_product", product.getDocumentId());
 
             view.getContext().startActivity(intent);
         }));
@@ -197,6 +197,7 @@ public class SearchFragment extends Fragment {
                 searchedProduct.clear();
                 for (QueryDocumentSnapshot snapshot : task.getResult()) {
                     Product product = snapshot.toObject(Product.class);
+                    product.setDocumentId(snapshot.getId());
                     searchedProduct.add(product);
                 }
 

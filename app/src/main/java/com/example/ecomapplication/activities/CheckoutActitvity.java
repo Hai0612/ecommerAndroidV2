@@ -145,8 +145,8 @@ public class CheckoutActitvity extends AppCompatActivity implements AdapterView.
     public void onBackPressed()
     {
         BackAction appdialog = new BackAction();
-        appdialog.Confirm(this, "Xác nhận hủy bỏ", "Bạn có muốn thanh toán trong lần tới không",
-                "Cancel", "OK", aproc(), bproc());
+        appdialog.Confirm(this, "Xác nhận hủy bỏ", "Bạn có hủy thanh toán",
+                "Không", "Có", aproc(), bproc());
 
     }
     public Runnable aproc(){
