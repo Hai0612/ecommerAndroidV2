@@ -17,6 +17,8 @@ import android.util.Log;
 import com.example.ecomapplication.BuildConfig;
 import com.example.ecomapplication.MainActivity;
 import com.example.ecomapplication.R;
+import com.example.ecomapplication.models.OrderPlace;
+import com.example.ecomapplication.models.Payment;
 import com.google.firebase.database.annotations.NotNull;
 import com.paypal.checkout.PayPalCheckout;
 import com.paypal.checkout.approve.Approval;
@@ -41,6 +43,7 @@ import com.paypal.checkout.order.PurchaseUnit;
 import com.paypal.checkout.paymentbutton.PayPalButton;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Paypal extends AppCompatActivity {
     PayPalButton payPalButton ;
@@ -53,6 +56,8 @@ public class Paypal extends AppCompatActivity {
         payPalButton = findViewById(R.id.payPalButton);
         Intent intent = getIntent();
         String amount = intent.getExtras().getString("amount");
+        String auth = intent.getExtras().getString("auth");
+        String orderAddress = intent.getExtras().getString("orderAddress");
         int total = Integer.valueOf(amount) / 20000;
         Log.v("TAGGG", String.valueOf(total));
         CheckoutConfig config = new CheckoutConfig(
@@ -79,7 +84,7 @@ public class Paypal extends AppCompatActivity {
                                         .amount(
                                                 new Amount.Builder()
                                                         .currencyCode(CurrencyCode.USD)
-                                                        .value(finalAmount)
+                                                        .value("0.5")
                                                         .build()
                                         )
                                         .build()
@@ -104,16 +109,10 @@ public class Paypal extends AppCompatActivity {
                                 progressDialog.setTitle("Đang thanh toán");
                                 progressDialog.setMessage("Vui lòng chờ...");
                                 progressDialog.setCanceledOnTouchOutside(true);
-                                progressDialog.show();
-                                new Handler(Looper.getMainLooper()).postDelayed(new Runnable()
-                                {
-                                    @Override
-                                    public void run()
-                                    {
-                                        //Do something here
-                                        progressDialog.dismiss();
-                                    }
-                                }, 2000);
+                                OrderWithPaypal orderWithPaypal = new OrderWithPaypal( orderAddress, Integer.valueOf(total), auth, new Date() , new Date());
+                                Log.v("aaaaa", auth);
+                                Log.v("aaaaa", orderAddress);
+//                                orderWithPaypal.order();
                                 showSuccessDialog();
                             }
                         });

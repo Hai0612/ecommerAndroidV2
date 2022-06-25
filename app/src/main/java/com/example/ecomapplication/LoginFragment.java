@@ -86,10 +86,10 @@ public class LoginFragment extends Fragment {
                         if (task.isSuccessful()) {
                             updateAccountToken();
 
-                            Toast.makeText(getContext(), "Sign In Successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getContext(), MainActivity.class));
                         } else {
-                            Toast.makeText(getContext(), "Email or Password Wrong ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Email hoặc mật khẩu không chính xác ", Toast.LENGTH_SHORT).show();
                         }
                     });
         });

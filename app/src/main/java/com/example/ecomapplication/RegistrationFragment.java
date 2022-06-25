@@ -93,12 +93,12 @@ public class RegistrationFragment extends Fragment {
                             UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder().setDisplayName(nameSignUp.getText().toString()).build();
                             user.updateProfile(profileChangeRequest);
 
-                            Toast.makeText(getContext(), "Sign Up Successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Đăng ký thành công", Toast.LENGTH_SHORT).show();
                             NavHostFragment.findNavController(RegistrationFragment.this)
                                     .navigate(R.id.action_nav_signup_to_nav_login);
                             addUserInfo();
                         } else {
-                            Toast.makeText(getContext(), "Sign Up Failed " + task.getException(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Đăng ký thất bại " + task.getException(), Toast.LENGTH_SHORT).show();
                         }
                     });
         });

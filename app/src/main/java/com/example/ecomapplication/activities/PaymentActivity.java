@@ -28,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -89,9 +90,10 @@ public class PaymentActivity extends AppCompatActivity {
         paypal.setOnClickListener(view -> {
             Intent intent12 = new Intent(PaymentActivity.this, Paypal.class);
             Payment selectedPayment = paymentList.get(paymentAdapter.getSelected_position());
-            OrderPlace cdd = new OrderPlace(PaymentActivity.this, orderAddress, Integer.valueOf(total), auth.getUid(),new Date() , new Date(), selectedPayment);
-            cdd.show();
+//            OrderWithPaypal cdd = new OrderWithPaypal(PaymentActivity.this, orderAddress, Integer.valueOf(total), auth.getUid(),new Date() , new Date(), selectedPayment);
             intent12.putExtra("amount" , total);
+            intent12.putExtra("orderAddress" , orderAddress);
+            intent12.putExtra("auth" , auth.getUid());
             startActivity(intent12);
         });
         momo.setOnClickListener(view -> {
