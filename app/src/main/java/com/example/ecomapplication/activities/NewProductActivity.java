@@ -143,7 +143,9 @@ public class NewProductActivity extends AppCompatActivity implements AdapterView
 
 //        String docId = UUID.randomUUID().toString();
         String docId = id;
-
+        if(rating.equals("")){
+            rating = "0";
+        }
         Map<String, Object> doc = new HashMap<>();
         doc.put("description", description);
         doc.put("id_category", id_category);

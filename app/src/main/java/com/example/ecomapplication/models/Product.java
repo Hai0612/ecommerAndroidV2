@@ -1,6 +1,8 @@
 package com.example.ecomapplication.models;
 
 
+import android.util.Log;
+
 import java.io.Serializable;
 
 public class Product implements Serializable {
@@ -29,6 +31,8 @@ public class Product implements Serializable {
         this.description = description;
         this.rating = rating;
         this.id_seller = id_seller;
+        Log.v("id_selleer1", id_seller);
+
     }
 
     public Product(String name, String img_url, String id_category,
@@ -38,6 +42,8 @@ public class Product implements Serializable {
         this.id_category = id_category;
         this.price = price;
         this.size = size;
+        Log.v("id_selleer2", id_seller);
+
         this.quantity = quantity;
         this.description = description;
     }
@@ -52,6 +58,7 @@ public class Product implements Serializable {
         this.description = description;
         this.rating = rating;
         this.id_seller = id_seller;
+        Log.v("id_selleer", id_seller);
     }
 
 

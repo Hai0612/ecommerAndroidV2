@@ -95,7 +95,7 @@ public class Paypal extends AppCompatActivity {
                                         .amount(
                                                 new Amount.Builder()
                                                         .currencyCode(CurrencyCode.USD)
-                                                        .value("0.5")
+                                                        .value(finalAmount)
                                                         .build()
                                         )
                                         .build()
@@ -117,7 +117,7 @@ public class Paypal extends AppCompatActivity {
                             @Override
                             public void onCaptureComplete(@NotNull CaptureOrderResult result) {
 
-                                OrderWithPaypal orderWithPaypal = new OrderWithPaypal( orderAddress, Integer.valueOf(total), auth, new Date() , new Date());
+                                OrderWithPaypal orderWithPaypal = new OrderWithPaypal(Paypal.this, orderAddress, Integer.valueOf(total), auth, new Date() , new Date());
 //                                orderWithPaypal.order();
                                 pushNotiPayment(auth , amount);
                                 showSuccessDialog();

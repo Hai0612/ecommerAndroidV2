@@ -58,7 +58,8 @@ public class OrderWithPaypal {
     UserInfo user ;
     private int total;
 
-    public OrderWithPaypal( String orderAddress, int total ,String id_user  , Date orderDate , Date shippedDate) {
+    public OrderWithPaypal(Activity activity, String orderAddress, int total ,String id_user  , Date orderDate , Date shippedDate) {
+        this.activity = activity;
         this.orderAddress = orderAddress;
         this.total = total;
         this.id_user = id_user;
@@ -146,6 +147,7 @@ public class OrderWithPaypal {
                             Log.v("dfsfsf", doc.getId());
                             Product myCartModel = doc.toObject(Product.class);
                             myCartModel.setDocumentId(doc.getId());
+                            Log.v("id_seller", myCartModel.getId_seller());
                             cartModelList.add(myCartModel);
                         }
                         orderPlace();
@@ -171,7 +173,7 @@ public class OrderWithPaypal {
         if (user != null){
             user_name = user.getFirstName() + user.getLastName();
         }
-
+        Log.v("taggg___" , product.getId_seller());
         SellerOrder sellerOrder = new SellerOrder(id_order, product.getName(), auth.getUid(), user_name, new Date(), new Date(), product.getQuantity(), "pending", product.getId_seller());
         db.collection("SellerOrder").document(product.getId_seller())
                 .collection("Orders")
@@ -183,7 +185,24 @@ public class OrderWithPaypal {
         db.collection("UserInfo").document(product.getId_seller())
                 .get().addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        List<String> registrationIds = new ArrayList<>();
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        String deviceToken = documentSnapshot.getString("deviceToken");
+                        Log.v("Test", "Receiver device token: " + deviceToken);
+                        registrationIds.add(deviceToken);
 
+                        FCMNotification.Notification notification = FCMNotification.createNotification(
+                                FCMNotification.getOrderTitle(),
+                                FCMNotification.getOrderBody(auth.getUid())
+                        );
+
+                        FCMNotification.Data data = FCMNotification.createData(
+                                FCMNotification.getOrderTitle(),
+                                FCMNotification.getOrderBody(auth.getUid())
+                        );
+
+                        FCMNotification FcmNotification = new FCMNotification(notification, data, registrationIds);
+                        new OrderWithPaypal.PushNotification(activity.getApplicationContext()).execute(FcmNotification);
                     }
                 });
     }
@@ -227,7 +246,6 @@ public class OrderWithPaypal {
     }
 
     public static class PushNotification extends AsyncTask<Object, Void, String> {
-        protected ProgressDialog progressDialog;
         protected Context context;
 
         public PushNotification(Context context) {
@@ -237,9 +255,7 @@ public class OrderWithPaypal {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            this.progressDialog = new ProgressDialog(context, 1);
-            this.progressDialog.setMessage("Creating Order...");
-            this.progressDialog.show();
+
         }
 
         @Override
@@ -259,9 +275,7 @@ public class OrderWithPaypal {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
+
         }
     }
 }
